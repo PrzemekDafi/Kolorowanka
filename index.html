@@ -266,6 +266,17 @@
                 });
             }
         });
+function handleColorChange(element, color) {
+    const targetElement = document.getElementById(`${element}-img`);
+
+    if (colors[color]?.type === 'gradient') {
+        targetElement.style.background = colors[color].value; // Ustaw gradient
+        targetElement.style.webkitBackgroundClip = 'text'; // Jeśli dotyczy tekstu
+        targetElement.style.color = 'transparent'; // Przezroczysty tekst
+    } else {
+        targetElement.style.background = ''; // Usuń gradient
+        targetElement.style.color = color; // Ustaw zwykły kolor
+    }
 
         function handleColorChange(element, selectedColor, hexValue) {
             let color = selectedColor;
