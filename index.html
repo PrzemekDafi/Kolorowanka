@@ -316,7 +316,7 @@
         }
 
         // Nakładanie gradientu/koloru
- ctx.globalCompositeOperation = 'source-atop';
+ ctx.globalCompositeOperation = 'multiply';
         ctx.fillStyle = gradient;
         ctx.fillRect(0, 0, canvas.width, canvas.height);
         ctx.globalCompositeOperation = 'source-over';
