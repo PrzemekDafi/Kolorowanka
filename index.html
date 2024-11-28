@@ -333,17 +333,45 @@ products[product].forEach((element, index) => {
     const wrapper = document.createElement('div');
     wrapper.className = 'image-wrapper';
     wrapper.style.zIndex = index + 1;
-
     const img = document.createElement('img');
     img.src = `images/${product}/${element}.png`;
     img.alt = element;
     img.id = `${element}-img`;
-
     wrapper.appendChild(img);
     productFrame.appendChild(wrapper);
 
-    originalImages[element] = img.src; // Zapisywanie oryginalnego obrazu
+    originalImages[element] = img.src;
+
+    const colorInput = document.createElement('div');
+    colorInput.className = 'color-input';
+    colorInput.innerHTML = `
+        <label for="${element}-color">${element}:</label>
+        <div class="input-container">
+            <input type="color" id="${element}-picker" value="#ffffff">
+            <input type="text" id="${element}-hex" placeholder="#FFFFFF">
+        </div>
+    `;
+    colorOptions.appendChild(colorInput);
+
+    const colorPicker = document.getElementById(`${element}-picker`);
+    const hexInput = document.getElementById(`${element}-hex`);
+
+    // Obsługa zmiany koloru z color pickera
+    colorPicker.addEventListener('input', function () {
+        hexInput.value = colorPicker.value.toUpperCase();
+        handleColorChange(element, colorPicker.value);
+    });
+
+    // Obsługa zmiany koloru z pola tekstowego HEX
+    hexInput.addEventListener('input', function () {
+        const hexValue = hexInput.value.startsWith('#') ? hexInput.value : `#${hexInput.value}`;
+        if (isValidHex(hexValue)) {
+            colorPicker.value = hexValue;
+            handleColorChange(element, hexValue);
+        }
+    });
 });
+
 
         }
     </script>
