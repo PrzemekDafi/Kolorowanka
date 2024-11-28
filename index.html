@@ -333,6 +333,7 @@ products[product].forEach((element, index) => {
     const wrapper = document.createElement('div');
     wrapper.className = 'image-wrapper';
     wrapper.style.zIndex = index + 1;
+
     const img = document.createElement('img');
     img.src = `images/${product}/${element}.png`;
     img.alt = element;
@@ -353,8 +354,9 @@ products[product].forEach((element, index) => {
     `;
     colorOptions.appendChild(colorInput);
 
-    const colorPicker = document.getElementById(`${element}-picker`);
-    const hexInput = document.getElementById(`${element}-hex`);
+    // Pobieranie elementów po dodaniu ich do DOM
+    const colorPicker = document.querySelector(`#${element}-picker`);
+    const hexInput = document.querySelector(`#${element}-hex`);
 
     // Obsługa zmiany koloru z color pickera
     colorPicker.addEventListener('input', function () {
