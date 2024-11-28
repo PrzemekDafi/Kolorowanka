@@ -266,7 +266,17 @@
                 });
             }
         });
-function handleColorChange(element, color) {
+
+        function handleColorChange(element, selectedColor, hexValue) {
+            let color = selectedColor;
+
+            if (hexValue && isValidHex(hexValue)) {
+                color = `#${hexValue.startsWith('#') ? hexValue.slice(1) : hexValue}`;
+            } else if (!selectedColor && !isValidHex(hexValue)) {
+                color = colors['Biały']; // Domyślny kolor, jeśli HEX jest nieprawidłowy
+            }
+
+            {
     const targetElement = document.getElementById(`${element}-img`);
 
     if (colors[color]?.type === 'gradient') {
@@ -277,15 +287,7 @@ function handleColorChange(element, color) {
         targetElement.style.background = ''; // Usuń gradient
         targetElement.style.color = color; // Ustaw zwykły kolor
     }
-
-        function handleColorChange(element, selectedColor, hexValue) {
-            let color = selectedColor;
-
-            if (hexValue && isValidHex(hexValue)) {
-                color = `#${hexValue.startsWith('#') ? hexValue.slice(1) : hexValue}`;
-            } else if (!selectedColor && !isValidHex(hexValue)) {
-                color = colors['Biały']; // Domyślny kolor, jeśli HEX jest nieprawidłowy
-            }
+}
 
             colorizeImage(element, color);
         }
