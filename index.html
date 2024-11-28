@@ -143,13 +143,13 @@
             <label for="product-select">Wybierz produkt:</label>
             <select id="product-select">
                 <option value="">Wybierz produkt</option>
-                <option value="butelka_soft_03l">Butelka Soft 0,3 l</option>
+          <!--      <option value="butelka_soft_03l">Butelka Soft 0,3 l</option> -->
                 <option value="butelka_soft_05l">Butelka Soft 0,5 l</option>
-                 <option value="butelka_soft_07l">Butelka Soft 0,7 l</option>
+              <!--         <option value="butelka_soft_07l">Butelka Soft 0,7 l</option>
                 
                 <option value="butelka_solid_03l">Butelka Solid 0,3 l</option>
                 <option value="butelka_solid_05l">Butelka Solid 0,5 l</option>
-                <option value="butelka_solid_07l">Butelka Solid 0,7 l</option>
+                <option value="butelka_solid_07l">Butelka Solid 0,7 l</option>-->
 
                <option value="saturator">PushAir</option>
             </select>
@@ -162,7 +162,12 @@
 
     <script>
         const products = {
+            butelka_soft_03l: ['ustnik', 'zakretka_z_gumka', 'filtr'],
             butelka_soft_05l: ['ustnik', 'zakretka_z_gumka', 'filtr'],
+            butelka_soft_07l: ['ustnik', 'zakretka_z_gumka', 'filtr'],
+          
+            butelka_solid_05l: ['elastometr', 'zakretka_gora', 'zakretka_dol', 'otwieranie', 'rurka', 'zbiornik_solid', 'ustnik', 'zakretka_z_gumka', 'filtr'],
+            butelka_solid_07l: ['elastometr', 'zakretka_gora', 'zakretka_dol', 'otwieranie', 'rurka', 'zbiornik_solid', 'ustnik', 'zakretka_z_gumka', 'filtr'],
 
            
             saturator: ['saturator_gora_korpus', 'saturator_butelka', 'satuator_korpus', 'przycisk_saturatora', 'saturator_gora_klapka', 'pushair_logo'],
