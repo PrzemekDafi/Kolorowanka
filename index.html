@@ -275,18 +275,6 @@
             } else if (!selectedColor && !isValidHex(hexValue)) {
                 color = colors['Biały']; // Domyślny kolor, jeśli HEX jest nieprawidłowy
             }
-
-            {
-    const targetElement = document.getElementById(`${element}-img`);
-
-    if (colors[color]?.type === 'gradient') {
-        targetElement.style.background = colors[color].value; // Ustaw gradient
-        targetElement.style.webkitBackgroundClip = 'text'; // Jeśli dotyczy tekstu
-        targetElement.style.color = 'transparent'; // Przezroczysty tekst
-    } else {
-        targetElement.style.background = ''; // Usuń gradient
-        targetElement.style.color = color; // Ustaw zwykły kolor
-    }
 }
 
             colorizeImage(element, color);
