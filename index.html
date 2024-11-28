@@ -38,25 +38,31 @@
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         }
         .product-frame {
-            position: relative;
-            width: 900px;
-            height: 900px;
-            background-size: cover;
-            background-position: center;
-            border-radius: 20px;
-            overflow: hidden; /* Zapewnia, że zawartość nie wychodzi poza ramkę */
-        }
-        .image-wrapper {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-        }
-        .image-wrapper img {
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-            border-radius: 20px;
-        }
+    position: relative;
+    width: 900px;
+    height: 900px;
+    background-size: cover; /* Tło dopasowane proporcjonalnie */
+    background-position: center;
+    background-repeat: no-repeat;
+    border-radius: 20px;
+    overflow: hidden;
+}
+
+.image-wrapper {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.image-wrapper img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain; /* Elementy produktu proporcjonalnie dopasowane */
+    border-radius: 20px;
+}
+
         .color-input {
             margin-bottom: 20px;
             display: flex;
@@ -160,6 +166,7 @@
     </div>
 
     <script>
+        
         const products = {
             butelka_soft_03l: ['ustnik', 'zakretka_z_gumka', 'filtr'],
             butelka_soft_05l: ['ustnik', 'zakretka_z_gumka', 'filtr'],
@@ -263,7 +270,7 @@
             if (hexValue && isValidHex(hexValue)) {
                 color = `#${hexValue.startsWith('#') ? hexValue.slice(1) : hexValue}`;
             } else if (!selectedColor && !isValidHex(hexValue)) {
-                color = colors['Flamingowy']; // Domyślny kolor, jeśli HEX jest nieprawidłowy
+                color = colors['Biały']; // Domyślny kolor, jeśli HEX jest nieprawidłowy
             }
 
             colorizeImage(element, color);
@@ -316,6 +323,27 @@
             };
 
             if (newImg.complete) newImg.onload();
+            const productFrame = document.createElement('div');
+productFrame.className = 'product-frame';
+productFrame.style.backgroundImage = `url('images/${product}.jpg')`; // Ładowanie tła
+imageColumn.appendChild(productFrame);
+
+products[product].forEach((element, index) => {
+    const wrapper = document.createElement('div');
+    wrapper.className = 'image-wrapper';
+    wrapper.style.zIndex = index + 1;
+
+    const img = document.createElement('img');
+    img.src = `images/${product}/${element}.png`;
+    img.alt = element;
+    img.id = `${element}-img`;
+
+    wrapper.appendChild(img);
+    productFrame.appendChild(wrapper);
+
+    originalImages[element] = img.src; // Zapisywanie oryginalnego obrazu
+});
+
         }
     </script>
 </body>
