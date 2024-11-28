@@ -320,6 +320,7 @@
         ctx.fillStyle = gradient;
         ctx.fillRect(0, 0, canvas.width, canvas.height);
         ctx.globalCompositeOperation = 'source-over';
+        img.src = canvas.toDataURL();
 
         
                 const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
