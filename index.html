@@ -315,12 +315,18 @@
             gradient = color;
         }
 
-        // Nakładanie gradientu/koloru
- ctx.globalCompositeOperation = 'multiply';
+        // Nakładanie gradientu z mieszaniem: mnożenie
+        ctx.globalCompositeOperation = 'multiply';
         ctx.fillStyle = gradient;
         ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        // Przywrócenie domyślnego trybu mieszania
         ctx.globalCompositeOperation = 'source-over';
+
         img.src = canvas.toDataURL();
+    
+
+    if (newImg.complete) newImg.onload();
 
         
                 const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
