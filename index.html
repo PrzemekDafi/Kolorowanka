@@ -184,8 +184,8 @@
         const colors = {
             Biały: '#ffffff',
             Antracytowy: '#131313',
-            Granatowy_FCB: '#a31d45',
-            Bordowy_FCB: '#1d3874',
+            GranatowyFCB: '#a31d45',
+            BordowyFCB: '#1d3874',
             Flamingowy: '#f04e98',
             Stalowy: '#768692',
             Wrzosowy: '#A7A4E0',
@@ -201,10 +201,7 @@
             Cappuccino_Pantone_4775C: '#D7C4B7',
             Stalowy_Pantone_430C: '#7C878E',
             Lazurowy_Pantone_7542C: '#A4BCC2',
-            Złoty: {
-        type: 'gradient',
-        value: 'linear-gradient(90deg, #D1B464, #FFD700)'
-    },
+            Złoty: '#D1B464',
             Srebrny: '#d4d4d4',
 
         };
@@ -275,7 +272,6 @@
             } else if (!selectedColor && !isValidHex(hexValue)) {
                 color = colors['Biały']; // Domyślny kolor, jeśli HEX jest nieprawidłowy
             }
-}
 
             colorizeImage(element, color);
         }
