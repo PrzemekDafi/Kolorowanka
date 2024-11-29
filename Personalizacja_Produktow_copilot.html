@@ -214,6 +214,7 @@
     padding: 10px;
     height: 400px; /* Dostosuj w zależności od potrzeby */
     position: relative;
+			z-index: 9999;
 }
 
 .grawer-upload-container {
@@ -247,6 +248,7 @@
 	height: auto;
     max-height: 420px;
     object-fit: contain;
+	z-index: 9999;
     transition: transform 0.3s ease-in-out;
 }
 
@@ -339,7 +341,7 @@
                 imageWrapper.removeChild(existingImage);
             }
 
-            // Dodaj obrazek do image-column
+            // Dodaj obrazek do grawer-column
             const imageElement = document.createElement('div');
             imageElement.classList.add('grawer-wrapper');
             imageElement.appendChild(img);
