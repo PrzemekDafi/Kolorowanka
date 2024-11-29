@@ -202,7 +202,6 @@
 }
 		
 		
-		
 		.grawer-column {
     display: flex;
     flex-direction: column;
@@ -214,7 +213,7 @@
     padding: 10px;
     height: 400px; /* Dostosuj w zależności od potrzeby */
     position: relative;
-			z-index: 9999;
+  z-index: 9999;
 }
 
 .grawer-upload-container {
@@ -227,7 +226,7 @@
     color: white;
     padding: 10px;
     cursor: pointer;
-    border-radius: 5px;
+    border-radius: 10px;
     display: inline-block;
 }
 
@@ -334,6 +333,7 @@
             img.alt = "Uploaded Image";
             img.style.transform = "rotate(0deg)";
             img.style.transform = `translateY(0px)`;
+	img.style.zindex = 9999;
 
             // Jeśli obrazek już istnieje, usuń go
             const existingImage = imageWrapper.querySelector('img');
