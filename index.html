@@ -152,7 +152,7 @@
         .ok-button:hover {
             background-color: #0056b3;
         }
-        #save-button {
+        #saveBtn {
             margin-top: 30px;
             padding: 12px 24px;
             font-size: 18px;
@@ -164,7 +164,7 @@
             cursor: pointer;
             transition: background-color 0.3s ease;
         }
-        #save-button:hover {
+        #saveBtn:hover {
             background-color: #218838;
         }
         .error-message {
@@ -172,9 +172,26 @@
             font-size: 14px;
             margin-top: 10px;
         }
+		
+		  #loadingMessage {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            padding: 20px;
+            background-color: rgba(0, 0, 0, 0.8);
+            color: white;
+            font-size: 18px;
+            border-radius: 10px;
+            z-index: 1000;
+        }
+		
     </style>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.min.js"></script>
-</head>
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" defer></script>
+	 <script src="https://cdnjs.cloudflare.com/ajax/libs/dom-to-image/2.6.0/dom-to-image.min.js"></script>
+
+	</head>
 <body>
     <div class="container">
         <div class="image-column" id="image-column">
@@ -197,9 +214,10 @@
             <div id="color-options">
                 <!-- Kolory dla elementów będą generowane dynamicznie -->
             </div>
-            <button id="save-button">Zapisz jako JPG</button>
+            <button id="saveBtn">Zapisz jako JPG</button>
         </div>
     </div>
+    <div id="loadingMessage">Trwa zapis obrazu, proszę czekać...</div>
 
     <script>
         
@@ -246,6 +264,7 @@
 
         let originalImages = {};
 
+		
         document.getElementById('product-select').addEventListener('change', function () {
             const product = this.value;
             const colorOptions = document.getElementById('color-options');
@@ -413,6 +432,36 @@ products[product].forEach((element, index) => {
 
 
         }
+    </script>
+	
+<script>
+	
+	
+  
+       document.getElementById('saveBtn').addEventListener('click', function() {
+            const element = document.getElementById('image-column');
+            const loadingMessage = document.getElementById('loadingMessage');
+            loadingMessage.style.display = 'block';
+
+            const selectedProduct = document.getElementById('product-select').value || 'produkt';
+            const now = new Date();
+            const timestamp = now.toISOString().replace(/[:.]/g, '-');
+
+            domtoimage.toJpeg(element, { quality: 0.95 })
+                .then(function(dataUrl) {
+                    const link = document.createElement('a');
+                    link.download = `${selectedProduct}_${timestamp}.jpg`;
+                    link.href = dataUrl;
+                    link.click();
+                    loadingMessage.style.display = 'none';
+                    alert('Obraz został zapisany.');
+                })
+                .catch(function(error) {
+                    console.error('Błąd podczas generowania obrazu:', error);
+                    loadingMessage.style.display = 'none';
+                    alert('Wystąpił błąd podczas zapisywania obrazu.');
+                });
+        });
     </script>
 </body>
 </html>
