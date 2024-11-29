@@ -260,12 +260,12 @@
 	</head>
 <body>
     <div class="container">
-	    <div class="grawer-column">
-        <!-- Obrazek zostanie wstawiony tutaj -->
-	    </div>
+	    
         <div class="image-column" id="image-column">
 			
-			
+	<div class="grawer-column">
+        <!-- Obrazek zostanie wstawiony tutaj -->
+	    </div>		
 			
             <!-- Obrazki produktów będą tutaj ładowane -->
         </div>
@@ -310,53 +310,7 @@
     </div>
     <div id="loadingMessage">Trwa zapis obrazu, proszę czekać...</div>
 
-	<script>
-document.getElementById("grawer-upload").addEventListener("change", function (event) {
-    const file = event.target.files[0];
-    const imageWrapper = document.querySelector('.grawer-column');
 
-    if (file) {
-        const reader = new FileReader();
-        reader.onload = function () {
-            const imageUrl = reader.result;
-
-            // Tworzymy element img
-            const img = document.createElement('img');
-            img.src = imageUrl;
-            img.alt = "Uploaded Image";
-            img.style.transform = "rotate(0deg) translateY(0px)";
-            img.style.zIndex = 9999;
-
-            // Jeśli obrazek już istnieje, usuń go
-            const existingImage = imageWrapper.querySelector('img');
-            if (existingImage) {
-                imageWrapper.removeChild(existingImage);
-            }
-
-            // Dodaj obrazek do grawer-column
-            imageWrapper.appendChild(img);
-        };
-        reader.readAsDataURL(file);
-    } else {
-        alert("Nie udało się wgrać obrazka.");
-    }
-});
-
-document.getElementById("rotate-slider").addEventListener("input", function (event) {
-    const img = document.querySelector('.grawer-column img');
-    if (img) {
-        img.style.transform = `rotate(${event.target.value}deg) translateY(0px)`;
-    }
-});
-
-document.getElementById("move-slider").addEventListener("input", function (event) {
-    const img = document.querySelector('.grawer-column img');
-    if (img) {
-        const currentRotation = img.style.transform.match(/rotate(-?\d+)deg/)?.[1] || 0;
-        img.style.transform = `rotate(${currentRotation}deg) translateY(${event.target.value}px)`;
-    }
-});
-	</script>
 	
 	
     <script>
@@ -619,5 +573,52 @@ products[product].forEach((element, index) => {
                 });
         });
     </script>
+		<script>
+document.getElementById("grawer-upload").addEventListener("change", function (event) {
+    const file = event.target.files[0];
+    const imageWrapper = document.querySelector('.grawer-column');
+
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function () {
+            const imageUrl = reader.result;
+
+            // Tworzymy element img
+            const img = document.createElement('img');
+            img.src = imageUrl;
+            img.alt = "Uploaded Image";
+            img.style.transform = "rotate(0deg) translateY(0px)";
+            img.style.zIndex = 9999;
+
+            // Jeśli obrazek już istnieje, usuń go
+            const existingImage = imageWrapper.querySelector('img');
+            if (existingImage) {
+                imageWrapper.removeChild(existingImage);
+            }
+
+            // Dodaj obrazek do grawer-column
+            imageWrapper.appendChild(img);
+        };
+        reader.readAsDataURL(file);
+    } else {
+        alert("Nie udało się wgrać obrazka.");
+    }
+});
+
+document.getElementById("rotate-slider").addEventListener("input", function (event) {
+    const img = document.querySelector('.grawer-column img');
+    if (img) {
+        img.style.transform = `rotate(${event.target.value}deg) translateY(0px)`;
+    }
+});
+
+document.getElementById("move-slider").addEventListener("input", function (event) {
+    const img = document.querySelector('.grawer-column img');
+    if (img) {
+        const currentRotation = img.style.transform.match(/rotate(-?\d+)deg/)?.[1] || 0;
+        img.style.transform = `rotate(${currentRotation}deg) translateY(${event.target.value}px)`;
+    }
+});
+		</script>
 </body>
 	</html>
