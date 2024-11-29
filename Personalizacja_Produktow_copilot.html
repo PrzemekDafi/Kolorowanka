@@ -310,30 +310,21 @@
     <div id="loadingMessage">Trwa zapis obrazu, proszę czekać...</div>
 
 	<script>
-	document.getElementById("grawer-upload").addEventListener("change", function(event) {
+document.getElementById("grawer-upload").addEventListener("change", function (event) {
     const file = event.target.files[0];
     const imageWrapper = document.querySelector('.grawer-column');
-    const fileName = file.name.toLowerCase();
 
-    // Warunki wykluczające nazwy produktów
-    const excludedWords = ["dzbanek", "saturator", "pushair", "self"];
-    const isExcluded = excludedWords.some(word => fileName.includes(word));
-
-    if (!isExcluded) {
-        // Pokaż panel wgrywania i suwaki do manipulacji
-        document.querySelector('.grawer-upload-container').style.display = 'block';
-
+    if (file) {
         const reader = new FileReader();
-        reader.onload = function() {
+        reader.onload = function () {
             const imageUrl = reader.result;
 
             // Tworzymy element img
             const img = document.createElement('img');
             img.src = imageUrl;
             img.alt = "Uploaded Image";
-            img.style.transform = "rotate(0deg)";
-            img.style.transform = `translateY(0px)`;
-	img.style.zIndex = 9999;
+            img.style.transform = "rotate(0deg) translateY(0px)";
+            img.style.zIndex = 9999;
 
             // Jeśli obrazek już istnieje, usuń go
             const existingImage = imageWrapper.querySelector('img');
@@ -342,35 +333,28 @@
             }
 
             // Dodaj obrazek do grawer-column
-            const imageElement = document.createElement('div');
-            imageElement.classList.add('grawer-wrapper');
-            imageElement.appendChild(img);
-            imageWrapper.appendChild(imageElement);
+            imageWrapper.appendChild(img);
         };
         reader.readAsDataURL(file);
     } else {
-        alert("Nie możesz dodać obrazka do tego produktu.");
+        alert("Nie udało się wgrać obrazka.");
     }
 });
 
-document.getElementById("rotate-slider").addEventListener("input", function(event) {
+document.getElementById("rotate-slider").addEventListener("input", function (event) {
     const img = document.querySelector('.grawer-column img');
-    const rotateValue = event.target.value;
     if (img) {
-        img.style.transform = `rotate(${rotateValue}deg)`;
+        img.style.transform = `rotate(${event.target.value}deg) translateY(0px)`;
     }
 });
 
-document.getElementById("move-slider").addEventListener("input", function(event) {
+document.getElementById("move-slider").addEventListener("input", function (event) {
     const img = document.querySelector('.grawer-column img');
-    const moveValue = event.target.value;
     if (img) {
-        img.style.transform = `translateY(${moveValue}px)`;
+        const currentRotation = img.style.transform.match(/rotate(-?\d+)deg/)?.[1] || 0;
+        img.style.transform = `rotate(${currentRotation}deg) translateY(${event.target.value}px)`;
     }
 });
-
-
-	
 	</script>
 	
 	
