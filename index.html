@@ -190,6 +190,16 @@
         .no-border-radius {
             border-radius: 0 !important;
         }
+
+	    .select-colors {
+    background-color: #f0f0f0;
+    border: 1px solid #ccc;
+    padding: 5px;
+    font-size: 16px;
+    border-radius: 4px; /* Dodanie zaokrąglonych rogów */
+    color: #333; /* Kolor tekstu */
+    width: auto%; /* Szerokość dopasowana do kontenera */
+}
 		
     </style>
  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" defer></script>
@@ -203,7 +213,7 @@
         </div>
         <div class="options-column">
             <label for="product-select">Wybierz produkt:</label>
-            <select id="product-select">
+            <select id="product-select" class="select-colors">
                 <option value="">Wybierz produkt</option>
           <!--  <option value="butelka_soft_03l">Butelka Soft 0,3 l</option> -->
                 <option value="butelka_soft_05l">Butelka Soft 0,5 l</option>
