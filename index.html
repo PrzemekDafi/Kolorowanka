@@ -438,10 +438,13 @@ products[product].forEach((element, index) => {
 	
 	
   
-       document.getElementById('saveBtn').addEventListener('click', function() {
+      document.getElementById('saveBtn').addEventListener('click', function() {
             const element = document.getElementById('image-column');
             const loadingMessage = document.getElementById('loadingMessage');
             loadingMessage.style.display = 'block';
+
+            // Dodaj klasę wyłączającą zaokrąglone rogi
+            element.classList.add('no-border-radius');
 
             const selectedProduct = document.getElementById('product-select').value || 'produkt';
             const now = new Date();
@@ -455,11 +458,15 @@ products[product].forEach((element, index) => {
                     link.click();
                     loadingMessage.style.display = 'none';
                     alert('Obraz został zapisany.');
+                    // Usuń klasę po zapisaniu obrazu
+                    element.classList.remove('no-border-radius');
                 })
                 .catch(function(error) {
                     console.error('Błąd podczas generowania obrazu:', error);
                     loadingMessage.style.display = 'none';
                     alert('Wystąpił błąd podczas zapisywania obrazu.');
+                    // Usuń klasę w przypadku błędu
+                    element.classList.remove('no-border-radius');
                 });
         });
     </script>
