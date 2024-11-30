@@ -199,6 +199,27 @@
     border-radius: 4px; /* Dodanie zaokrąglonych rogów */
     color: #333; /* Kolor tekstu */
     width: auto%; /* Szerokość dopasowana do kontenera */
+
+		    #image-column {
+    position: relative; /* Ważne, aby kontener miał relatywne pozycjonowanie */
+    width: 500px;
+    height: 500px;
+}
+
+#base-canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1; /* Tło */
+}
+
+#overlay-canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 9999; /* Obrazek grawer - na wierzchu */
+    pointer-events: none; /* Opcjonalne - nie blokuje interakcji z elementami poniżej */
+}
 }
 		
     </style>
@@ -516,6 +537,7 @@ products[product].forEach((element, index) => {
 const overlayCanvas = document.getElementById('overlay-canvas');
 const baseCtx = baseCanvas.getContext('2d');
 const overlayCtx = overlayCanvas.getContext('2d');
+		
 
 const fileUpload = document.getElementById('file-upload');
 const rotateSlider = document.getElementById('rotate-slider');
