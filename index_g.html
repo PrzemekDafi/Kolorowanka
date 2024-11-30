@@ -211,14 +211,14 @@
     position: absolute;
     top: 0;
     left: 0;
-    z-index: 1; /* Tło */
+    z-index: 9999; /* Tło */
 }
 
 #overlay-canvas {
     position: absolute;
     top: 0;
     left: 0;
-    z-index: 9999; /* Obrazek grawer - na wierzchu */
+    z-index: 1000; /* Obrazek grawer - na wierzchu */
     pointer-events: none; /* Opcjonalne - nie blokuje interakcji z elementami poniżej */
 }
 }
@@ -229,7 +229,9 @@
 
 	</head>
 <body>
-    <div class="container">
+    <div class="container"><canvas id="base-canvas" width="200" height="500" style="position: absolute; z-index: 9999;"></canvas>
+    <canvas id="overlay-canvas" width="500" height="500" style="position: absolute; z-index: 1000;"></canvas>
+	
         <div class="image-column" id="image-column">
          
     <canvas id="base-canvas" width="200" height="500" style="position: absolute; z-index: 9999;"></canvas>
