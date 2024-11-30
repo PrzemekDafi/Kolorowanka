@@ -209,8 +209,11 @@
 <body>
     <div class="container">
         <div class="image-column" id="image-column">
-            <!-- Obrazki produktów będą tutaj ładowane -->
-        </div>
+         
+    <canvas id="canvas" width="500" height="500"></canvas>
+</div>
+
+
         <div class="options-column">
             <label for="product-select">Wybierz produkt:</label>
             <select id="product-select" class="select-colors">
@@ -235,9 +238,17 @@
             </div>
             <button id="saveBtn">Zapisz jako JPG</button>
         </div>
-    </div>
+    
     <div id="loadingMessage">Trwa zapis obrazu, proszę czekać...</div>
 
+<label for="file-upload">Wgraj obrazek:</label>
+<input type="file" id="file-upload" accept="image/*">
+
+<label for="rotate-slider">Obrót:</label>
+<input type="range" id="rotate-slider" min="0" max="360" value="0">
+
+<label for="vertical-slider">Przesunięcie w pionie:</label>
+<input type="range" id="vertical-slider" min="-200" max="200" value="0">
     <script>
         
         const products = {
@@ -497,6 +508,66 @@ products[product].forEach((element, index) => {
                     element.classList.remove('no-border-radius');
                 });
         });
+
+	const fileUpload = document.getElementById('file-upload');
+const rotateSlider = document.getElementById('rotate-slider');
+const verticalSlider = document.getElementById('vertical-slider');
+const canvas = document.getElementById('canvas');
+const ctx = canvas.getContext('2d');
+let image = new Image();
+let rotation = 0;
+let verticalOffset = 0;
+
+// Funkcja rysująca obrazek na canvas
+function drawImage() {
+    // Wyczyść canvas
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    // Ustaw środek canvas
+    const centerX = canvas.width / 2;
+    const centerY = canvas.height / 2 + verticalOffset;
+
+    // Obróć canvas
+    ctx.save();
+    ctx.translate(centerX, centerY);
+    ctx.rotate((rotation * Math.PI) / 180);
+    ctx.translate(-centerX, -centerY);
+
+    // Rysuj obrazek na środku
+    const aspectRatio = image.width / image.height;
+    const width = aspectRatio > 1 ? 90 : 90 * aspectRatio;
+    const height = aspectRatio > 1 ? 400 / aspectRatio : 400;
+    ctx.drawImage(image, centerX - width / 2, centerY - height / 2, width, height);
+
+    ctx.restore();
+}
+
+// Obsługa wgrywania pliku
+fileUpload.addEventListener('change', (event) => {
+    const file = event.target.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            image.src = e.target.result;
+            image.onload = () => {
+                drawImage();
+            };
+        };
+        reader.readAsDataURL(file);
+    }
+});
+
+// Obsługa suwaka obrotu
+rotateSlider.addEventListener('input', (event) => {
+    rotation = parseInt(event.target.value, 10);
+    drawImage();
+});
+
+// Obsługa suwaka przesunięcia
+verticalSlider.addEventListener('input', (event) => {
+    verticalOffset = parseInt(event.target.value, 10);
+    drawImage();
+});
     </script>
 </body>
 </html>
