@@ -210,8 +210,10 @@
     <div class="container">
         <div class="image-column" id="image-column">
          
-    <canvas id="canvas" width="500" height="500"></canvas>
-</div>
+    <canvas id="base-canvas" width="200" height="500" style="position: absolute; z-index: 1;"></canvas>
+    <canvas id="overlay-canvas" width="500" height="500" style="position: absolute; z-index: 2;"></canvas>
+	</div>
+    
 
 
         <div class="options-column">
@@ -509,37 +511,40 @@ products[product].forEach((element, index) => {
                 });
         });
 
-	const fileUpload = document.getElementById('file-upload');
+    </script>
+	    <script>const baseCanvas = document.getElementById('base-canvas');
+const overlayCanvas = document.getElementById('overlay-canvas');
+const baseCtx = baseCanvas.getContext('2d');
+const overlayCtx = overlayCanvas.getContext('2d');
+
+const fileUpload = document.getElementById('file-upload');
 const rotateSlider = document.getElementById('rotate-slider');
 const verticalSlider = document.getElementById('vertical-slider');
-const canvas = document.getElementById('canvas');
-const ctx = canvas.getContext('2d');
+
 let image = new Image();
 let rotation = 0;
 let verticalOffset = 0;
 
-// Funkcja rysująca obrazek na canvas
-function drawImage() {
-    // Wyczyść canvas
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
+// Funkcja rysująca obrazek na overlay canvas
+function drawOverlayImage() {
+    overlayCtx.clearRect(0, 0, overlayCanvas.width, overlayCanvas.height);
 
-    // Ustaw środek canvas
-    const centerX = canvas.width / 2;
-    const centerY = canvas.height / 2 + verticalOffset;
+    // Ustaw środek overlay canvas
+    const centerX = overlayCanvas.width / 2;
+    const centerY = overlayCanvas.height / 2 + verticalOffset;
 
-    // Obróć canvas
-    ctx.save();
-    ctx.translate(centerX, centerY);
-    ctx.rotate((rotation * Math.PI) / 180);
-    ctx.translate(-centerX, -centerY);
+    overlayCtx.save();
+    overlayCtx.translate(centerX, centerY);
+    overlayCtx.rotate((rotation * Math.PI) / 180);
+    overlayCtx.translate(-centerX, -centerY);
 
-    // Rysuj obrazek na środku
+    // Skalowanie obrazka do 90x400px
     const aspectRatio = image.width / image.height;
     const width = aspectRatio > 1 ? 90 : 90 * aspectRatio;
     const height = aspectRatio > 1 ? 400 / aspectRatio : 400;
-    ctx.drawImage(image, centerX - width / 2, centerY - height / 2, width, height);
+    overlayCtx.drawImage(image, centerX - width / 2, centerY - height / 2, width, height);
 
-    ctx.restore();
+    overlayCtx.restore();
 }
 
 // Obsługa wgrywania pliku
@@ -550,7 +555,7 @@ fileUpload.addEventListener('change', (event) => {
         reader.onload = (e) => {
             image.src = e.target.result;
             image.onload = () => {
-                drawImage();
+                drawOverlayImage();
             };
         };
         reader.readAsDataURL(file);
@@ -560,14 +565,13 @@ fileUpload.addEventListener('change', (event) => {
 // Obsługa suwaka obrotu
 rotateSlider.addEventListener('input', (event) => {
     rotation = parseInt(event.target.value, 10);
-    drawImage();
+    drawOverlayImage();
 });
 
 // Obsługa suwaka przesunięcia
 verticalSlider.addEventListener('input', (event) => {
     verticalOffset = parseInt(event.target.value, 10);
-    drawImage();
-});
-    </script>
+    drawOverlayImage();
+});</script>
 </body>
 </html>
