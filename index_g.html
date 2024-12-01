@@ -566,7 +566,7 @@ function drawOverlayImage() {
     // Skalowanie obrazka do 90x400px
     const aspectRatio = image.width / image.height;
     const width = aspectRatio > 1 ? 90 : 90 * aspectRatio;
-    const height = aspectRatio > 1 ? 400 / aspectRatio : 400;
+    const height = aspectRatio > 1 ? 300 / aspectRatio : 300;
     overlayCtx.drawImage(image, centerX - width / 2, centerY - height / 2, width, height);
 
     overlayCtx.restore();
