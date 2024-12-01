@@ -563,12 +563,30 @@ function drawOverlayImage() {
     overlayCtx.rotate((rotation * Math.PI) / 180);
     overlayCtx.translate(-centerX, -centerY);
 
-    // Skalowanie obrazka do 90x400px
-    const aspectRatio = image.width / image.height;
-    const width = aspectRatio > 1 ? 90 : 90 * aspectRatio;
-    const height = aspectRatio > 1 ? 300 / aspectRatio : 300;
-    overlayCtx.drawImage(image, centerX - width / 2, centerY - height / 2, width, height);
+    const maxWidth = 90;
+const maxHeight = 400;
+const aspectRatio = image.width / image.height;
 
+// Oblicz nową szerokość i wysokość, zachowując proporcje
+let width, height;
+if (aspectRatio > 1) {
+    // Obraz jest szerszy niż wyższy
+    width = maxWidth;
+    height = maxWidth / aspectRatio;
+} else {
+    // Obraz jest wyższy niż szerszy
+    height = maxHeight;
+    width = maxHeight * aspectRatio;
+}
+
+// Dopasowanie do środka
+overlayCtx.drawImage(
+    image,
+    centerX - width / 2,
+    centerY - height / 2,
+    width,
+    height
+);
     overlayCtx.restore();
 }
 
