@@ -263,6 +263,8 @@
                 <!-- Kolory dla elementów będą generowane dynamicznie -->
             </div><label for="file-upload">Wgraj obrazek:</label>
 <input type="file" id="file-upload" accept="image/*">
+    <label for="scale">Skalowanie:</label>
+        <input id="scale" type="range" min="0.1" max="2" step="0.1" value="1">
 
 <label for="rotate-slider">Obrót:</label>
 <input type="range" id="rotate-slider" min="0" max="360" value="0">
@@ -566,53 +568,63 @@ function drawOverlayImage() {
 const maxWidth = 90;
 const maxHeight = 400;
 
-// Funkcja dopasowująca obrazek do maksymalnych wymiarów
-function fitImageToCanvas(image, angle) {
-    const rotatedWidth = angle % 180 === 0 ? image.width : image.height;
-    const rotatedHeight = angle % 180 === 0 ? image.height : image.width;
+const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        const scaleInput = document.getElementById('scale');
+        const image = new Image();
+        const maxWidth = 90;
+        const maxHeight = 400;
 
-    const aspectRatio = rotatedWidth / rotatedHeight;
+        let scale = 1;
+        let angle = 0;
 
-    // Oblicz nową szerokość i wysokość z zachowaniem proporcji
-    let width, height;
-    if (aspectRatio > maxWidth / maxHeight) {
-        width = maxWidth;
-        height = maxWidth / aspectRatio;
-    } else {
-        height = maxHeight;
-        width = maxHeight * aspectRatio;
-    }
+        // Wczytaj obraz
+        image.src = 'https://via.placeholder.com/600'; // Podmień na ścieżkę do swojego obrazu
+        image.onload = () => drawImage();
 
-    return { width, height };
-}
+        // Rysowanie obrazu na canvas
+        function drawImage() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height); // Czyszczenie canvas
+            ctx.save();
 
-// Przykład użycia:
-const angle = 90; // Kąt obrotu w stopniach
-const { width, height } = fitImageToCanvas(image, angle);
+            // Środek obrotu
+            const centerX = canvas.width / 2;
+            const centerY = canvas.height / 2;
 
-// Rysowanie obrazka na środku
-overlayCtx.save();
-overlayCtx.translate(centerX, centerY); // Przesunięcie środka rotacji
-overlayCtx.rotate((angle * Math.PI) / 180); // Obrót w radianach
-overlayCtx.drawImage(
-    image,
-    -width / 2,
-    -height / 2,
-    width,
-    height
-);
-overlayCtx.restore();
-// Dopasowanie do środka
-overlayCtx.drawImage(
-    image,
-    centerX - width / 2,
-    centerY - height / 2,
-    width,
-    height
-);
-    overlayCtx.restore();
-}
+            // Oblicz proporcje po obrocie
+            const rotatedWidth = angle % 180 === 0 ? image.width : image.height;
+            const rotatedHeight = angle % 180 === 0 ? image.height : image.width;
+            const aspectRatio = rotatedWidth / rotatedHeight;
 
+            let width, height;
+            if (aspectRatio > maxWidth / maxHeight) {
+                width = maxWidth * scale;
+                height = (maxWidth / aspectRatio) * scale;
+            } else {
+                height = maxHeight * scale;
+                width = (maxHeight * aspectRatio) * scale;
+            }
+
+            // Obrót obrazu
+            ctx.translate(centerX, centerY);
+            ctx.rotate((angle * Math.PI) / 180);
+
+            // Rysowanie obrazu na środku
+            ctx.drawImage(image, -width / 2, -height / 2, width, height);
+            ctx.restore();
+        }
+
+        // Obsługa suwaka skalowania
+        scaleInput.addEventListener('input', (e) => {
+            scale = parseFloat(e.target.value);
+            drawImage();
+        });
+
+        // Obrót co 90° (przykład – możesz zmienić logikę rotacji)
+        canvas.addEventListener('click', () => {
+            angle = (angle + 90) % 360;
+            drawImage();
+        });
 // Obsługa wgrywania pliku
 fileUpload.addEventListener('change', (event) => {
     const file = event.target.files[0];
