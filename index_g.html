@@ -23,13 +23,13 @@
             align-items: center;
             height: 100%;
         }
-        .image-column, .options-column {
+        .image-column, image-column2, .options-column {
             flex: 1;
             padding: 20px;
             max-width: 900px;
             min-width: auto;
         }
-        .image-column {
+        .image-column, .image-column2 {
             display: flex;
 	position: relative;
             justify-content: center;
@@ -229,14 +229,16 @@
 
 	</head>
 <body>
-    <div class="container"><canvas id="base-canvas" width="200" height="500" style="position: absolute; z-index: 9999;"></canvas>
+    <div class="container">
+	    <div class="image-column2" id="image-column2">
+	    <canvas id="base-canvas" width="200" height="500" style="position: absolute; z-index: 9999;"></canvas>
     <canvas id="overlay-canvas" width="500" height="500" style="position: absolute; z-index: 1000;"></canvas>
 	
         <div class="image-column" id="image-column">
          
     <canvas id="base-canvas" width="200" height="500" style="position: absolute; z-index: 9999;"></canvas>
     <canvas id="overlay-canvas" width="500" height="500" style="position: absolute; z-index: 1000;"></canvas>
-	</div>
+	</div></div>
     
 
 
