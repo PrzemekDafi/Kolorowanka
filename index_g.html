@@ -261,13 +261,7 @@
             </select>
             <div id="color-options">
                 <!-- Kolory dla elementów będą generowane dynamicznie -->
-            </div>
-            <button id="saveBtn">Zapisz jako JPG</button>
-        </div>
-    
-    <div id="loadingMessage">Trwa zapis obrazu, proszę czekać...</div>
-
-<label for="file-upload">Wgraj obrazek:</label>
+            </div><label for="file-upload">Wgraj obrazek:</label>
 <input type="file" id="file-upload" accept="image/*">
 
 <label for="rotate-slider">Obrót:</label>
@@ -275,7 +269,13 @@
 
 <label for="vertical-slider">Przesunięcie w pionie:</label>
 <input type="range" id="vertical-slider" min="-200" max="200" value="0">
-    <script>
+    
+            <button id="saveBtn">Zapisz jako JPG</button>
+        </div>
+    
+    <div id="loadingMessage">Trwa zapis obrazu, proszę czekać...</div>
+
+<script>
         
         const products = {
             butelka_soft_03l: ['ustnik', 'zakretka_z_gumka', 'filtr'],
