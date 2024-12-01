@@ -563,22 +563,45 @@ function drawOverlayImage() {
     overlayCtx.rotate((rotation * Math.PI) / 180);
     overlayCtx.translate(-centerX, -centerY);
 
-    const maxWidth = 90;
+const maxWidth = 90;
 const maxHeight = 400;
-const aspectRatio = image.width / image.height;
 
-// Oblicz nową szerokość i wysokość, zachowując proporcje
-let width, height;
-if (aspectRatio > 1) {
-    // Obraz jest szerszy niż wyższy
-    width = maxWidth;
-    height = maxWidth / aspectRatio;
-} else {
-    // Obraz jest wyższy niż szerszy
-    height = maxHeight;
-    width = maxHeight * aspectRatio;
+// Funkcja dopasowująca obrazek do maksymalnych wymiarów
+function fitImageToCanvas(image, angle) {
+    const rotatedWidth = angle % 180 === 0 ? image.width : image.height;
+    const rotatedHeight = angle % 180 === 0 ? image.height : image.width;
+
+    const aspectRatio = rotatedWidth / rotatedHeight;
+
+    // Oblicz nową szerokość i wysokość z zachowaniem proporcji
+    let width, height;
+    if (aspectRatio > maxWidth / maxHeight) {
+        width = maxWidth;
+        height = maxWidth / aspectRatio;
+    } else {
+        height = maxHeight;
+        width = maxHeight * aspectRatio;
+    }
+
+    return { width, height };
 }
 
+// Przykład użycia:
+const angle = 90; // Kąt obrotu w stopniach
+const { width, height } = fitImageToCanvas(image, angle);
+
+// Rysowanie obrazka na środku
+overlayCtx.save();
+overlayCtx.translate(centerX, centerY); // Przesunięcie środka rotacji
+overlayCtx.rotate((angle * Math.PI) / 180); // Obrót w radianach
+overlayCtx.drawImage(
+    image,
+    -width / 2,
+    -height / 2,
+    width,
+    height
+);
+overlayCtx.restore();
 // Dopasowanie do środka
 overlayCtx.drawImage(
     image,
