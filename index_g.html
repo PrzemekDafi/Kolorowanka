@@ -569,7 +569,7 @@ function drawOverlayImage() {
     overlayCtx.rotate((rotation * Math.PI) / 180);
     overlayCtx.translate(-centerX, -centerY);
 
-    // Skalowanie obrazka z zachowaniem proporcji
+      // Skalowanie obrazka z zachowaniem proporcji
     const maxWidth = 90;
     const maxHeight = 400;
     const aspectRatio = image.width / image.height;
@@ -623,8 +623,7 @@ rotateSlider.addEventListener('input', (event) => {
     drawOverlayImage();
 });
 
-// Obsługa suwaka skali
-    const scale = parseFloat(document.getElementById("scaleSlider").value);
+
 
 // Skala obrazka (można zmieniać dynamicznie, np. jako parametr funkcji)
     const scale = 1.0; // Zmień na wartość między 0.1 a 2.0, by skalować obrazek
@@ -658,7 +657,9 @@ rotateSlider.addEventListener('input', (event) => {
     overlayCtx.drawImage(image, centerX - width / 2, centerY - height / 2, width, height);
 
     overlayCtx.restore();
-}
+
+		    // Obsługa suwaka skali
+    const scale = parseFloat(document.getElementById("scaleSlider").value);
 	    
 	    </script>
 </body>
