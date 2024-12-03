@@ -626,8 +626,10 @@ rotateSlider.addEventListener('input', (event) => {
 
 
 // Skala obrazka (można zmieniać dynamicznie, np. jako parametr funkcji)
-    const scale = 1.0; // Zmień na wartość między 0.1 a 2.0, by skalować obrazek
 
+// Obsługa suwaka skali
+    const scale = parseFloat(document.getElementById("scaleSlider").value);
+	    
     let width, height;
 
     if (aspectRatio > 1) {
