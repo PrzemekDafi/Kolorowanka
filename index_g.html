@@ -650,13 +650,7 @@ rotateSlider.addEventListener('input', (event) => {
         }
     }
 
-    // Zastosuj skalowanie
-		    {  width *= scale;
-    height *= scale;
-
-    overlayCtx.drawImage(image, centerX - width / 2, centerY - height / 2, width, height);
-
-    overlayCtx.restore();}
+    
 
 		    // Obsługa suwaka skali
     const scale = parseFloat(document.getElementById("scaleSlider").value);
