@@ -23,6 +23,14 @@
             align-items: center;
             height: 100%;
         }
+
+	    image-column2 {
+            flex: 1;
+            padding: 20px;
+            max-width: 100%;
+            min-width: auto;
+        }
+	    
         .image-column, image-column2, .options-column {
             flex: 1;
             padding: 20px;
@@ -234,7 +242,7 @@
 	    <div class="image-column2" id="image-column2">
 	    <canvas id="base-canvas" width="500px" height="500px" style="position: absolute; z-index: 9999;"></canvas>
     <canvas id="overlay-canvas" width="100%" height="auto" style="position: absolute; z-index: 1000;"></canvas>
-    <canvas id="overlay-canvas" width="900" height="900" style="position: absolute; z-index: 1000;"></canvas>
+    <canvas id="overlay-canvas" width="500" height="500" style="position: absolute; z-index: 1000;"></canvas>
 
         <div class="image-column" id="image-column">
 
