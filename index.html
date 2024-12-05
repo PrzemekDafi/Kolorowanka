@@ -23,20 +23,26 @@
             align-items: center;
             height: 100%;
         }
+
+	    
         .image-column, .options-column {
             flex: 1;
             padding: 20px;
             max-width: 900px;
             min-width: auto;
         }
-        .image-column {
+        .image-column, .image-column2 {
             display: flex;
+			position: relative;
             justify-content: center;
             align-items: center;
             background-color: #fff;
             border-radius: 20px;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         }
+		
+			
+		
         .product-frame {
     position: relative;
     width: 100%;
@@ -56,10 +62,12 @@
     left: 0;
     width: 100%;
     height: 100%;
+	
 }
 
 .image-wrapper img {
     width: 100%;
+	
     height: 100%;
     object-fit: contain; /* Elementy produktu proporcjonalnie dopasowane */
     border-radius: 20px;
@@ -79,7 +87,7 @@
             margin-bottom: 8px;
         }
 
-	    .product-select {
+	    .product-select, {
             margin-bottom: 20px;
             display: flex;
             flex-direction: column;
@@ -92,10 +100,27 @@
             color: #333;
             margin-bottom: 8px;
         }
+		.grawer-column {
+            justify-content: center;
+            align-items: center;
+            background-color: #fff;
+			padding: 20px;
+			margin: 10px 0 10px 0;
+            border-radius: 20px;
+			width: 50%;
+        }
+		
+		#file-upload {
+			font-size: 16px;
+            font-weight: 600;
+			color: #fff;
+            background-color: #28a745;
+            margin-bottom: 8px;
+		}
 
-	    
+
 	    .product-select,
-        .product-select input {
+        .product-select, input {
             padding: 10px;
             font-size: 16px;
             border-radius: 10px;
@@ -110,7 +135,7 @@
             border-color: #007bff;
             outline: none;
         }
-	    
+
         .color-input select,
         .color-input input {
             padding: 10px;
@@ -172,7 +197,7 @@
             font-size: 14px;
             margin-top: 10px;
         }
-		
+
 		  #loadingMessage {
             display: none;
             position: fixed;
@@ -198,9 +223,31 @@
     font-size: 16px;
     border-radius: 4px; /* Dodanie zaokrąglonych rogów */
     color: #333; /* Kolor tekstu */
-    width: auto%; /* Szerokość dopasowana do kontenera */
+			width: auto%; /* Szerokość dopasowana do kontenera */}
+
+		    #image-column {
+    position: relative; /* Ważne, aby kontener miał relatywne pozycjonowanie */
+    min-width: 900px;
+    max-width: 900px;
+    min-height: 900px;
+	max-height: 900px;}
+
+#base-canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 9999; /* Tło */
 }
-		
+
+#overlay-canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1000; /* Obrazek grawer - na wierzchu */
+    pointer-events: none; /* Opcjonalne - nie blokuje interakcji z elementami poniżej */
+
+		}
+
     </style>
  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" defer></script>
 	 <script src="https://cdnjs.cloudflare.com/ajax/libs/dom-to-image/2.6.0/dom-to-image.min.js"></script>
@@ -208,9 +255,15 @@
 	</head>
 <body>
     <div class="container">
-        <div class="image-column" id="image-column">
-            <!-- Obrazki produktów będą tutaj ładowane -->
-        </div>
+	    <div class="image-column2" id="image-column2">
+	    <canvas id="base-canvas" width="800px" height="800px" style="position: absolute; z-index: 9999;"></canvas>
+    <canvas id="overlay-canvas" width="800px" height="800px" style="position: absolute; z-index: 1000;"></canvas>
+
+			<div class="image-column" id="image-column"></div>
+			</div>
+
+
+
         <div class="options-column">
             <label for="product-select">Wybierz produkt:</label>
             <select id="product-select" class="select-colors">
@@ -225,32 +278,47 @@
 
                 <option value="shape_t">Shape T</option>
                 <option value="shape">Shape</option>
-		    
+
                 <option value="easy">Easy</option>
 
                 <option value="saturator">PushAir</option>
             </select>
             <div id="color-options">
                 <!-- Kolory dla elementów będą generowane dynamicznie -->
-            </div>
-            <button id="saveBtn">Zapisz jako JPG</button>
-        </div>
+            </div><div class="grawer-column">
+			<label for="file-upload"><b>NOWOŚĆ</b> Wgraj grawer:</label>
+<input type="file" id="file-upload" accept="image/*">
+<br>
+<label for="rotate-slider">Obrót:</label><br>
+<input type="range" id="rotate-slider" min="0" max="360" value="0">
+<br>
+<label for="vertical-slider">Przesunięcie w pionie:</label><br>
+<input type="range" id="vertical-slider" min="-200" max="200" value="0"><br>
+<label for="horizontal-slider">Przesunięcie w poziomie:</label><br>
+<input type="range" id="horizontal-slider" min="-200" max="200" value="0"><br>
+<label for="size-slider">Rozmiar obrazka:</label><br>
+<input id="size-slider" type="range" min="10" max="100" value="80">
     </div>
-    <div id="loadingMessage">Trwa zapis obrazu, proszę czekać...</div>
+<div>
+	
+            <button id="saveBtn">Zapisz jako JPG</button>
+			</div></div>
 
-    <script>
-        
+    <div id="loadingMessage">Trwa zapis obrazu, proszę czekać...</div>
+	</div>
+<script>
+
         const products = {
             butelka_soft_03l: ['ustnik', 'zakretka_z_gumka', 'filtr'],
             butelka_soft_05l: ['ustnik', 'zakretka_z_gumka', 'filtr'],
             butelka_soft_07l: ['ustnik', 'zakretka_z_gumka', 'filtr'],
-          
+
             butelka_solid_05l: ['elastometr', 'przycisk', 'zakretka_gora', 'zakretka_dol', 'rurka', 'zbiornik_solid', 'ustnik', 'zakretka_z_gumka', 'filtr'],
             butelka_solid_07l: ['elastometr', 'elastometr_uchwyty', 'przycisk', 'zakretka_dol', 'zakretka_gora', 'rurka', 'zbiornik_solid'],
             butelka_solid_steel_07l: ['elastometr', 'elastometr_uchwyty', 'przycisk', 'zakretka_dol', 'zakretka_gora','zbiornik_solid_steel'],
 	    shape_t: ['zakretka_shape', 'uszczelka_shape', 'wewnetrzna_gumka'],
             shape: ['shape_zbiornik', 'zakretka_shape', 'uszczelka_shape', 'wewnetrzna_gumka'],
-		
+
             easy: ['elastometr', 'sama_gora_zakretki', 'zbiornik', 'gora_zakretki', 'guma_zakretki'],
 
             saturator: ['saturator_gora_korpus', 'saturator_butelka', 'satuator_korpus', 'przycisk_saturatora', 'saturator_gora_klapka', 'pushair_logo'],
@@ -292,7 +360,7 @@
 
         let originalImages = {};
 
-		
+
         document.getElementById('product-select').addEventListener('change', function () {
             const product = this.value;
             const colorOptions = document.getElementById('color-options');
@@ -461,13 +529,13 @@ products[product].forEach((element, index) => {
 
         }
     </script>
-	
+
 <script>
-	
-	
-  
+
+
+
       document.getElementById('saveBtn').addEventListener('click', function() {
-            const element = document.getElementById('image-column');
+            const element = document.getElementById('image-column2');
             const loadingMessage = document.getElementById('loadingMessage');
             loadingMessage.style.display = 'block';
 
@@ -497,6 +565,109 @@ products[product].forEach((element, index) => {
                     element.classList.remove('no-border-radius');
                 });
         });
+
     </script>
+	    <script>const baseCanvas = document.getElementById('base-canvas');
+const overlayCanvas = document.getElementById('overlay-canvas');
+const baseCtx = baseCanvas.getContext('2d');
+const overlayCtx = overlayCanvas.getContext('2d');
+
+
+const fileUpload = document.getElementById('file-upload');
+const rotateSlider = document.getElementById('rotate-slider');
+const verticalSlider = document.getElementById('vertical-slider');
+const horizontalSlider = document.getElementById('horizontal-slider');
+const sizeSlider = document.getElementById('size-slider');
+
+
+let image = new Image();
+let rotation = 0;
+let verticalOffset = 0;
+let horizontalOffset = 0;
+let scale = 0.2 // Domyślny rozmiar 100% (1.0)
+
+
+
+function drawOverlayImage() {
+    overlayCtx.clearRect(0, 0, overlayCanvas.width, overlayCanvas.height);
+
+    const centerX = overlayCanvas.width / 2 + horizontalOffset;
+    const centerY = overlayCanvas.height / 2 + verticalOffset;
+
+    overlayCtx.save();
+    overlayCtx.translate(centerX, centerY);
+    overlayCtx.rotate((rotation * Math.PI) / 180);
+    overlayCtx.translate(-centerX, -centerY);
+
+    // Skalowanie obrazka z zachowaniem proporcji
+    const maxWidth = 800 * scale; // Uwzględnij skalę
+    const maxHeight = 800 * scale; // Uwzględnij skalę
+    const aspectRatio = image.width / image.height;
+
+    let width, height;
+
+    if (aspectRatio > 1) {
+        width = maxWidth;
+        height = maxWidth / aspectRatio;
+
+        if (height > maxHeight) {
+            height = maxHeight;
+            width = maxHeight * aspectRatio;
+        }
+    } else {
+        height = maxHeight;
+        width = maxHeight * aspectRatio;
+
+        if (width > maxWidth) {
+            width = maxWidth;
+            height = maxWidth / aspectRatio;
+        }
+    }
+
+    overlayCtx.drawImage(image, centerX - width / 2, centerY - height / 2, width, height);
+
+    overlayCtx.restore();
+}
+
+
+
+// Obsługa wgrywania pliku
+fileUpload.addEventListener('change', (event) => {
+    const file = event.target.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            image.src = e.target.result;
+            image.onload = () => {
+                drawOverlayImage();
+            };
+        };
+        reader.readAsDataURL(file);
+    }
+});
+
+// Obsługa suwaka obrotu
+rotateSlider.addEventListener('input', (event) => {
+    rotation = parseInt(event.target.value, 10);
+    drawOverlayImage();
+});
+// Obsługa suwaka przesunięcia
+horizontalSlider.addEventListener('input', (event) => {
+    horizontalOffset = parseInt(event.target.value, 10);
+    drawOverlayImage();
+});
+// Obsługa suwaka przesunięcia
+verticalSlider.addEventListener('input', (event) => {
+    verticalOffset = parseInt(event.target.value, 10);
+    drawOverlayImage();
+});
+// Obsługa zmiany rozmiaru
+	sizeSlider.addEventListener('input', (event) => {
+    scale = parseInt(event.target.value, 10) / 80; // Wartość suwaka w zakresie 10–200 przekształcana na skalę 0.1–2.0
+    drawOverlayImage();
+});
+
+	
+	</script>
 </body>
 </html>
