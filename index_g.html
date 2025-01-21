@@ -285,7 +285,7 @@ h1 {
         }
 
         /* Styl maski dla wgranego obrazka */
-        #image-column {
+        #self-image {
             width: 300px;
             height: 300px;
             position: relative;
@@ -359,6 +359,10 @@ h1 {
 <label for="size-slider">Rozmiar obrazka:</label><br>
 <input id="size-slider" type="range" min="10" max="100" value="80">
     </div>
+
+		<div class="self-image" id="self-image">
+        <!-- Obrazek wyświetlony tutaj -->
+    </div>
 <div>
 	
             <button id="saveBtn">Zapisz jako JPG</button>
@@ -370,7 +374,7 @@ h1 {
         // Pobieranie elementów
         const optionSelector = document.getElementById('option-selector');
         const grawerColumn = document.querySelector('.grawer-column');
-        const imageColumn = document.getElementById('image-column');
+        const imageColumn = document.getElementById('self-image');
 
         // Funkcja obsługująca zmianę opcji w select
         optionSelector.addEventListener('change', (event) => {
