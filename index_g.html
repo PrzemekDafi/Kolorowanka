@@ -24,14 +24,8 @@
             height: 100%;
         }
 
-	    image-column2 {
-            flex: 1;
-            padding: 20px;
-            max-width: 100%;
-            min-width: auto;
-        }
 	    
-        .image-column, image-column2, .options-column {
+        .image-column, .options-column {
             flex: 1;
             padding: 20px;
             max-width: 900px;
@@ -39,13 +33,32 @@
         }
         .image-column, .image-column2 {
             display: flex;
-	position: relative;
+			position: relative;
             justify-content: center;
             align-items: center;
             background-color: #fff;
             border-radius: 20px;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         }
+		
+			@media (max-width: 768px) {
+  .image-column, .image-column2 {
+    width: 100%;
+    height: auto;
+    justify-content: center;
+
+  }
+
+  .image-column img, .image-column2 img {
+    width: 100%;
+    height: auto;
+    object-fit: contain; /* Zapewnia, że obrazek będzie w całości widoczny, zachowując proporcje */
+    justify-content: center;
+
+  }
+}
+
+		
         .product-frame {
     position: relative;
     width: 100%;
@@ -65,19 +78,21 @@
     left: 0;
     width: 100%;
     height: 100%;
+	
 }
 
 .image-wrapper img {
     width: 100%;
+	
     height: 100%;
     object-fit: contain; /* Elementy produktu proporcjonalnie dopasowane */
     border-radius: 20px;
 }
 
         .color-input {
-            margin-bottom: 20px;
+            margin: 20px;
             display: flex;
-            flex-direction: column;
+            flex-direction: row;
             align-items: center;
             gap: 10px;
         }
@@ -88,7 +103,7 @@
             margin-bottom: 8px;
         }
 
-	    .product-select {
+	    .product-select, {
             margin-bottom: 20px;
             display: flex;
             flex-direction: column;
@@ -101,13 +116,41 @@
             color: #333;
             margin-bottom: 8px;
         }
+		.grawer-column {
+            justify-content: center;
+            align-items: center;
+            background-color: #fff;
+	padding: 20px;
+	margin: 10px 0 10px 0;
+            border-radius: 20px;
+		width: auto;
+        }
+		
+		#file-upload {
+			font-size: 16px;
+            font-weight: 600;
+			color: #fff;
+            background-color: #28a745;
+            margin-bottom: 10px;
+        	margin-top: 10px;
 
+		}
+h1 {
+	    font-size: 16px;
+            font-weight: 600;
+	    color: #fff;
+	border-radius: 50px;
+	text-wrap: wrap;
+            background-color: #28a745;
+            padding: 15px;
+	width: 300px;
+		}
 
 	    .product-select,
-        .product-select input {
+        .product-select, input {
             padding: 10px;
             font-size: 16px;
-            border-radius: 10px;
+            border-radius: 50px;
             border: 1px solid #ccc;
             width: 100%;
             max-width: 300px;
@@ -124,7 +167,7 @@
         .color-input input {
             padding: 10px;
             font-size: 16px;
-            border-radius: 10px;
+            border-radius: 50px;
             border: 1px solid #ccc;
             width: 100%;
             max-width: 300px;
@@ -211,10 +254,11 @@
 
 		    #image-column {
     position: relative; /* Ważne, aby kontener miał relatywne pozycjonowanie */
-    min-width: 500px;
-    max-width: 900px
-    min-height: 500px;
-    max-height: auto;
+    min-width: 900px;
+    max-width: 900px;
+    min-height: 900px;
+			    max-height: 900px;}
+	    
 
 #base-canvas {
     position: absolute;
@@ -240,17 +284,16 @@
 <body>
     <div class="container">
 	    <div class="image-column2" id="image-column2">
-	    <canvas id="base-canvas" width="500px" height="500px" style="position: absolute; z-index: 9999;"></canvas>
-    <canvas id="overlay-canvas" width="100%" height="auto" style="position: absolute; z-index: 1000;"></canvas>
-    <canvas id="overlay-canvas" width="500" height="500" style="position: absolute; z-index: 1000;"></canvas>
+	    <canvas id="base-canvas" width="900px" height="900px" style="position: absolute; z-index: 9999;"></canvas>
+    <canvas id="overlay-canvas" width="900px" height="900px" style="position: absolute; z-index: 1000;"></canvas>
 
-        <div class="image-column" id="image-column">
-
-    </div></div>
+			<div class="image-column" id="image-column"></div>
+			</div>
 
 
 
         <div class="options-column">
+		<h1>Aktualizacja: Bidon Twist + GRAWER!</h1>
             <label for="product-select">Wybierz produkt:</label>
             <select id="product-select" class="select-colors">
                 <option value="">Wybierz produkt</option>
@@ -261,7 +304,8 @@
                 <option value="butelka_solid_05l">Butelka Solid 0,5 l</option>-->
                 <option value="butelka_solid_07l">Butelka Solid 0,7 l</option>
                 <option value="butelka_solid_steel_07l">Butelka Solid Steel 0,7 l</option>
-
+                <option value="bidon_twist">Bidon Twist</option>
+		<option value="bidon_klasyczny">Bidon Dafi</option>
                 <option value="shape_t">Shape T</option>
                 <option value="shape">Shape</option>
 
@@ -271,22 +315,27 @@
             </select>
             <div id="color-options">
                 <!-- Kolory dla elementów będą generowane dynamicznie -->
-            </div><br>
-<div>
-	<label for="file-upload">Wgraj obrazek:</label>
+            </div><div class="grawer-column">
+			<label for="file-upload"><b>NOWOŚĆ</b> Wgraj grawer:</label>
 <input type="file" id="file-upload" accept="image/*">
 <br>
 <label for="rotate-slider">Obrót:</label><br>
 <input type="range" id="rotate-slider" min="0" max="360" value="0">
 <br>
 <label for="vertical-slider">Przesunięcie w pionie:</label><br>
-<input type="range" id="vertical-slider" min="-200" max="200" value="0">
-<br>
+<input type="range" id="vertical-slider" min="-200" max="200" value="0"><br>
+<label for="horizontal-slider">Przesunięcie w poziomie:</label><br>
+<input type="range" id="horizontal-slider" min="-200" max="200" value="0"><br>
+<label for="size-slider">Rozmiar obrazka:</label><br>
+<input id="size-slider" type="range" min="10" max="100" value="80">
+    </div>
+<div>
+	
             <button id="saveBtn">Zapisz jako JPG</button>
 			</div></div>
 
     <div id="loadingMessage">Trwa zapis obrazu, proszę czekać...</div>
-
+	</div>
 <script>
 
         const products = {
@@ -299,6 +348,8 @@
             butelka_solid_steel_07l: ['elastometr', 'elastometr_uchwyty', 'przycisk', 'zakretka_dol', 'zakretka_gora','zbiornik_solid_steel'],
 	    shape_t: ['zakretka_shape', 'uszczelka_shape', 'wewnetrzna_gumka'],
             shape: ['shape_zbiornik', 'zakretka_shape', 'uszczelka_shape', 'wewnetrzna_gumka'],
+	    bidon_twist: ['twist-ustnik', 'twist_zakretka', 'twist_zakretka-dol', 'twist_zbiornik'],
+            bidon_klasyczny: ['bidon_zatyczka', 'bidon_zakretka', 'bidon_zbiornik'],
 
             easy: ['elastometr', 'sama_gora_zakretki', 'zbiornik', 'gora_zakretki', 'guma_zakretki'],
 
@@ -308,6 +359,16 @@
         };
 
         const colors = {
+
+	    Mocha_Mousse_Pantone_kolor_2025roku_NOWOŚĆ: '#a47764',
+		Tendril_NOWOŚĆ: '#899f6a',
+		Cornflower_Blue_NOWOŚĆ: '#7391c9',
+		Viola_NOWOŚĆ: '#a793b8',
+		Rose_Tan_NOWOŚĆ: '#d29d98',
+		Cobblestone_NOWOŚĆ: '#a99b8f',
+		Willow_NOWOŚĆ: '#9a8b4f',
+		Gardenia_NOWOŚĆ: '#f0e9e0',
+		Peach: '#f5c09e',
             Biały: '#ffffff',
             Antracytowy: '#161616',
             Bordowy_FCB: '#a31d45',
@@ -557,16 +618,22 @@ const overlayCtx = overlayCanvas.getContext('2d');
 const fileUpload = document.getElementById('file-upload');
 const rotateSlider = document.getElementById('rotate-slider');
 const verticalSlider = document.getElementById('vertical-slider');
+const horizontalSlider = document.getElementById('horizontal-slider');
+const sizeSlider = document.getElementById('size-slider');
+
 
 let image = new Image();
 let rotation = 0;
 let verticalOffset = 0;
+let horizontalOffset = 0;
+let scale = 0.2 // Domyślny rozmiar 100% (1.0)
+
+
 
 function drawOverlayImage() {
     overlayCtx.clearRect(0, 0, overlayCanvas.width, overlayCanvas.height);
 
-    // Ustaw środek overlay canvas
-    const centerX = overlayCanvas.width / 2;
+    const centerX = overlayCanvas.width / 2 + horizontalOffset;
     const centerY = overlayCanvas.height / 2 + verticalOffset;
 
     overlayCtx.save();
@@ -575,14 +642,13 @@ function drawOverlayImage() {
     overlayCtx.translate(-centerX, -centerY);
 
     // Skalowanie obrazka z zachowaniem proporcji
-    const maxWidth = 100;
-    const maxHeight = 800;
+    const maxWidth = 800 * scale; // Uwzględnij skalę
+    const maxHeight = 800 * scale; // Uwzględnij skalę
     const aspectRatio = image.width / image.height;
 
     let width, height;
 
     if (aspectRatio > 1) {
-        // Obrazek jest szerszy niż wyższy
         width = maxWidth;
         height = maxWidth / aspectRatio;
 
@@ -591,7 +657,6 @@ function drawOverlayImage() {
             width = maxHeight * aspectRatio;
         }
     } else {
-        // Obrazek jest wyższy niż szerszy lub kwadratowy
         height = maxHeight;
         width = maxHeight * aspectRatio;
 
@@ -605,6 +670,7 @@ function drawOverlayImage() {
 
     overlayCtx.restore();
 }
+
 
 
 // Obsługa wgrywania pliku
@@ -627,11 +693,23 @@ rotateSlider.addEventListener('input', (event) => {
     rotation = parseInt(event.target.value, 10);
     drawOverlayImage();
 });
-
+// Obsługa suwaka przesunięcia
+horizontalSlider.addEventListener('input', (event) => {
+    horizontalOffset = parseInt(event.target.value, 10);
+    drawOverlayImage();
+});
 // Obsługa suwaka przesunięcia
 verticalSlider.addEventListener('input', (event) => {
     verticalOffset = parseInt(event.target.value, 10);
     drawOverlayImage();
-});</script>
+});
+// Obsługa zmiany rozmiaru
+	sizeSlider.addEventListener('input', (event) => {
+    scale = parseInt(event.target.value, 10) / 80; // Wartość suwaka w zakresie 10–200 przekształcana na skalę 0.1–2.0
+    drawOverlayImage();
+});
+
+	
+	</script>
 </body>
 </html>
