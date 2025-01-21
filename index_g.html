@@ -336,6 +336,10 @@ h1 {
 
     <div id="loadingMessage">Trwa zapis obrazu, proszę czekać...</div>
 	</div>
+	<!--SELF SELF--><div id="image-upload-column" style="display: none;">
+    <label for="image-upload">Wgraj obrazek:</label>
+    <input type="file" id="image-upload" accept="image/*">
+</div><!--SELF SELF-->
 <script>
 
         const products = {
@@ -573,25 +577,56 @@ products[product].forEach((element, index) => {
     </script>
 <!-- SELF SELF SELF SELF  SELF SELF SELF SELF  SELF SELF SELF SELF  SELF SELF SELF SELF  SELF SELF SELF SELF  SELF SELF SELF SELF  SELF SELF SELF SELF  SELF SELF SELF SELF  SELF SELF SELF SELF  SELF SELF SELF SELF -->
 	<script> 
-	<script>
-    document.getElementById('product-select').addEventListener('change', function () {
-        const product = this.value;
-        const colorOptions = document.getElementById('color-options');
-        const imageColumn = document.getElementById('image-column');
-        const grawerColumn = document.getElementById('grawer-column');
-        const imageUploadColumn = document.getElementById('image-upload-column');
-        colorOptions.innerHTML = '';
-        imageColumn.innerHTML = '';
-        originalImages = {};
+		document.getElementById('product-select').addEventListener('change', function () {
+    const product = this.value;
+    const grawerColumn = document.getElementById('grawer-column');
+    const imageUploadColumn = document.getElementById('image-upload-column');
 
-        if (product === 'self') {
-            grawerColumn.style.display = 'none';
-            imageUploadColumn.style.display = 'block';
-        } else {
-            grawerColumn.style.display = 'block';
-            imageUploadColumn.style.display = 'none';
-        }
+    if (product === 'self') {
+        grawerColumn.style.display = 'none';
+        imageUploadColumn.style.display = 'block';
+    } else {
+        grawerColumn.style.display = 'block';
+        imageUploadColumn.style.display = 'none';
+    }
+});
+		
+		
+		const imageUpload = document.getElementById('image-upload');
+const baseCanvas = document.getElementById('base-canvas');
+const baseCtx = baseCanvas.getContext('2d');
 
+imageUpload.addEventListener('change', (event) => {
+    const file = event.target.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            const img = new Image();
+            img.src = e.target.result;
+            img.onload = () => {
+                drawImageOnCylinder(img);
+            };
+        };
+        reader.readAsDataURL(file);
+    }
+});
+
+function drawImageOnCylinder(img) {
+    const canvasWidth = 900;
+    const canvasHeight = 900;
+    const cylinderHeight = 762;
+    const cylinderDiameter = 257;
+    const centerX = canvasWidth / 2;
+    const centerY = canvasHeight / 2;
+
+    baseCtx.clearRect(0, 0, canvasWidth, canvasHeight);
+
+    const scale = cylinderHeight / img.height;
+    const imgWidth = img.width * scale;
+    const imgHeight = img.height * scale;
+
+    baseCtx.drawImage(img, centerX - imgWidth / 2, centerY - imgHeight / 2, imgWidth, imgHeight);
+}
 	</script>
 	<!-- SELF SELF SELF SELF  SELF SELF SELF SELF  SELF SELF SELF SELF  SELF SELF SELF SELF  SELF SELF SELF SELF  SELF SELF SELF SELF  SELF SELF SELF SELF  SELF SELF SELF SELF  SELF SELF SELF SELF  SELF SELF SELF SELF -->
 
