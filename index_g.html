@@ -336,6 +336,73 @@ h1 {
 
     <div id="loadingMessage">Trwa zapis obrazu, proszę czekać...</div>
 	</div>
+
+		<!--- SELF  SELF  SELF  SELF  SELF  SELF  SELF  SELF  SELF  SELF  SELF  SELF  SELF  SELF  SELF  SELF  SELF  SELF  SELF  SELF  SELF  SELF  SELF  SELF  SELF  SELF  SELF  SELF  SELF  SELF  SELF  SELF  SELF  -->
+
+<h1>Personalizacja produktu</h1>
+  <button id="selfButton">Wybierz opcję "Self"</button>
+  <div class="upload-container" id="uploadContainer">
+    <label for="imageUpload">Wgraj obrazek (600x400):</label>
+    <input type="file" id="imageUpload" accept="image/*">
+    <button id="applyButton">Zastosuj na walcu</button>
+  </div>
+  <canvas id="cylinderCanvas" width="800" height="600"></canvas>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r146/three.min.js"></script>
+  <script>
+    const selfButton = document.getElementById('selfButton');
+    const uploadContainer = document.getElementById('uploadContainer');
+    const imageUpload = document.getElementById('imageUpload');
+    const applyButton = document.getElementById('applyButton');
+    const canvas = document.getElementById('cylinderCanvas');
+
+    // Three.js Scene Setup
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(75, canvas.width / canvas.height, 0.1, 1000);
+    const renderer = new THREE.WebGLRenderer({ canvas });
+    renderer.setSize(canvas.width, canvas.height);
+
+    // Cylinder Geometry
+    const geometry = new THREE.CylinderGeometry(2, 2, 5, 32, 1, true);
+    const material = new THREE.MeshBasicMaterial({ color: 0xffffff, side: THREE.DoubleSide });
+    const cylinder = new THREE.Mesh(geometry, material);
+    scene.add(cylinder);
+
+    // Camera Position
+    camera.position.z = 10;
+
+    // Animation Loop
+    function animate() {
+      requestAnimationFrame(animate);
+      cylinder.rotation.y += 0.01;
+      renderer.render(scene, camera);
+    }
+    animate();
+
+    // Show Upload Options When "Self" is Selected
+    selfButton.addEventListener('click', () => {
+      uploadContainer.style.display = 'flex';
+    });
+
+    // Apply Texture to Cylinder
+    applyButton.addEventListener('click', () => {
+      const file = imageUpload.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function (event) {
+          const texture = new THREE.TextureLoader().load(event.target.result, () => {
+            material.map = texture;
+            material.needsUpdate = true;
+          });
+        };
+        reader.readAsDataURL(file);
+      } else {
+        alert('Proszę wgrać obrazek o rozmiarze 600x400.');
+      }
+    });
+  </script>
+	<!--- SELF  SELF  SELF  SELF  SELF  SELF  SELF  SELF  SELF  SELF  SELF  SELF  SELF  SELF  SELF  SELF  SELF  SELF  SELF  SELF  SELF  SELF  SELF  SELF  SELF  SELF  SELF  SELF  SELF  SELF  SELF  SELF  SELF  -->
+	
 <script>
 
         const products = {
