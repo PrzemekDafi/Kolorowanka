@@ -571,6 +571,55 @@ products[product].forEach((element, index) => {
 
         }
     </script>
+<!-- SELF SELF SELF SELF  SELF SELF SELF SELF  SELF SELF SELF SELF  SELF SELF SELF SELF  SELF SELF SELF SELF  SELF SELF SELF SELF  SELF SELF SELF SELF  SELF SELF SELF SELF  SELF SELF SELF SELF  SELF SELF SELF SELF -->
+	<script> 
+	// Function to wrap the image around a cylinder
+function wrapImageOnCylinder(imageSrc) {
+    const canvas = document.getElementById('base-canvas');
+    const ctx = canvas.getContext('2d');
+    const img = new Image();
+
+    img.onload = function () {
+        const width = canvas.width;
+        const height = canvas.height;
+
+        // Set the canvas size to match the image size
+        canvas.width = width;
+        canvas.height = height;
+
+        // Draw the image wrapped around a cylinder
+        const radius = width / 4; // Adjust the radius as necessary
+        const cylinderHeight = height;
+
+        // Loop through each vertical slice of the image
+        for (let i = 0; i < img.width; i++) {
+            const angle = (i / img.width) * Math.PI * 2; // Angle for cylindrical mapping
+            const x = radius * Math.cos(angle) + width / 2;
+            const y = radius * Math.sin(angle) + height / 2;
+
+            // Draw each part of the image based on cylindrical coordinates
+            ctx.drawImage(img, i, 0, 1, img.height, x, y, 1, cylinderHeight);
+        }
+    };
+    img.src = imageSrc;
+}
+
+// Handling file upload and displaying the image
+const imageUploader = document.getElementById('image-uploader');
+imageUploader.addEventListener('change', (e) => {
+    const file = e.target.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            // Display the uploaded image and wrap it on the cylinder
+            const imageSrc = e.target.result;
+            wrapImageOnCylinder(imageSrc);
+        };
+        reader.readAsDataURL(file);
+    }
+});
+	</script>
+	<!-- SELF SELF SELF SELF  SELF SELF SELF SELF  SELF SELF SELF SELF  SELF SELF SELF SELF  SELF SELF SELF SELF  SELF SELF SELF SELF  SELF SELF SELF SELF  SELF SELF SELF SELF  SELF SELF SELF SELF  SELF SELF SELF SELF -->
 
 <script>
 
