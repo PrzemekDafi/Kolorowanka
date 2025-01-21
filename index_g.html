@@ -15,6 +15,33 @@
             background-color: #f8f8f8;
             height: 100vh;
         }
+
+	    /* Ukrywanie elementu przez klasę hidden */
+        .hidden {
+            display: none;
+        }
+
+        /* Styl maski dla wgranego obrazka */
+        #image-column {
+            width: 300px;
+            height: 300px;
+            position: relative;
+            overflow: hidden;
+            mask-image: url('self-grafika.png'); /* Ścieżka do maski */
+            -webkit-mask-image: url('self-grafika.png'); /* WebKit dla Safari */
+            mask-size: cover;
+            -webkit-mask-size: cover;
+            mask-repeat: no-repeat;
+            -webkit-mask-repeat: no-repeat;
+            background-color: #ddd; /* Kolor tła, jeśli obrazek nie jest wgrany */
+        }
+
+        #image-preview {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+	    
         .container {
             display: flex;
             width: 100%;
@@ -337,7 +364,43 @@ h1 {
 
     <div id="loadingMessage">Trwa zapis obrazu, proszę czekać...</div>
 	</div>
+<script>
+        // Pobieranie elementów
+        const optionSelector = document.getElementById('option-selector');
+        const grawerColumn = document.querySelector('.grawer-column');
+        const imageColumn = document.getElementById('image-column');
 
+        // Funkcja obsługująca zmianę opcji w select
+        optionSelector.addEventListener('change', (event) => {
+            const selectedValue = event.target.value;
+
+            if (selectedValue === 'self') {
+                // Usunięcie zawartości grawer-column i dodanie inputu
+                grawerColumn.innerHTML = `
+                    <input type="file" id="image-uploader" accept="image/*" />
+                    <p>Wgraj obrazek, aby zobaczyć podgląd</p>
+                `;
+
+                // Obsługa wgrywania obrazu
+                const imageUploader = document.getElementById('image-uploader');
+                imageUploader.addEventListener('change', (e) => {
+                    const file = e.target.files[0];
+                    if (file) {
+                        const reader = new FileReader();
+                        reader.onload = (e) => {
+                            // Wyświetlenie obrazka w image-column
+                            imageColumn.innerHTML = `<img id="image-preview" src="${e.target.result}" alt="Podgląd grafiki" />`;
+                        };
+                        reader.readAsDataURL(file);
+                    }
+                });
+            } else {
+                // Przywrócenie opcji graweru
+                grawerColumn.innerHTML = `<p>Opcje graweru</p>`;
+                imageColumn.innerHTML = ''; // Wyczyszczenie podglądu
+            }
+        });
+    </script>
 		
 <script>
 
