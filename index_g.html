@@ -649,7 +649,9 @@ products[product].forEach((element, index) => {
         });
 
     </script>
-	    <script>const baseCanvas = document.getElementById('base-canvas');
+	    <script>
+		    
+		    const baseCanvas = document.getElementById('base-canvas');
 const overlayCanvas = document.getElementById('overlay-canvas');
 const baseCtx = baseCanvas.getContext('2d');
 const overlayCtx = overlayCanvas.getContext('2d');
@@ -775,7 +777,7 @@ verticalSlider.addEventListener('input', (event) => {
     }
 });
 
-		    function drawOverlayImage() {
+		    function drawZadrukImage() {
     overlayCtx.clearRect(0, 0, overlayCanvas.width, overlayCanvas.height);
 
     const zadrukImg = document.getElementById('zadruk-img');
@@ -821,7 +823,7 @@ verticalSlider.addEventListener('input', (event) => {
 
 		    document.getElementById('horizontal-slider-zadruk').addEventListener('input', function (event) {
     horizontalOffset = parseInt(event.target.value, 10);
-    drawOverlayImage();
+    drawZadrukImage();
 	});
 
 	</script>
