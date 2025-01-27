@@ -323,7 +323,10 @@ h1 {
             </div>
 		<div class="input-container">
     <label for="zbiornik-upload">Wgraj obrazek dla zbiornika:</label>
-    <input type="file" id="zbiornik-upload" accept="image/*">
+    <input type="file" id="zbiornik-upload" accept="image/*"><br>
+			
+<input type="range" id="horizontal-slider2" min="-200" max="200" value="0"><br>
+
 </div>
 		<div class="grawer-column">
 			<label for="file-upload"><b>NOWOŚĆ</b> Wgraj grawer:</label>
@@ -811,7 +814,7 @@ verticalSlider.addEventListener('input', (event) => {
 
     overlayCtx.restore();
 }
-		    document.getElementById('horizontal-slider').addEventListener('input', function (event) {
+		    document.getElementById('horizontal-slider2').addEventListener('input', function (event) {
     horizontalOffset = parseInt(event.target.value, 10);
     drawOverlayImage();
 });
