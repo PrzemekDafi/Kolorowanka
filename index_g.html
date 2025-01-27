@@ -747,7 +747,11 @@ verticalSlider.addEventListener('input', (event) => {
 	sizeSlider.addEventListener('input', (event) => {
     scale = parseInt(event.target.value, 10) / 80; // Wartość suwaka w zakresie 10–200 przekształcana na skalę 0.1–2.0
     drawOverlayImage();
+	
 });
+	</script>
+<script>
+		    
 		    document.getElementById('zadruk-upload').addEventListener('change', function (event) {
     const file = event.target.files[0];
     if (file) {
