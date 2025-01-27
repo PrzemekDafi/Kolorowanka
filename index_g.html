@@ -749,65 +749,7 @@ verticalSlider.addEventListener('input', (event) => {
     drawOverlayImage();
 });
 		    
-//SELF SELF SELF SELF
-	const imageUpload = document.getElementById('image-upload');
-const baseCanvas = document.getElementById('base-canvas');
-const baseCtx = baseCanvas.getContext('2d');
 
-imageUpload.addEventListener('change', (event) => {
-    const file = event.target.files[0];
-    if (file) {
-        const reader = new FileReader();
-        reader.onload = (e) => {
-            const img = new Image();
-            img.src = e.target.result;
-            img.onload = () => {
-                drawImageOnCylinder(img);
-            };
-        };
-        reader.readAsDataURL(file);
-    }
-});
-
-function drawImageOnCylinder(img) {
-    const canvasWidth = 900;
-    const canvasHeight = 900;
-    const cylinderHeight = 762;
-    const cylinderDiameter = 257;
-    const centerX = canvasWidth / 2;
-    const centerY = canvasHeight / 2;
-
-    baseCtx.clearRect(0, 0, canvasWidth, canvasHeight);
-
-    const scale = cylinderHeight / img.height;
-    const imgWidth = img.width * scale;
-    const imgHeight = img.height * scale;
-
-    baseCtx.drawImage(img, centerX - imgWidth / 2, centerY - imgHeight / 2, imgWidth, imgHeight);
-}
-		    //self self self
-		    document.getElementById('zbiornik-upload').addEventListener('change', function (event) {
-    const file = event.target.files[0];
-    if (file) {
-        const reader = new FileReader();
-        reader.onload = function (e) {
-            const img = new Image();
-            img.src = e.target.result;
-            img.onload = function () {
-                const canvas = document.createElement('canvas');
-                const ctx = canvas.getContext('2d');
-                const maskImg = document.getElementById('zbiornik-img');
-                canvas.width = maskImg.width;
-                canvas.height = maskImg.height;
-                ctx.drawImage(maskImg, 0, 0);
-                ctx.globalCompositeOperation = 'source-in';
-                ctx.drawImage(img, 0, 0, maskImg.width, maskImg.height);
-                maskImg.src = canvas.toDataURL();
-            };
-        };
-        reader.readAsDataURL(file);
-    }
-});
 	</script>
 </body>
 </html>
