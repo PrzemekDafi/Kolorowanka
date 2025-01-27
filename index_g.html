@@ -322,10 +322,10 @@ h1 {
                 <!-- Kolory dla elementów będą generowane dynamicznie -->
             </div>
 		<div class="input-container">
-    <label for="zbiornik-upload">Wgraj obrazek dla zbiornika:</label>
-    <input type="file" id="zbiornik-upload" accept="image/*"><br>
-			
-<input type="range" id="horizontal-slider2" min="-200" max="200" value="0"><br>
+    <label for="zadruk-upload">Wgraj obrazek dla zadruku 360:</label>
+    <input type="file" id="zadruk-upload" accept="image/*"><br>
+<label for="horizontal-slider-zadruk">Przesunięcie w poziomie:</label><br>
+<input type="range" id="horizontal-slider-zadruk" min="-200" max="200" value="0"><br>
 
 </div>
 		<div class="grawer-column">
@@ -366,7 +366,7 @@ h1 {
             shape: ['shape_zbiornik', 'zakretka_shape', 'uszczelka_shape', 'wewnetrzna_gumka'],
 	    bidon_twist: ['twist-ustnik', 'twist_zakretka', 'twist_zakretka-dol', 'twist_zbiornik'],
             bidon_klasyczny: ['bidon_zatyczka', 'bidon_zakretka', 'bidon_zbiornik'],
-            self: ['self_zakretka', 'self_zatyczka', 'self-zbiornik-wewnetrzny', 'self-zbiornik-zewnetrzny'],
+            self: ['self_zakretka', 'self_zatyczka', 'self-zbiornik-wewnetrzny', 'self-zbiornik-zewnetrzny', 'zadruk'],
             easy: ['elastometr', 'sama_gora_zakretki', 'zbiornik', 'gora_zakretki', 'guma_zakretki'],
 
             saturator: ['saturator_gora_korpus', 'saturator_butelka', 'satuator_korpus', 'przycisk_saturatora', 'saturator_gora_klapka', 'pushair_logo'],
@@ -477,12 +477,12 @@ h1 {
             }
         });
 
-       // Sprawdź, czy produkt zawiera element "zbiornik"
+       // Sprawdź, czy produkt zawiera element "zadruk"
      
 
         function handleColorChange(element, selectedColor, hexValue) {
-            if (element === 'zbiornik') {
-                return; // Nie zmieniaj koloru dla zbiornika
+            if (element === 'zadruk') {
+                return; // Nie zmieniaj koloru dla zadruka
             }
 
     let color = selectedColor;
@@ -582,10 +582,10 @@ products[product].forEach((element, index) => {
         hexInput.value = colorPicker.value.toUpperCase();
         handleColorChange(element, colorPicker.value);
     });
-	// Obsługa wgrania obrazka do zbiornika
+	// Obsługa wgrania obrazka do zadruk
 	function handleColorChange(element, selectedColor, hexValue) {
-    if (element === 'zbiornik') {
-        return; // Nie zmieniaj koloru dla zbiornika
+    if (element === 'zadruk') {
+        return; // Nie zmieniaj koloru dla zadruk
     }
 
     let color = selectedColor;
@@ -748,7 +748,7 @@ verticalSlider.addEventListener('input', (event) => {
     scale = parseInt(event.target.value, 10) / 80; // Wartość suwaka w zakresie 10–200 przekształcana na skalę 0.1–2.0
     drawOverlayImage();
 });
-		    document.getElementById('zbiornik-upload').addEventListener('change', function (event) {
+		    document.getElementById('zadruk-upload').addEventListener('change', function (event) {
     const file = event.target.files[0];
     if (file) {
         const reader = new FileReader();
@@ -758,7 +758,7 @@ verticalSlider.addEventListener('input', (event) => {
             img.onload = function () {
                 const canvas = document.createElement('canvas');
                 const ctx = canvas.getContext('2d');
-                const maskImg = document.getElementById('zbiornik-img');
+                const maskImg = document.getElementById('zadruk-img');
                 canvas.width = maskImg.width;
                 canvas.height = maskImg.height;
                 ctx.drawImage(maskImg, 0, 0);
@@ -774,8 +774,8 @@ verticalSlider.addEventListener('input', (event) => {
 		    function drawOverlayImage() {
     overlayCtx.clearRect(0, 0, overlayCanvas.width, overlayCanvas.height);
 
-    const zbiornikImg = document.getElementById('zbiornik-img');
-    if (!zbiornikImg) return;
+    const zadrukImg = document.getElementById('zadruk-img');
+    if (!zadrukImg) return;
 
     const centerX = overlayCanvas.width / 2 + horizontalOffset;
     const centerY = overlayCanvas.height / 2;
@@ -786,8 +786,8 @@ verticalSlider.addEventListener('input', (event) => {
     overlayCtx.translate(-centerX, -centerY);
 
     // Skalowanie obrazka z zachowaniem proporcji
-    const maxWidth = zbiornikImg.width;
-    const maxHeight = zbiornikImg.height;
+    const maxWidth = zadrukImg.width;
+    const maxHeight = zadrukImg.height;
     const aspectRatio = image.width / image.height;
 
     let width, height;
@@ -814,7 +814,7 @@ verticalSlider.addEventListener('input', (event) => {
 
     overlayCtx.restore();
 }
-		    document.getElementById('horizontal-slider2').addEventListener('input', function (event) {
+		    document.getElementById('horizontal-slider-zadruk').addEventListener('input', function (event) {
     horizontalOffset = parseInt(event.target.value, 10);
     drawOverlayImage();
 });
