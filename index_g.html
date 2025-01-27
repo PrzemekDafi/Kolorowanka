@@ -293,15 +293,18 @@ h1 {
 
 
         <div class="options-column">
-		<h1>Aktualizacja: Bidon Twist + GRAWER!</h1>
+		<h1>Nowości: GRAWER! + Dzbanki + Saturator butelka</h1>
             <label for="product-select">Wybierz produkt:</label>
             <select id="product-select" class="select-colors">
                 <option value="">Wybierz produkt</option>
           <!--  <option value="butelka_soft_03l">Butelka Soft 0,3 l</option> -->
+		  <option value="crystal">Dzbanek Crystal Classic</option>
+	         <option value="crystal_unimax">Dzbanek Crystal Unimax</option>
+		  <option value="astra_classic">Dzbanek Astra Classic</option>
                 <option value="butelka_soft_05l">Butelka Soft 0,5 l</option>
-          <!--  <option value="butelka_soft_07l">Butelka Soft 0,7 l</option>
+          <!--  <option value="butelka_soft_07l">Butelka Soft 0,7 l</option>-->
                 
-                <option value="butelka_solid_05l">Butelka Solid 0,5 l</option>-->
+                <option value="butelka_solid_05l">Butelka Solid 0,5 l</option>
                 <option value="butelka_solid_07l">Butelka Solid 0,7 l</option>
                 <option value="butelka_solid_steel_07l">Butelka Solid Steel 0,7 l</option>
                 <option value="bidon_twist">Bidon Twist</option>
@@ -312,16 +315,12 @@ h1 {
                 <option value="easy">Easy</option>
 
                 <option value="saturator">PushAir</option>
+		  <option value="saturator_butelka">PushAir Butelka 0,7</option>
+
             </select>
             <div id="color-options">
-		                    <!-- Kolory dla elementów będą generowane dynamicznie -->
-            </div>
-<div class="input-container">
-    <label for="zbiornik-upload">Wgraj obrazek dla zbiornika:</label>
-    <input type="file" id="zbiornik-upload" accept="image/*">
-</div>
-		
-		<div class="grawer-column">
+                <!-- Kolory dla elementów będą generowane dynamicznie -->
+            </div><div class="grawer-column">
 			<label for="file-upload"><b>NOWOŚĆ</b> Wgraj grawer:</label>
 <input type="file" id="file-upload" accept="image/*">
 <br>
@@ -341,21 +340,19 @@ h1 {
 			</div></div>
 
     <div id="loadingMessage">Trwa zapis obrazu, proszę czekać...</div>
-	    	<!--SELF SELF--><div id="image-upload-column" style="display: none;">
-    <label for="image-upload">Wgraj obrazek:</label>
-    <input type="file" id="image-upload" accept="image/*">
-</div><!--SELF SELF-->
 	</div>
-
 <script>
 
         const products = {
+	    astra_classic: ['pokrywka','raczka', 'zbiornik'],
+	    crystal: ['pokrywka', 'obudowa', 'raczka', 'zbiornik'],
+	    crystal_unimax: ['pokrywka', 'obudowa', 'raczka', 'zbiornik'],
             butelka_soft_03l: ['ustnik', 'zakretka_z_gumka', 'filtr'],
             butelka_soft_05l: ['ustnik', 'zakretka_z_gumka', 'filtr'],
             butelka_soft_07l: ['ustnik', 'zakretka_z_gumka', 'filtr'],
 
-            butelka_solid_05l: ['elastometr', 'przycisk', 'zakretka_gora', 'zakretka_dol', 'rurka', 'zbiornik_solid', 'ustnik', 'zakretka_z_gumka', 'filtr'],
-            butelka_solid_07l: ['elastometr', 'elastometr_uchwyty', 'przycisk', 'zakretka_dol', 'zakretka_gora', 'rurka', 'zbiornik_solid'],
+            butelka_solid_05l: ['elastometr', 'elastometr_uchwyty', 'przycisk', 'zakretka_dol', 'zakretka_gora', 'filtr', 'zbiornik',],
+            butelka_solid_07l: ['elastometr', 'elastometr_uchwyty', 'przycisk', 'zakretka_dol', 'zakretka_gora', 'zbiornik_solid', 'rurka'],
             butelka_solid_steel_07l: ['elastometr', 'elastometr_uchwyty', 'przycisk', 'zakretka_dol', 'zakretka_gora','zbiornik_solid_steel'],
 	    shape_t: ['zakretka_shape', 'uszczelka_shape', 'wewnetrzna_gumka'],
             shape: ['shape_zbiornik', 'zakretka_shape', 'uszczelka_shape', 'wewnetrzna_gumka'],
@@ -365,6 +362,7 @@ h1 {
             easy: ['elastometr', 'sama_gora_zakretki', 'zbiornik', 'gora_zakretki', 'guma_zakretki'],
 
             saturator: ['saturator_gora_korpus', 'saturator_butelka', 'satuator_korpus', 'przycisk_saturatora', 'saturator_gora_klapka', 'pushair_logo'],
+            saturator_butelka: ['zakretka', 'dol'],
 
 
         };
@@ -382,7 +380,8 @@ h1 {
 		Peach: '#f5c09e',
             Biały: '#ffffff',
             Antracytowy: '#161616',
-            Bordowy_FCB: '#a31d45',
+            Żółty_FCB: '#ffc836',
+		 Bordowy_FCB: '#a31d45',
             Granatowy_FCB: '#1d3874',
 	    Barbie: '#e0218a', 
             Flamingowy: '#f04e98',
@@ -415,20 +414,6 @@ h1 {
 
 
         document.getElementById('product-select').addEventListener('change', function () {
-//SELF SELF SELF SELF SELF
-
-		const grawerColumn = document.getElementById('grawer-column');
-const imageUploadColumn = document.getElementById('image-upload-column');
-
-if (product === 'self') {
-    grawerColumn.style.display = 'none';
-    imageUploadColumn.style.display = 'block';
-} else {
-    grawerColumn.style.display = 'block';
-    imageUploadColumn.style.display = 'none';
-}
-//SELF SELF SELF SELF SELF
-		
             const product = this.value;
             const colorOptions = document.getElementById('color-options');
             const imageColumn = document.getElementById('image-column');
@@ -582,22 +567,7 @@ products[product].forEach((element, index) => {
         hexInput.value = colorPicker.value.toUpperCase();
         handleColorChange(element, colorPicker.value);
     });
-	// Obsługa wgrania obrazka
-	function handleColorChange(element, selectedColor, hexValue) {
-    if (element === 'zbiornik') {
-        return; // Nie zmieniaj koloru dla zbiornika
-    }
 
-    let color = selectedColor;
-
-    if (hexValue && isValidHex(hexValue)) {
-        color = `#${hexValue.startsWith('#') ? hexValue.slice(1) : hexValue}`;
-    } else if (!selectedColor && !isValidHex(hexValue)) {
-        color = colors['Biały']; // Domyślny kolor, jeśli HEX jest nieprawidłowy
-    }
-
-    colorizeImage(element, color);
-}
     // Obsługa zmiany koloru z pola tekstowego HEX
     hexInput.addEventListener('input', function () {
         const hexValue = hexInput.value.startsWith('#') ? hexInput.value : `#${hexInput.value}`;
@@ -748,8 +718,8 @@ verticalSlider.addEventListener('input', (event) => {
     scale = parseInt(event.target.value, 10) / 80; // Wartość suwaka w zakresie 10–200 przekształcana na skalę 0.1–2.0
     drawOverlayImage();
 });
-		    
 
+	
 	</script>
 </body>
 </html>
