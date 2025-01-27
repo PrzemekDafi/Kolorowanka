@@ -474,10 +474,19 @@ h1 {
             }
         });
 
-       function handleColorChange(element, selectedColor, hexValue) {
-    if (element === 'zbiornik') {
-        return; // Nie zmieniaj koloru dla zbiornika
-    }
+       // Sprawdź, czy produkt zawiera element "zbiornik"
+                if (products[product].includes('zbiornik')) {
+                    zbiornikUploadContainer.style.display = 'block';
+                } else {
+                    zbiornikUploadContainer.style.display = 'none';
+                }
+            }
+        });
+
+        function handleColorChange(element, selectedColor, hexValue) {
+            if (element === 'zbiornik') {
+                return; // Nie zmieniaj koloru dla zbiornika
+            }
 
     let color = selectedColor;
 
