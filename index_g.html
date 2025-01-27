@@ -314,8 +314,14 @@ h1 {
                 <option value="saturator">PushAir</option>
             </select>
             <div id="color-options">
-                <!-- Kolory dla elementów będą generowane dynamicznie -->
-            </div><div class="grawer-column">
+		                    <!-- Kolory dla elementów będą generowane dynamicznie -->
+            </div>
+<div class="input-container">
+    <label for="zbiornik-upload">Wgraj obrazek dla zbiornika:</label>
+    <input type="file" id="zbiornik-upload" accept="image/*">
+</div>
+		
+		<div class="grawer-column">
 			<label for="file-upload"><b>NOWOŚĆ</b> Wgraj grawer:</label>
 <input type="file" id="file-upload" accept="image/*">
 <br>
@@ -576,7 +582,22 @@ products[product].forEach((element, index) => {
         hexInput.value = colorPicker.value.toUpperCase();
         handleColorChange(element, colorPicker.value);
     });
+	// Obsługa wgrania obrazka
+	function handleColorChange(element, selectedColor, hexValue) {
+    if (element === 'zbiornik') {
+        return; // Nie zmieniaj koloru dla zbiornika
+    }
 
+    let color = selectedColor;
+
+    if (hexValue && isValidHex(hexValue)) {
+        color = `#${hexValue.startsWith('#') ? hexValue.slice(1) : hexValue}`;
+    } else if (!selectedColor && !isValidHex(hexValue)) {
+        color = colors['Biały']; // Domyślny kolor, jeśli HEX jest nieprawidłowy
+    }
+
+    colorizeImage(element, color);
+}
     // Obsługa zmiany koloru z pola tekstowego HEX
     hexInput.addEventListener('input', function () {
         const hexValue = hexInput.value.startsWith('#') ? hexInput.value : `#${hexInput.value}`;
@@ -765,6 +786,28 @@ function drawImageOnCylinder(img) {
     baseCtx.drawImage(img, centerX - imgWidth / 2, centerY - imgHeight / 2, imgWidth, imgHeight);
 }
 		    //self self self
+		    document.getElementById('zbiornik-upload').addEventListener('change', function (event) {
+    const file = event.target.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function (e) {
+            const img = new Image();
+            img.src = e.target.result;
+            img.onload = function () {
+                const canvas = document.createElement('canvas');
+                const ctx = canvas.getContext('2d');
+                const maskImg = document.getElementById('zbiornik-img');
+                canvas.width = maskImg.width;
+                canvas.height = maskImg.height;
+                ctx.drawImage(maskImg, 0, 0);
+                ctx.globalCompositeOperation = 'source-in';
+                ctx.drawImage(img, 0, 0, maskImg.width, maskImg.height);
+                maskImg.src = canvas.toDataURL();
+            };
+        };
+        reader.readAsDataURL(file);
+    }
+});
 	</script>
 </body>
 </html>
