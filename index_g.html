@@ -322,10 +322,10 @@ h1 {
                 <!-- Kolory dla elementów będą generowane dynamicznie -->
             </div>
 		<div class="input-container">
-    <label for="zbiornik-upload">Wgraj obrazek dla zbiornika:</label>
+    <label for="zbiornik-upload">Wgraj obrazek dla zbiornika:</label><br>
     <input type="file" id="zbiornik-upload" accept="image/*"><br>
 			
-<input type="range" id="horizontal-slider2" min="-200" max="200" value="0"><br>
+<input type="range" id="horizontal-slider-zbiornik" min="-200" max="200" value="0"><br>
 
 </div>
 		<div class="grawer-column">
@@ -477,13 +477,7 @@ h1 {
             }
         });
 
-       // Sprawdź, czy produkt zawiera element "zbiornik"
-     
 
-        function handleColorChange(element, selectedColor, hexValue) {
-            if (element === 'zbiornik') {
-                return; // Nie zmieniaj koloru dla zbiornika
-            }
 
     let color = selectedColor;
 
@@ -814,7 +808,7 @@ verticalSlider.addEventListener('input', (event) => {
 
     overlayCtx.restore();
 }
-		    document.getElementById('horizontal-slider2').addEventListener('input', function (event) {
+		    document.getElementById('horizontal-slider-zbiornik').addEventListener('input', function (event) {
     horizontalOffset = parseInt(event.target.value, 10);
     drawOverlayImage();
 });
