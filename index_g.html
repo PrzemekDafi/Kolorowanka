@@ -661,8 +661,6 @@ const fileUpload = document.getElementById('file-upload');
 const rotateSlider = document.getElementById('rotate-slider');
 const verticalSlider = document.getElementById('vertical-slider');
 const horizontalSlider = document.getElementById('horizontal-slider');
-		    const horizontalSlider = document.getElementById('horizontal-zadruk-slider');
-
 const sizeSlider = document.getElementById('size-slider');
 
 
@@ -827,10 +825,6 @@ verticalSlider.addEventListener('input', (event) => {
     horizontalOffset = parseInt(event.target.value, 10);
     drawZadrukImage();
 	
-	// Obsługa suwaka przesunięcia
-horizontalSlider.addEventListener('input', (event) => {
-    horizontalOffset = parseInt(event.target.value, 10);
-    drawZadrukImage();
 });
 
 	</script>
