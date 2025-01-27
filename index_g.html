@@ -478,7 +478,13 @@ h1 {
         });
 
        // Sprawdź, czy produkt zawiera element "zadruk"
-     
+     if (products[product].includes('zadruk')) {
+            zadrukUpload.style.display = 'block';
+        } else {
+            zadrukUpload.style.display = 'none';
+        }
+    }
+});
 
         function handleColorChange(element, selectedColor, hexValue) {
             if (element === 'zadruk') {
