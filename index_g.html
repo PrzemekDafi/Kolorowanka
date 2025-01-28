@@ -825,13 +825,13 @@ overlayCtx.restore();
 
 document.getElementById('horizontal-slider-zadruk').addEventListener('zadruk', function (event) {
 horizontalOffset = parseInt(event.target.value, 10);
-drawZadrukImage();
+drawOverlayImage();
 	});
 	
 	// Obsługa suwaka przesunięcia
 horizontalSlider.addEventListener('zadruk', (event) => {
     horizontalOffset = parseInt(event.target.value, 10);
-    drawZadrukImage();
+    drawOverlayImage();
 });
 
 </script>
