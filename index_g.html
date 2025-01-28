@@ -1,335 +1,336 @@
 <!DOCTYPE html>
 <html lang="pl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Personalizacja Produktów</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
-    <style>
-        body {
-            font-family: 'Poppins', sans-serif;
-            display: flex;
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            background-color: #f8f8f8;
-            height: 100vh;
-        }
-        .container {
-            display: flex;
-            width: 100%;
-            flex-wrap: wrap;
-            justify-content: center;
-            align-items: center;
-            height: 100%;
-        }
-
-	    
-        .image-column, .options-column {
-            flex: 1;
-            padding: 20px;
-            max-width: 900px;
-            min-width: auto;
-        }
-        .image-column, .image-column2 {
-            display: flex;
-			position: relative;
-            justify-content: center;
-            align-items: center;
-            background-color: #fff;
-            border-radius: 20px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-        }
-		
-			@media (max-width: 768px) {
-  .image-column, .image-column2 {
-    width: 100%;
-    height: auto;
-    justify-content: center;
-
-  }
-
-  .image-column img, .image-column2 img {
-    width: 100%;
-    height: auto;
-    object-fit: contain; /* Zapewnia, że obrazek będzie w całości widoczny, zachowując proporcje */
-    justify-content: center;
-
-  }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Personalizacja Produktów</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+body {
+font-family: 'Poppins', sans-serif;
+display: flex;
+margin: 0;
+padding: 0;
+box-sizing: border-box;
+background-color: #f8f8f8;
+height: 100vh;
+}
+.container {
+display: flex;
+width: 100%;
+flex-wrap: wrap;
+justify-content: center;
+align-items: center;
+height: 100%;
 }
 
-		
-        .product-frame {
-    position: relative;
-    width: 100%;
-    max-width: 900px;
-    min-width: 400px;
-    aspect-ratio: 1 / 1; /* Utrzymuje proporcje kwadratu */
-    background-size: cover; /* Tło dopasowane proporcjonalnie */
-    background-position: center;
-    background-repeat: no-repeat;
-    border-radius: 20px;
-    overflow: hidden;
+
+.image-column, .options-column {
+flex: 1;
+padding: 20px;
+max-width: 900px;
+min-width: auto;
+}
+.image-column, .image-column2 {
+display: flex;
+position: relative;
+justify-content: center;
+align-items: center;
+background-color: #fff;
+border-radius: 20px;
+box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+@media (max-width: 768px) {
+.image-column, .image-column2 {
+width: 100%;
+height: auto;
+justify-content: center;
+
+}
+
+.image-column img, .image-column2 img {
+width: 100%;
+height: auto;
+object-fit: contain; /* Zapewnia, że obrazek będzie w całości widoczny, zachowując proporcje */
+justify-content: center;
+
+}
+}
+
+
+.product-frame {
+position: relative;
+width: 100%;
+max-width: 900px;
+min-width: 400px;
+aspect-ratio: 1 / 1; /* Utrzymuje proporcje kwadratu */
+background-size: cover; /* Tło dopasowane proporcjonalnie */
+background-position: center;
+background-repeat: no-repeat;
+border-radius: 20px;
+overflow: hidden;
 }
 
 .image-wrapper {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-	
+position: absolute;
+top: 0;
+left: 0;
+width: 100%;
+height: 100%;
+
 }
 
 .image-wrapper img {
-    width: 100%;
-	
-    height: 100%;
-    object-fit: contain; /* Elementy produktu proporcjonalnie dopasowane */
-    border-radius: 20px;
+width: 100%;
+
+height: 100%;
+object-fit: contain; /* Elementy produktu proporcjonalnie dopasowane */
+border-radius: 20px;
 }
 
-        .color-input {
-            margin: 20px;
-            display: flex;
-            flex-direction: row;
-            align-items: center;
-            gap: 10px;
-        }
-        .color-input label {
-            font-size: 16px;
-            font-weight: 600;
-            color: #333;
-            margin-bottom: 8px;
-        }
+.color-input {
+margin: 20px;
+display: flex;
+flex-direction: row;
+align-items: center;
+gap: 10px;
+}
+.color-input label {
+font-size: 16px;
+font-weight: 600;
+color: #333;
+margin-bottom: 8px;
+}
 
-	    .product-select, {
-            margin-bottom: 20px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 10px;
-        }
-        .product-select label {
-            font-size: 16px;
-            font-weight: 600;
-            color: #333;
-            margin-bottom: 8px;
-        }
-		.grawer-column {
-            justify-content: center;
-            align-items: center;
-            background-color: #fff;
-	padding: 20px;
-	margin: 10px 0 10px 0;
-            border-radius: 20px;
-		width: auto;
-        }
-		
-		#file-upload {
-			font-size: 16px;
-            font-weight: 600;
-			color: #fff;
-            background-color: #28a745;
-            margin-bottom: 10px;
-        	margin-top: 10px;
+.product-select, {
+margin-bottom: 20px;
+display: flex;
+flex-direction: column;
+align-items: center;
+gap: 10px;
+}
+.product-select label {
+font-size: 16px;
+font-weight: 600;
+color: #333;
+margin-bottom: 8px;
+}
+.grawer-column {
+justify-content: center;
+align-items: center;
+background-color: #fff;
+padding: 20px;
+margin: 10px 0 10px 0;
+border-radius: 20px;
+width: auto;
+}
 
-		}
+#file-upload {
+font-size: 16px;
+font-weight: 600;
+color: #fff;
+background-color: #28a745;
+margin-bottom: 10px;
+margin-top: 10px;
+
+}
 h1 {
-	    font-size: 16px;
-            font-weight: 600;
-	    color: #fff;
-	border-radius: 50px;
-	text-wrap: wrap;
-            background-color: #28a745;
-            padding: 15px;
-	width: 300px;
-		}
+font-size: 16px;
+font-weight: 600;
+color: #fff;
+border-radius: 50px;
+text-wrap: wrap;
+background-color: #28a745;
+padding: 15px;
+width: 300px;
+}
 
-	    .product-select,
-        .product-select, input {
-            padding: 10px;
-            font-size: 16px;
-            border-radius: 50px;
-            border: 1px solid #ccc;
-            width: 100%;
-            max-width: 300px;
-            box-sizing: border-box;
-            transition: all 0.3s ease;
-        }
-        .product-select select:focus,
-        .product-select input:focus {
-            border-color: #007bff;
-            outline: none;
-        }
+.product-select,
+.product-select, input {
+padding: 10px;
+font-size: 16px;
+border-radius: 50px;
+border: 1px solid #ccc;
+width: 100%;
+max-width: 300px;
+box-sizing: border-box;
+transition: all 0.3s ease;
+}
+.product-select select:focus,
+.product-select input:focus {
+border-color: #007bff;
+outline: none;
+}
 
-        .color-input select,
-        .color-input input {
-            padding: 10px;
-            font-size: 16px;
-            border-radius: 50px;
-            border: 1px solid #ccc;
-            width: 100%;
-            max-width: 300px;
-            box-sizing: border-box;
-            transition: all 0.3s ease;
-        }
-        .color-input select:focus,
-        .color-input input:focus {
-            border-color: #007bff;
-            outline: none;
-        }
-        .input-container {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 15px;
-        }
-        .color-input select {
-            background-color: #f9f9f9;
-        }
-        .input-container input {
-            background-color: #f9f9f9;
-            width: 100%;
-        }
-        .ok-button {
-            padding: 8px 16px;
-            font-size: 16px;
-            background-color: #007bff;
-            color: white;
-            border: none;
-            border-radius: 20px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-        .ok-button:hover {
-            background-color: #0056b3;
-        }
-        #saveBtn {
-            margin-top: 30px;
-            padding: 12px 24px;
-            font-size: 18px;
-            font-weight: 600;
-            background-color: #28a745;
-            color: white;
-            border: none;
-            border-radius: 25px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-        #saveBtn:hover {
-            background-color: #218838;
-        }
-        .error-message {
-            color: red;
-            font-size: 14px;
-            margin-top: 10px;
-        }
+.color-input select,
+.color-input input {
+padding: 10px;
+font-size: 16px;
+border-radius: 50px;
+border: 1px solid #ccc;
+width: 100%;
+max-width: 300px;
+box-sizing: border-box;
+transition: all 0.3s ease;
+}
+.color-input select:focus,
+.color-input input:focus {
+border-color: #007bff;
+outline: none;
+}
+.input-container {
+display: flex;
+gap: 10px;
+margin-bottom: 15px;
+}
+.color-input select {
+background-color: #f9f9f9;
+}
+.input-container input {
+background-color: #f9f9f9;
+width: 100%;
+}
+.ok-button {
+padding: 8px 16px;
+font-size: 16px;
+background-color: #007bff;
+color: white;
+border: none;
+border-radius: 20px;
+cursor: pointer;
+transition: background-color 0.3s ease;
+}
+.ok-button:hover {
+background-color: #0056b3;
+}
+#saveBtn {
+margin-top: 30px;
+padding: 12px 24px;
+font-size: 18px;
+font-weight: 600;
+background-color: #28a745;
+color: white;
+border: none;
+border-radius: 25px;
+cursor: pointer;
+transition: background-color 0.3s ease;
+}
+#saveBtn:hover {
+background-color: #218838;
+}
+.error-message {
+color: red;
+font-size: 14px;
+margin-top: 10px;
+}
 
-		  #loadingMessage {
-            display: none;
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            padding: 20px;
-            background-color: rgba(0, 0, 0, 0.8);
-            color: white;
-            font-size: 18px;
-            border-radius: 10px;
-            z-index: 1000;
-        }
-	     /* Styl wyłączający zaokrąglone rogi podczas przechwytywania obrazu */
-        .no-border-radius {
-            border-radius: 0 !important;
-        }
+#loadingMessage {
+display: none;
+position: fixed;
+top: 50%;
+left: 50%;
+transform: translate(-50%, -50%);
+padding: 20px;
+background-color: rgba(0, 0, 0, 0.8);
+color: white;
+font-size: 18px;
+border-radius: 10px;
+z-index: 1000;
+}
+/* Styl wyłączający zaokrąglone rogi podczas przechwytywania obrazu */
+.no-border-radius {
+border-radius: 0 !important;
+}
 
-	    .select-colors {
-    background-color: #f0f0f0;
-    border: 1px solid #ccc;
-    padding: 5px;
-    font-size: 16px;
-    border-radius: 4px; /* Dodanie zaokrąglonych rogów */
-    color: #333; /* Kolor tekstu */
-			width: auto%; /* Szerokość dopasowana do kontenera */}
+.select-colors {
+background-color: #f0f0f0;
+border: 1px solid #ccc;
+padding: 5px;
+font-size: 16px;
+border-radius: 4px; /* Dodanie zaokrąglonych rogów */
+color: #333; /* Kolor tekstu */
+width: auto%; /* Szerokość dopasowana do kontenera */}
 
-		    #image-column {
-    position: relative; /* Ważne, aby kontener miał relatywne pozycjonowanie */
-    min-width: 900px;
-    max-width: 900px;
-    min-height: 900px;
-			    max-height: 900px;}
-	    
+#image-column {
+position: relative; /* Ważne, aby kontener miał relatywne pozycjonowanie */
+min-width: 900px;
+max-width: 900px;
+min-height: 900px;
+max-height: 900px;}
+
 
 #base-canvas {
-    position: absolute;
-    top: 0;
-    left: 0;
-    z-index: 9999; /* Tło */
+position: absolute;
+top: 0;
+left: 0;
+z-index: 9999; /* Tło */
 }
 
 #overlay-canvas {
-    position: absolute;
-    top: 0;
-    left: 0;
-    z-index: 1000; /* Obrazek grawer - na wierzchu */
-    pointer-events: none; /* Opcjonalne - nie blokuje interakcji z elementami poniżej */
+position: absolute;
+top: 0;
+left: 0;
+z-index: 1000; /* Obrazek grawer - na wierzchu */
+pointer-events: none; /* Opcjonalne - nie blokuje interakcji z elementami poniżej */
 
-		}
+}
 
-    </style>
- <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" defer></script>
-	 <script src="https://cdnjs.cloudflare.com/ajax/libs/dom-to-image/2.6.0/dom-to-image.min.js"></script>
+</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/dom-to-image/2.6.0/dom-to-image.min.js"></script>
 
-	</head>
+</head>
 <body>
-    <div class="container">
-	    <div class="image-column2" id="image-column2">
-	    <canvas id="base-canvas" width="900px" height="900px" style="position: absolute; z-index: 9999;"></canvas>
-    <canvas id="overlay-canvas" width="900px" height="900px" style="position: absolute; z-index: 1000;"></canvas>
+<div class="container">
+<div class="image-column2" id="image-column2">
+<canvas id="base-canvas" width="900px" height="900px" style="position: absolute; z-index: 9999;"></canvas>
+<canvas id="overlay-canvas" width="900px" height="900px" style="position: absolute; z-index: 1000;"></canvas>
 
-			<div class="image-column" id="image-column"></div>
-			</div>
+<div class="image-column" id="image-column"></div>
+</div>
 
 
 
-        <div class="options-column">
-		<h1>Nowości: GRAWER! + Dzbanki + Saturator butelka</h1>
-            <label for="product-select">Wybierz produkt:</label>
-            <select id="product-select" class="select-colors">
-                <option value="">Wybierz produkt</option>
-          <!--  <option value="butelka_soft_03l">Butelka Soft 0,3 l</option> -->
-		  <option value="crystal">Dzbanek Crystal Classic</option>
-	         <option value="crystal_unimax">Dzbanek Crystal Unimax</option>
-		  <option value="astra_classic">Dzbanek Astra Classic</option>
-                <option value="butelka_soft_05l">Butelka Soft 0,5 l</option>
-          <!--  <option value="butelka_soft_07l">Butelka Soft 0,7 l</option>-->
-                
-                <option value="butelka_solid_05l">Butelka Solid 0,5 l</option>
-                <option value="butelka_solid_07l">Butelka Solid 0,7 l</option>
-                <option value="butelka_solid_steel_07l">Butelka Solid Steel 0,7 l</option>
-                <option value="bidon_twist">Bidon Twist</option>
-		<option value="bidon_klasyczny">Bidon Dafi</option>
-                <option value="shape_t">Shape T</option>
-                <option value="shape">Shape</option>
-		<option value="self">Self</option>
-                <option value="easy">Easy</option>
+<div class="options-column">
+<h1>Nowości: GRAWER! + Dzbanki + Saturator butelka</h1>
+<label for="product-select">Wybierz produkt:</label>
+<select id="product-select" class="select-colors">
+<option value="">Wybierz produkt</option>
+<!--  <option value="butelka_soft_03l">Butelka Soft 0,3 l</option> -->
+<option value="crystal">Dzbanek Crystal Classic</option>
+<option value="crystal_unimax">Dzbanek Crystal Unimax</option>
+<option value="astra_classic">Dzbanek Astra Classic</option>
+<option value="butelka_soft_05l">Butelka Soft 0,5 l</option>
+<!--  <option value="butelka_soft_07l">Butelka Soft 0,7 l</option>-->
 
-                <option value="saturator">PushAir</option>
-		  <option value="saturator_butelka">PushAir Butelka 0,7</option>
+<option value="butelka_solid_05l">Butelka Solid 0,5 l</option>
+<option value="butelka_solid_07l">Butelka Solid 0,7 l</option>
+<option value="butelka_solid_steel_07l">Butelka Solid Steel 0,7 l</option>
+<option value="bidon_twist">Bidon Twist</option>
+<option value="bidon_klasyczny">Bidon Dafi</option>
+<option value="shape_t">Shape T</option>
+<option value="shape">Shape</option>
+<option value="self">Self</option>
+<option value="easy">Easy</option>
 
-            </select>
-            <div id="color-options">
-                <!-- Kolory dla elementów będą generowane dynamicznie -->
-            </div>
+<option value="saturator">PushAir</option>
+<option value="saturator_butelka">PushAir Butelka 0,7</option>
+
+</select>
+<div id="color-options">
+<!-- Kolory dla elementów będą generowane dynamicznie -->
+</div>
+		<div class="input-container">
 		<div class="zadruk-container">
-    <label for="zadruk-upload">Wgraj obrazek dla zadruku 360:</label>
-    <input type="file" id="zadruk-upload" accept="image/*"><br>
+<label for="zadruk-upload">Wgraj obrazek dla zadruku 360:</label>
+<input type="file" id="zadruk-upload" accept="image/*"><br>
 <label for="horizontal-slider-zadruk">Przesunięcie w poziomie:</label><br>
 <input type="range" id="horizontal-slider-zadruk" min="-200" max="200" value="0"><br>
 
 </div>
-		<div class="grawer-column">
-			<label for="file-upload"><b>NOWOŚĆ</b> Wgraj grawer:</label>
+<div class="grawer-column">
+<label for="file-upload"><b>NOWOŚĆ</b> Wgraj grawer:</label>
 <input type="file" id="file-upload" accept="image/*">
 <br>
 <label for="rotate-slider">Obrót:</label><br>
@@ -341,318 +342,317 @@ h1 {
 <input type="range" id="horizontal-slider" min="-200" max="200" value="0"><br>
 <label for="size-slider">Rozmiar obrazka:</label><br>
 <input id="size-slider" type="range" min="10" max="100" value="80">
-    </div>
+</div>
 <div>
-	
-            <button id="saveBtn">Zapisz jako JPG</button>
-			</div></div>
 
-    <div id="loadingMessage">Trwa zapis obrazu, proszę czekać...</div>
-	</div>
+<button id="saveBtn">Zapisz jako JPG</button>
+</div></div>
+
+<div id="loadingMessage">Trwa zapis obrazu, proszę czekać...</div>
+</div>
 <script>
 
-        const products = {
-	    astra_classic: ['pokrywka','raczka', 'zbiornik'],
-	    crystal: ['pokrywka', 'obudowa', 'raczka', 'zbiornik'],
-	    crystal_unimax: ['pokrywka', 'obudowa', 'raczka', 'zbiornik'],
-            butelka_soft_03l: ['ustnik', 'zakretka_z_gumka', 'filtr'],
-            butelka_soft_05l: ['ustnik', 'zakretka_z_gumka', 'filtr'],
-            butelka_soft_07l: ['ustnik', 'zakretka_z_gumka', 'filtr'],
+const products = {
+astra_classic: ['pokrywka','raczka', 'zbiornik'],
+crystal: ['pokrywka', 'obudowa', 'raczka', 'zbiornik'],
+crystal_unimax: ['pokrywka', 'obudowa', 'raczka', 'zbiornik'],
+butelka_soft_03l: ['ustnik', 'zakretka_z_gumka', 'filtr'],
+butelka_soft_05l: ['ustnik', 'zakretka_z_gumka', 'filtr'],
+butelka_soft_07l: ['ustnik', 'zakretka_z_gumka', 'filtr'],
 
-            butelka_solid_05l: ['elastometr', 'elastometr_uchwyty', 'przycisk', 'zakretka_dol', 'zakretka_gora', 'filtr', 'zbiornik',],
-            butelka_solid_07l: ['elastometr', 'elastometr_uchwyty', 'przycisk', 'zakretka_dol', 'zakretka_gora', 'zbiornik_solid', 'rurka'],
-            butelka_solid_steel_07l: ['elastometr', 'elastometr_uchwyty', 'przycisk', 'zakretka_dol', 'zakretka_gora','zbiornik_solid_steel'],
-	    shape_t: ['zakretka_shape', 'uszczelka_shape', 'wewnetrzna_gumka'],
-            shape: ['shape_zbiornik', 'zakretka_shape', 'uszczelka_shape', 'wewnetrzna_gumka'],
-	    bidon_twist: ['twist-ustnik', 'twist_zakretka', 'twist_zakretka-dol', 'twist_zbiornik'],
-            bidon_klasyczny: ['bidon_zatyczka', 'bidon_zakretka', 'bidon_zbiornik'],
-            self: ['self_zakretka', 'self_zatyczka', 'self-zbiornik-wewnetrzny', 'self-zbiornik-zewnetrzny', 'zadruk'],
-            easy: ['elastometr', 'sama_gora_zakretki', 'zbiornik', 'gora_zakretki', 'guma_zakretki'],
+butelka_solid_05l: ['elastometr', 'elastometr_uchwyty', 'przycisk', 'zakretka_dol', 'zakretka_gora', 'filtr', 'zbiornik',],
+butelka_solid_07l: ['elastometr', 'elastometr_uchwyty', 'przycisk', 'zakretka_dol', 'zakretka_gora', 'zbiornik_solid', 'rurka'],
+butelka_solid_steel_07l: ['elastometr', 'elastometr_uchwyty', 'przycisk', 'zakretka_dol', 'zakretka_gora','zbiornik_solid_steel'],
+shape_t: ['zakretka_shape', 'uszczelka_shape', 'wewnetrzna_gumka'],
+shape: ['shape_zbiornik', 'zakretka_shape', 'uszczelka_shape', 'wewnetrzna_gumka'],
+bidon_twist: ['twist-ustnik', 'twist_zakretka', 'twist_zakretka-dol', 'twist_zbiornik'],
+bidon_klasyczny: ['bidon_zatyczka', 'bidon_zakretka', 'bidon_zbiornik'],
+self: ['self_zakretka', 'self_zatyczka', 'self-zbiornik-wewnetrzny', 'self-zbiornik-zewnetrzny', 'zadruk'],
+easy: ['elastometr', 'sama_gora_zakretki', 'zbiornik', 'gora_zakretki', 'guma_zakretki'],
 
-            saturator: ['saturator_gora_korpus', 'saturator_butelka', 'satuator_korpus', 'przycisk_saturatora', 'saturator_gora_klapka', 'pushair_logo'],
-            saturator_butelka: ['zakretka', 'dol'],
-
-
-        };
-
-        const colors = {
-
-	    Mocha_Mousse_Pantone_kolor_2025roku_NOWOŚĆ: '#a47764',
-		Tendril_NOWOŚĆ: '#899f6a',
-		Cornflower_Blue_NOWOŚĆ: '#7391c9',
-		Viola_NOWOŚĆ: '#a793b8',
-		Rose_Tan_NOWOŚĆ: '#d29d98',
-		Cobblestone_NOWOŚĆ: '#a99b8f',
-		Willow_NOWOŚĆ: '#9a8b4f',
-		Gardenia_NOWOŚĆ: '#f0e9e0',
-		Peach: '#f5c09e',
-            Biały: '#ffffff',
-            Antracytowy: '#161616',
-            Żółty_FCB: '#ffc836',
-		 Bordowy_FCB: '#a31d45',
-            Granatowy_FCB: '#1d3874',
-	    Barbie: '#e0218a', 
-            Flamingowy: '#f04e98',
-	    Różany: '#ffc0cb',
-            Stalowy: '#768692',
-            Wrzosowy: '#A7A4E0',
-	    Lavender: '#afa4ce',
-            Niebiański: '#6CACE4',
-	    Szafirowy: '#355ca8',
-            Miętowy: '#88DBDF',
-	    Turkusowy: '#58c4c5',
-	    Jeansowy: '#7b879e',
-            Mandarynkowy: '#FF8200',
-	    Bursztynowy: '#ed7e2a',
-            Makowy: '#E4002B',
-            Cytrynowy: '#F3E500',
-            Clicks: '#C4D600',
-            Szałwiowy_Pantone_5615C: '#5e7461',
-            Miętowy_Pantone_5507C: '#9db0ac',
-            Piaskowy_Pantone_Warm_Gray: '#CBC4BC',
-            Cappuccino_Pantone_4775C: '#D7C4B7',
-            Stalowy_Pantone_430C: '#7C878E',
-            Lazurowy_Pantone_7542C: '#A4BCC2',
-            Złoty: '#D1B464',
-            Srebrny: '#d4d4d4',
-
-        };
-
-        let originalImages = {};
+saturator: ['saturator_gora_korpus', 'saturator_butelka', 'satuator_korpus', 'przycisk_saturatora', 'saturator_gora_klapka', 'pushair_logo'],
+saturator_butelka: ['zakretka', 'dol'],
 
 
-        document.getElementById('product-select').addEventListener('change', function () {
-            const product = this.value;
-            const colorOptions = document.getElementById('color-options');
-            const imageColumn = document.getElementById('image-column');
-            colorOptions.innerHTML = '';
-            imageColumn.innerHTML = '';
-            originalImages = {};
+};
 
-            if (product && products[product]) {
-                const productFrame = document.createElement('div');
-                productFrame.className = 'product-frame';
-                productFrame.style.backgroundImage = `url('images/${product}.jpg')`;
-                imageColumn.appendChild(productFrame);
+const colors = {
 
-                products[product].forEach((element, index) => {
-                    const wrapper = document.createElement('div');
-                    wrapper.className = 'image-wrapper';
-                    wrapper.style.zIndex = index + 1;
-                    const img = document.createElement('img');
-                    img.src = `images/${product}/${element}.png`;
-                    img.alt = element;
-                    img.id = `${element}-img`;
-                    wrapper.appendChild(img);
-                    productFrame.appendChild(wrapper);
+Mocha_Mousse_Pantone_kolor_2025roku_NOWOŚĆ: '#a47764',
+Tendril_NOWOŚĆ: '#899f6a',
+Cornflower_Blue_NOWOŚĆ: '#7391c9',
+Viola_NOWOŚĆ: '#a793b8',
+Rose_Tan_NOWOŚĆ: '#d29d98',
+Cobblestone_NOWOŚĆ: '#a99b8f',
+Willow_NOWOŚĆ: '#9a8b4f',
+Gardenia_NOWOŚĆ: '#f0e9e0',
+Peach: '#f5c09e',
+Biały: '#ffffff',
+Antracytowy: '#161616',
+Żółty_FCB: '#ffc836',
+Bordowy_FCB: '#a31d45',
+Granatowy_FCB: '#1d3874',
+Barbie: '#e0218a', 
+Flamingowy: '#f04e98',
+Różany: '#ffc0cb',
+Stalowy: '#768692',
+Wrzosowy: '#A7A4E0',
+Lavender: '#afa4ce',
+Niebiański: '#6CACE4',
+Szafirowy: '#355ca8',
+Miętowy: '#88DBDF',
+Turkusowy: '#58c4c5',
+Jeansowy: '#7b879e',
+Mandarynkowy: '#FF8200',
+Bursztynowy: '#ed7e2a',
+Makowy: '#E4002B',
+Cytrynowy: '#F3E500',
+Clicks: '#C4D600',
+Szałwiowy_Pantone_5615C: '#5e7461',
+Miętowy_Pantone_5507C: '#9db0ac',
+Piaskowy_Pantone_Warm_Gray: '#CBC4BC',
+Cappuccino_Pantone_4775C: '#D7C4B7',
+Stalowy_Pantone_430C: '#7C878E',
+Lazurowy_Pantone_7542C: '#A4BCC2',
+Złoty: '#D1B464',
+Srebrny: '#d4d4d4',
 
-                    originalImages[element] = img.src;
+};
 
-                    const colorInput = document.createElement('div');
-                    colorInput.className = 'color-input';
-                    colorInput.innerHTML = `
-                        <label for="${element}-color">${element}:</label>
-                        <select id="${element}-color">
-                            <option value="">Wybierz kolor</option>
-                            ${Object.keys(colors).map(color => `<option value="${colors[color]}">${color}</option>`).join('')}
-                        </select>
-                        <div class="input-container">   
-                            <input type="text" id="${element}-hex" placeholder="Kolor HEX">
-                        </div>
-                    `;
-                    colorOptions.appendChild(colorInput);
+let originalImages = {};
 
-                    const selectElement = document.getElementById(`${element}-color`);
-                    const hexInput = document.getElementById(`${element}-hex`);
 
-                    selectElement.addEventListener('change', function () {
-                        hexInput.value = '';
-                        handleColorChange(element, selectElement.value, hexInput.value);
-                    });
+document.getElementById('product-select').addEventListener('change', function () {
+const product = this.value;
+const colorOptions = document.getElementById('color-options');
+const imageColumn = document.getElementById('image-column');
+colorOptions.innerHTML = '';
+imageColumn.innerHTML = '';
+originalImages = {};
 
-                    hexInput.addEventListener('input', function () {
-                        handleColorChange(element, selectElement.value, hexInput.value);
-                    });
-                });
-            }
-        });
+if (product && products[product]) {
+const productFrame = document.createElement('div');
+productFrame.className = 'product-frame';
+productFrame.style.backgroundImage = `url('images/${product}.jpg')`;
+imageColumn.appendChild(productFrame);
 
-  
-    }
+products[product].forEach((element, index) => {
+const wrapper = document.createElement('div');
+wrapper.className = 'image-wrapper';
+wrapper.style.zIndex = index + 1;
+const img = document.createElement('img');
+img.src = `images/${product}/${element}.png`;
+img.alt = element;
+img.id = `${element}-img`;
+wrapper.appendChild(img);
+productFrame.appendChild(wrapper);
+
+originalImages[element] = img.src;
+
+const colorInput = document.createElement('div');
+colorInput.className = 'color-input';
+colorInput.innerHTML = `
+                       <label for="${element}-color">${element}:</label>
+                       <select id="${element}-color">
+                           <option value="">Wybierz kolor</option>
+                           ${Object.keys(colors).map(color => `<option value="${colors[color]}">${color}</option>`).join('')}
+                       </select>
+                       <div class="input-container">   
+                           <input type="text" id="${element}-hex" placeholder="Kolor HEX">
+                       </div>
+                   `;
+colorOptions.appendChild(colorInput);
+
+const selectElement = document.getElementById(`${element}-color`);
+const hexInput = document.getElementById(`${element}-hex`);
+
+selectElement.addEventListener('change', function () {
+hexInput.value = '';
+handleColorChange(element, selectElement.value, hexInput.value);
 });
 
-        function handleColorChange(element, selectedColor, hexValue) {
-            if (element === 'zadruk') {
-                return; // Nie zmieniaj koloru dla zadruka
-            }
+hexInput.addEventListener('input', function () {
+handleColorChange(element, selectElement.value, hexInput.value);
+});
+});
+}
+});
 
-    let color = selectedColor;
+// Sprawdź, czy produkt zawiera element "zadruk"
 
-    if (hexValue && isValidHex(hexValue)) {
-        color = `#${hexValue.startsWith('#') ? hexValue.slice(1) : hexValue}`;
-    } else if (!selectedColor && !isValidHex(hexValue)) {
-        color = colors['Biały']; // Domyślny kolor, jeśli HEX jest nieprawidłowy
-    }
 
-    colorizeImage(element, color);
+function handleColorChange(element, selectedColor, hexValue) {
+if (element === 'zadruk') {
+return; // Nie zmieniaj koloru dla zadruka
 }
 
-        function isValidHex(hex) {
-            return /^([0-9A-F]{3}){1,2}$/i.test(hex);
-        }
+let color = selectedColor;
 
-        function colorizeImage(element, color) {
-            const img = document.getElementById(`${element}-img`);
-            const canvas = document.createElement('canvas');
-            const ctx = canvas.getContext('2d');
-            const newImg = new Image();
-            newImg.src = originalImages[element];
-            newImg.crossOrigin = 'anonymous';
+if (hexValue && isValidHex(hexValue)) {
+color = `#${hexValue.startsWith('#') ? hexValue.slice(1) : hexValue}`;
+} else if (!selectedColor && !isValidHex(hexValue)) {
+color = colors['Biały']; // Domyślny kolor, jeśli HEX jest nieprawidłowy
+}
 
-            function hexToRgb(hex) {
-                const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-                return result ? {
-                    r: parseInt(result[1], 16),
-                    g: parseInt(result[2], 16),
-                    b: parseInt(result[3], 16)
-                } : null;
-            }
+colorizeImage(element, color);
+}
 
-            newImg.onload = function () {
-                canvas.width = newImg.width;
-                canvas.height = newImg.height;
-                ctx.drawImage(newImg, 0, 0);
-                const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-                const data = imageData.data;
+function isValidHex(hex) {
+return /^([0-9A-F]{3}){1,2}$/i.test(hex);
+}
 
-                const rgb = hexToRgb(color);
-                const rOverlay = rgb ? rgb.r : 255;
-                const gOverlay = rgb ? rgb.g : 255;
-                const bOverlay = rgb ? rgb.b : 255;
+function colorizeImage(element, color) {
+const img = document.getElementById(`${element}-img`);
+const canvas = document.createElement('canvas');
+const ctx = canvas.getContext('2d');
+const newImg = new Image();
+newImg.src = originalImages[element];
+newImg.crossOrigin = 'anonymous';
 
-                for (let i = 0; i < data.length; i += 4) {
-                    const alpha = data[i + 3];
-                    if (alpha > 0) {
-                        data[i] = Math.floor((data[i] * rOverlay) / 255);
-                        data[i + 1] = Math.floor((data[i + 1] * gOverlay) / 255);
-                        data[i + 2] = Math.floor((data[i + 2] * bOverlay) / 255);
-                    }
-                }
+function hexToRgb(hex) {
+const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+return result ? {
+r: parseInt(result[1], 16),
+g: parseInt(result[2], 16),
+b: parseInt(result[3], 16)
+} : null;
+}
 
-                ctx.putImageData(imageData, 0, 0);
-                img.src = canvas.toDataURL();
-            };
+newImg.onload = function () {
+canvas.width = newImg.width;
+canvas.height = newImg.height;
+ctx.drawImage(newImg, 0, 0);
+const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+const data = imageData.data;
 
-            if (newImg.complete) newImg.onload();
-            const productFrame = document.createElement('div');
+const rgb = hexToRgb(color);
+const rOverlay = rgb ? rgb.r : 255;
+const gOverlay = rgb ? rgb.g : 255;
+const bOverlay = rgb ? rgb.b : 255;
+
+for (let i = 0; i < data.length; i += 4) {
+const alpha = data[i + 3];
+if (alpha > 0) {
+data[i] = Math.floor((data[i] * rOverlay) / 255);
+data[i + 1] = Math.floor((data[i + 1] * gOverlay) / 255);
+data[i + 2] = Math.floor((data[i + 2] * bOverlay) / 255);
+}
+}
+
+ctx.putImageData(imageData, 0, 0);
+img.src = canvas.toDataURL();
+};
+
+if (newImg.complete) newImg.onload();
+const productFrame = document.createElement('div');
 productFrame.className = 'product-frame';
 productFrame.style.backgroundImage = `url('images/${product}.jpg')`; // Ładowanie tła
 imageColumn.appendChild(productFrame);
 
 products[product].forEach((element, index) => {
-    const wrapper = document.createElement('div');
-    wrapper.className = 'image-wrapper';
-    wrapper.style.zIndex = index + 1;
+const wrapper = document.createElement('div');
+wrapper.className = 'image-wrapper';
+wrapper.style.zIndex = index + 1;
 
-    const img = document.createElement('img');
-    img.src = `images/${product}/${element}.png`;
-    img.alt = element;
-    img.id = `${element}-img`;
-    wrapper.appendChild(img);
-    productFrame.appendChild(wrapper);
+const img = document.createElement('img');
+img.src = `images/${product}/${element}.png`;
+img.alt = element;
+img.id = `${element}-img`;
+wrapper.appendChild(img);
+productFrame.appendChild(wrapper);
 
-    originalImages[element] = img.src;
+originalImages[element] = img.src;
 
-    const colorInput = document.createElement('div');
-    colorInput.className = 'color-input';
-    colorInput.innerHTML = `
-        <label for="${element}-color">${element}:</label>
-        <div class="input-container">
-            <input type="color" id="${element}-picker" value="#ffffff">
-            <input type="text" id="${element}-hex" placeholder="#FFFFFF">
-        </div>
-    `;
-    colorOptions.appendChild(colorInput);
+const colorInput = document.createElement('div');
+colorInput.className = 'color-input';
+colorInput.innerHTML = `
+       <label for="${element}-color">${element}:</label>
+       <div class="input-container">
+           <input type="color" id="${element}-picker" value="#ffffff">
+           <input type="text" id="${element}-hex" placeholder="#FFFFFF">
+       </div>
+   `;
+colorOptions.appendChild(colorInput);
 
-    // Pobieranie elementów po dodaniu ich do DOM
-    const colorPicker = document.querySelector(`#${element}-picker`);
-    const hexInput = document.querySelector(`#${element}-hex`);
+// Pobieranie elementów po dodaniu ich do DOM
+const colorPicker = document.querySelector(`#${element}-picker`);
+const hexInput = document.querySelector(`#${element}-hex`);
 
-    // Obsługa zmiany koloru z color pickera
-    colorPicker.addEventListener('input', function () {
-        hexInput.value = colorPicker.value.toUpperCase();
-        handleColorChange(element, colorPicker.value);
-    });
-	// Obsługa wgrania obrazka do zadruk
-	function handleColorChange(element, selectedColor, hexValue) {
-    if (element === 'zadruk') {
-        return; // Nie zmieniaj koloru dla zadruk
-    }
-
-    let color = selectedColor;
-
-    if (hexValue && isValidHex(hexValue)) {
-        color = `#${hexValue.startsWith('#') ? hexValue.slice(1) : hexValue}`;
-    } else if (!selectedColor && !isValidHex(hexValue)) {
-        color = colors['Biały']; // Domyślny kolor, jeśli HEX jest nieprawidłowy
-    }
-
-    colorizeImage(element, color);
+// Obsługa zmiany koloru z color pickera
+colorPicker.addEventListener('input', function () {
+hexInput.value = colorPicker.value.toUpperCase();
+handleColorChange(element, colorPicker.value);
+});
+// Obsługa wgrania obrazka do zadruk
+function handleColorChange(element, selectedColor, hexValue) {
+if (element === 'zadruk') {
+return; // Nie zmieniaj koloru dla zadruk
 }
-    // Obsługa zmiany koloru z pola tekstowego HEX
-    hexInput.addEventListener('input', function () {
-        const hexValue = hexInput.value.startsWith('#') ? hexInput.value : `#${hexInput.value}`;
-        if (isValidHex(hexValue)) {
-            colorPicker.value = hexValue;
-            handleColorChange(element, hexValue);
-        }
-    });
+
+let color = selectedColor;
+
+if (hexValue && isValidHex(hexValue)) {
+color = `#${hexValue.startsWith('#') ? hexValue.slice(1) : hexValue}`;
+} else if (!selectedColor && !isValidHex(hexValue)) {
+color = colors['Biały']; // Domyślny kolor, jeśli HEX jest nieprawidłowy
+}
+
+colorizeImage(element, color);
+}
+// Obsługa zmiany koloru z pola tekstowego HEX
+hexInput.addEventListener('input', function () {
+const hexValue = hexInput.value.startsWith('#') ? hexInput.value : `#${hexInput.value}`;
+if (isValidHex(hexValue)) {
+colorPicker.value = hexValue;
+handleColorChange(element, hexValue);
+}
+});
 });
 
 
-        }
-    </script>
+}
+</script>
 
 <script>
 
 
 
-      document.getElementById('saveBtn').addEventListener('click', function() {
-            const element = document.getElementById('image-column2');
-            const loadingMessage = document.getElementById('loadingMessage');
-            loadingMessage.style.display = 'block';
+document.getElementById('saveBtn').addEventListener('click', function() {
+const element = document.getElementById('image-column2');
+const loadingMessage = document.getElementById('loadingMessage');
+loadingMessage.style.display = 'block';
 
-            // Dodaj klasę wyłączającą zaokrąglone rogi
-            element.classList.add('no-border-radius');
+// Dodaj klasę wyłączającą zaokrąglone rogi
+element.classList.add('no-border-radius');
 
-            const selectedProduct = document.getElementById('product-select').value || 'produkt';
-            const now = new Date();
-            const timestamp = now.toISOString().replace(/[:.]/g, '-');
+const selectedProduct = document.getElementById('product-select').value || 'produkt';
+const now = new Date();
+const timestamp = now.toISOString().replace(/[:.]/g, '-');
 
-            domtoimage.toJpeg(element, { quality: 0.95 })
-                .then(function(dataUrl) {
-                    const link = document.createElement('a');
-                    link.download = `${selectedProduct}_${timestamp}.jpg`;
-                    link.href = dataUrl;
-                    link.click();
-                    loadingMessage.style.display = 'none';
-                    alert('Obraz został zapisany.');
-                    // Usuń klasę po zapisaniu obrazu
-                    element.classList.remove('no-border-radius');
-                })
-                .catch(function(error) {
-                    console.error('Błąd podczas generowania obrazu:', error);
-                    loadingMessage.style.display = 'none';
-                    alert('Wystąpił błąd podczas zapisywania obrazu.');
-                    // Usuń klasę w przypadku błędu
-                    element.classList.remove('no-border-radius');
-                });
-        });
+domtoimage.toJpeg(element, { quality: 0.95 })
+.then(function(dataUrl) {
+const link = document.createElement('a');
+link.download = `${selectedProduct}_${timestamp}.jpg`;
+link.href = dataUrl;
+link.click();
+loadingMessage.style.display = 'none';
+alert('Obraz został zapisany.');
+// Usuń klasę po zapisaniu obrazu
+element.classList.remove('no-border-radius');
+})
+.catch(function(error) {
+console.error('Błąd podczas generowania obrazu:', error);
+loadingMessage.style.display = 'none';
+alert('Wystąpił błąd podczas zapisywania obrazu.');
+// Usuń klasę w przypadku błędu
+element.classList.remove('no-border-radius');
+});
+});
 
-    </script>
-	    <script>
-		    
-		    const baseCanvas = document.getElementById('base-canvas');
+</script>
+<script>
+
+const baseCanvas = document.getElementById('base-canvas');
 const overlayCanvas = document.getElementById('overlay-canvas');
 const baseCtx = baseCanvas.getContext('2d');
 const overlayCtx = overlayCanvas.getContext('2d');
@@ -674,160 +674,161 @@ let scale = 0.2 // Domyślny rozmiar 100% (1.0)
 
 
 function drawOverlayImage() {
-    overlayCtx.clearRect(0, 0, overlayCanvas.width, overlayCanvas.height);
+overlayCtx.clearRect(0, 0, overlayCanvas.width, overlayCanvas.height);
 
-    const centerX = overlayCanvas.width / 2 + horizontalOffset;
-    const centerY = overlayCanvas.height / 2 + verticalOffset;
+const centerX = overlayCanvas.width / 2 + horizontalOffset;
+const centerY = overlayCanvas.height / 2 + verticalOffset;
 
-    overlayCtx.save();
-    overlayCtx.translate(centerX, centerY);
-    overlayCtx.rotate((rotation * Math.PI) / 180);
-    overlayCtx.translate(-centerX, -centerY);
+overlayCtx.save();
+overlayCtx.translate(centerX, centerY);
+overlayCtx.rotate((rotation * Math.PI) / 180);
+overlayCtx.translate(-centerX, -centerY);
 
-    // Skalowanie obrazka z zachowaniem proporcji
-    const maxWidth = 800 * scale; // Uwzględnij skalę
-    const maxHeight = 800 * scale; // Uwzględnij skalę
-    const aspectRatio = image.width / image.height;
+// Skalowanie obrazka z zachowaniem proporcji
+const maxWidth = 800 * scale; // Uwzględnij skalę
+const maxHeight = 800 * scale; // Uwzględnij skalę
+const aspectRatio = image.width / image.height;
 
-    let width, height;
+let width, height;
 
-    if (aspectRatio > 1) {
-        width = maxWidth;
-        height = maxWidth / aspectRatio;
+if (aspectRatio > 1) {
+width = maxWidth;
+height = maxWidth / aspectRatio;
 
-        if (height > maxHeight) {
-            height = maxHeight;
-            width = maxHeight * aspectRatio;
-        }
-    } else {
-        height = maxHeight;
-        width = maxHeight * aspectRatio;
+if (height > maxHeight) {
+height = maxHeight;
+width = maxHeight * aspectRatio;
+}
+} else {
+height = maxHeight;
+width = maxHeight * aspectRatio;
 
-        if (width > maxWidth) {
-            width = maxWidth;
-            height = maxWidth / aspectRatio;
-        }
-    }
+if (width > maxWidth) {
+width = maxWidth;
+height = maxWidth / aspectRatio;
+}
+}
 
-    overlayCtx.drawImage(image, centerX - width / 2, centerY - height / 2, width, height);
+overlayCtx.drawImage(image, centerX - width / 2, centerY - height / 2, width, height);
 
-    overlayCtx.restore();
+overlayCtx.restore();
 }
 
 
 
 // Obsługa wgrywania pliku
 fileUpload.addEventListener('change', (event) => {
-    const file = event.target.files[0];
-    if (file) {
-        const reader = new FileReader();
-        reader.onload = (e) => {
-            image.src = e.target.result;
-            image.onload = () => {
-                drawOverlayImage();
-            };
-        };
-        reader.readAsDataURL(file);
-    }
+const file = event.target.files[0];
+if (file) {
+const reader = new FileReader();
+reader.onload = (e) => {
+image.src = e.target.result;
+image.onload = () => {
+drawOverlayImage();
+};
+};
+reader.readAsDataURL(file);
+}
 });
 
 // Obsługa suwaka obrotu
 rotateSlider.addEventListener('input', (event) => {
-    rotation = parseInt(event.target.value, 10);
-    drawOverlayImage();
+rotation = parseInt(event.target.value, 10);
+drawOverlayImage();
 });
 // Obsługa suwaka przesunięcia
 horizontalSlider.addEventListener('input', (event) => {
-    horizontalOffset = parseInt(event.target.value, 10);
-    drawOverlayImage();
+horizontalOffset = parseInt(event.target.value, 10);
+drawOverlayImage();
 });
 // Obsługa suwaka przesunięcia
 verticalSlider.addEventListener('input', (event) => {
-    verticalOffset = parseInt(event.target.value, 10);
-    drawOverlayImage();
+verticalOffset = parseInt(event.target.value, 10);
+drawOverlayImage();
 });
 // Obsługa zmiany rozmiaru
-	sizeSlider.addEventListener('input', (event) => {
-    scale = parseInt(event.target.value, 10) / 80; // Wartość suwaka w zakresie 10–200 przekształcana na skalę 0.1–2.0
-    drawOverlayImage();
-	
+sizeSlider.addEventListener('input', (event) => {
+scale = parseInt(event.target.value, 10) / 80; // Wartość suwaka w zakresie 10–200 przekształcana na skalę 0.1–2.0
+drawOverlayImage();
+
 });
-	</script>
+</script>
 <script>
-		    
-		    document.getElementById('zadruk-upload').addEventListener('change', function (event) {
-    const file = event.target.files[0];
-    if (file) {
-        const reader = new FileReader();
-        reader.onload = function (e) {
-            const img = new Image();
-            img.src = e.target.result;
-            img.onload = function () {
-                const canvas = document.createElement('canvas');
-                const ctx = canvas.getContext('2d');
-                const maskImg = document.getElementById('zadruk-img');
-                canvas.width = maskImg.width;
-                canvas.height = maskImg.height;
-                ctx.drawImage(maskImg, 0, 0);
-                ctx.globalCompositeOperation = 'source-in';
-                ctx.drawImage(img, 0, 0, maskImg.width, maskImg.height);
-                maskImg.src = canvas.toDataURL();
-            };
-        };
-        reader.readAsDataURL(file);
-    }
+
+document.getElementById('zadruk-upload').addEventListener('change', function (event) {
+const file = event.target.files[0];
+if (file) {
+const reader = new FileReader();
+reader.onload = function (e) {
+const img = new Image();
+img.src = e.target.result;
+img.onload = function () {
+const canvas = document.createElement('canvas');
+const ctx = canvas.getContext('2d');
+const maskImg = document.getElementById('zadruk-img');
+canvas.width = maskImg.width;
+canvas.height = maskImg.height;
+ctx.drawImage(maskImg, 0, 0);
+ctx.globalCompositeOperation = 'source-in';
+ctx.drawImage(img, 0, 0, maskImg.width, maskImg.height);
+maskImg.src = canvas.toDataURL();
+};
+};
+reader.readAsDataURL(file);
+}
 });
 
-		    function drawZadrukImage() {
-    overlayCtx.clearRect(0, 0, overlayCanvas.width, overlayCanvas.height);
+function drawZadrukImage() {
+overlayCtx.clearRect(0, 0, overlayCanvas.width, overlayCanvas.height);
 
-    const zadrukImg = document.getElementById('zadruk-img');
-    if (!zadrukImg) return;
+const zadrukImg = document.getElementById('zadruk-img');
+if (!zadrukImg) return;
 
-    const centerX = overlayCanvas.width / 2 + horizontalOffset;
-    const centerY = overlayCanvas.height / 2;
+const centerX = overlayCanvas.width / 2 + horizontalOffset;
+const centerY = overlayCanvas.height / 2;
 
-    overlayCtx.save();
-    overlayCtx.translate(centerX, centerY);
-    overlayCtx.rotate((rotation * Math.PI) / 180);
-    overlayCtx.translate(-centerX, -centerY);
+overlayCtx.save();
+overlayCtx.translate(centerX, centerY);
+overlayCtx.rotate((rotation * Math.PI) / 180);
+overlayCtx.translate(-centerX, -centerY);
 
-    // Skalowanie obrazka z zachowaniem proporcji
-    const maxWidth = zadrukImg.width;
-    const maxHeight = zadrukImg.height;
-    const aspectRatio = image.width / image.height;
+// Skalowanie obrazka z zachowaniem proporcji
+const maxWidth = zadrukImg.width;
+const maxHeight = zadrukImg.height;
+const aspectRatio = image.width / image.height;
 
-    let width, height;
+let width, height;
 
-    if (aspectRatio > 1) {
-        width = maxWidth;
-        height = maxWidth / aspectRatio;
+if (aspectRatio > 1) {
+width = maxWidth;
+height = maxWidth / aspectRatio;
 
-        if (height > maxHeight) {
-            height = maxHeight;
-            width = maxHeight * aspectRatio;
-        }
-    } else {
-        height = maxHeight;
-        width = maxHeight * aspectRatio;
+if (height > maxHeight) {
+height = maxHeight;
+width = maxHeight * aspectRatio;
+}
+} else {
+height = maxHeight;
+width = maxHeight * aspectRatio;
 
-        if (width > maxWidth) {
-            width = maxWidth;
-            height = maxWidth / aspectRatio;
-        }
-    }
-
-    overlayCtx.drawImage(image, centerX - width / 2, centerY - height / 2, width, height);
-
-    overlayCtx.restore();
+if (width > maxWidth) {
+width = maxWidth;
+height = maxWidth / aspectRatio;
+}
 }
 
+overlayCtx.drawImage(image, centerX - width / 2, centerY - height / 2, width, height);
+
+overlayCtx.restore();
+}
+
+		    document.getElementById('horizontal-slider-zadruk').addEventListener('input', function (event) {
 		    document.getElementById('horizontal-slider-zadruk').addEventListener('zadruk', function (event) {
-    horizontalOffset = parseInt(event.target.value, 10);
-    drawZadrukImage();
-	
+horizontalOffset = parseInt(event.target.value, 10);
+drawZadrukImage();
+
 });
 
-	</script>
+</script>
 </body>
 </html>
