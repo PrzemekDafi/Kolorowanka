@@ -322,30 +322,33 @@ pointer-events: none; /* Opcjonalne - nie blokuje interakcji z elementami poniż
 <!-- Kolory dla elementów będą generowane dynamicznie -->
 </div>
 <div class="zadruk-container">
-<label for="zadruk-upload">Wgraj obrazek dla zadruku 360:</label>
-<input type="file" id="zadruk-upload" accept="image/*"><br>
-<label for="horizontal-slider-zadruk">Przesunięcie w poziomie:</label><br>
-<input type="range" id="horizontal-slider-zadruk" min="-200" max="200" value="0"><br>
-
+  <label for="zadruk-upload">Wgraj obrazek dla zadruku 360:</label>
+  <input type="file" id="zadruk-upload" accept="image/*"><br>
+  <label for="horizontal-slider-zadruk">Przesunięcie w poziomie:</label><br>
+  <input type="range" id="horizontal-slider-zadruk" min="-200" max="200" value="0"><br>
 </div>
+
 <div class="grawer-column">
-<label for="file-upload"><b>NOWOŚĆ</b> Wgraj grawer:</label>
-<input type="file" id="file-upload" accept="image/*">
-<br>
-<label for="rotate-slider">Obrót:</label><br>
-<input type="range" id="rotate-slider" min="0" max="360" value="0">
-<br>
-<label for="vertical-slider">Przesunięcie w pionie:</label><br>
-<input type="range" id="vertical-slider" min="-200" max="200" value="0"><br>
-<label for="horizontal-slider">Przesunięcie w poziomie:</label><br>
-<input type="range" id="horizontal-slider" min="-200" max="200" value="0"><br>
-<label for="size-slider">Rozmiar obrazka:</label><br>
-<input id="size-slider" type="range" min="10" max="100" value="80">
+  <label for="file-upload"><b>NOWOŚĆ</b> Wgraj grawer:</label>
+  <input type="file" id="file-upload" accept="image/*">
+  <br>
+  <label for="rotate-slider">Obrót:</label><br>
+  <input type="range" id="rotate-slider" min="0" max="360" value="0">
+  <br>
+  <label for="vertical-slider">Przesunięcie w pionie:</label><br>
+  <input type="range" id="vertical-slider" min="-200" max="200" value="0"><br>
+  <label for="horizontal-slider">Przesunięcie w poziomie:</label><br>
+  <input type="range" id="horizontal-slider" min="-200" max="200" value="0"><br>
+  <label for="size-slider">Rozmiar obrazka:</label><br>
+  <input id="size-slider" type="range" min="10" max="100" value="80">
 </div>
-<div>
 
-<button id="saveBtn">Zapisz jako JPG</button>
-</div></div>
+<canvas id="overlayCanvas" width="600" height="400"></canvas>
+
+<div>
+  <button id="saveBtn">Zapisz jako JPG</button>
+</div>
+
 
 <div id="loadingMessage">Trwa zapis obrazu, proszę czekać...</div>
 </div>
