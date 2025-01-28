@@ -822,16 +822,7 @@ overlayCtx.drawImage(image, centerX - width / 2, centerY - height / 2, width, he
 
 overlayCtx.restore();
 }
-// Obsługa suwaka przesunięcia
-horizontalSlider.addEventListener('input', function (event) => {
-horizontalOffset = parseInt(event.target.value, 10);
-drawZadrukImage();
 });
-	  
-document.getElementById('horizontal-slider-zadruk').addEventListener('zadruk', function (event) {
-horizontalOffset = parseInt(event.target.value, 10);
-drawZadrukImage();
-	});
 	
 
 </script>
