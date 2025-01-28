@@ -321,8 +321,7 @@ pointer-events: none; /* Opcjonalne - nie blokuje interakcji z elementami poniż
 <div id="color-options">
 <!-- Kolory dla elementów będą generowane dynamicznie -->
 </div>
-		<div class="input-container">
-		<div class="zadruk-container">
+<div class="input-container">
 <label for="zadruk-upload">Wgraj obrazek dla zadruku 360:</label>
 <input type="file" id="zadruk-upload" accept="image/*"><br>
 <label for="horizontal-slider-zadruk">Przesunięcie w poziomie:</label><br>
@@ -662,6 +661,8 @@ const fileUpload = document.getElementById('file-upload');
 const rotateSlider = document.getElementById('rotate-slider');
 const verticalSlider = document.getElementById('vertical-slider');
 const horizontalSlider = document.getElementById('horizontal-slider');
+		    const horizontalSlider = document.getElementById('horizontal-zadruk-slider');
+
 const sizeSlider = document.getElementById('size-slider');
 
 
@@ -822,11 +823,15 @@ overlayCtx.drawImage(image, centerX - width / 2, centerY - height / 2, width, he
 overlayCtx.restore();
 }
 
-		    document.getElementById('horizontal-slider-zadruk').addEventListener('input', function (event) {
-		    document.getElementById('horizontal-slider-zadruk').addEventListener('zadruk', function (event) {
+document.getElementById('horizontal-slider-zadruk').addEventListener('input', function (event) {
 horizontalOffset = parseInt(event.target.value, 10);
 drawZadrukImage();
-
+	});
+	
+	// Obsługa suwaka przesunięcia
+horizontalSlider.addEventListener('input', (event) => {
+    horizontalOffset = parseInt(event.target.value, 10);
+    drawZadrukImage();
 });
 
 </script>
