@@ -321,11 +321,11 @@ pointer-events: none; /* Opcjonalne - nie blokuje interakcji z elementami poniż
 <div id="color-options">
 <!-- Kolory dla elementów będą generowane dynamicznie -->
 </div>
-<div class="zadruk-container">
+<div class="zadruk-container"><canvas id="overlayCanvas">
   <label for="zadruk-upload">Wgraj obrazek dla zadruku 360:</label>
   <input type="file" id="zadruk-upload" accept="image/*"><br>
   <label for="horizontal-slider-zadruk">Przesunięcie w poziomie:</label><br>
-  <input type="range" id="horizontal-slider-zadruk" min="-200" max="200" value="0"><br>
+  <input type="range" id="horizontal-slider-zadruk" min="-200" max="200" value="0"><br></canvas>
 </div>
 
 <div class="grawer-column">
@@ -343,7 +343,7 @@ pointer-events: none; /* Opcjonalne - nie blokuje interakcji z elementami poniż
   <input id="size-slider" type="range" min="10" max="100" value="80">
 </div>
 
-<canvas id="overlayCanvas" width="600" height="400"></canvas>
+
 
 <div>
   <button id="saveBtn">Zapisz jako JPG</button>
