@@ -753,90 +753,86 @@ scale = parseInt(event.target.value, 10) / 80; // Wartość suwaka w zakresie 10
 drawOverlayImage();
 
 });
-</script><script>
+</script>
+  <script>
 
-const fileUpload = document.getElementById('zadruk-upload');
-const horizontalSlider = document.getElementById('horizontal-slider');
-
+document.getElementById('zadruk-upload').addEventListener('change', function (event) {
+const file = event.target.files[0];
+if (file) {
+const reader = new FileReader();
+reader.onload = function (e) {
+const img = new Image();
+img.src = e.target.result;
+img.onload = function () {
+const canvas = document.createElement('canvas');
+const ctx = canvas.getContext('2d');
+const maskImg = document.getElementById('zadruk-img');
+canvas.width = maskImg.width;
+canvas.height = maskImg.height;
+ctx.drawImage(maskImg, 0, 0);
+ctx.globalCompositeOperation = 'source-in';
+ctx.drawImage(img, 0, 0, maskImg.width, maskImg.height);
+maskImg.src = canvas.toDataURL();
+};
+};
+reader.readAsDataURL(file);
+}
+});
 
 function drawZadrukImage() {
 overlayCtx.clearRect(0, 0, overlayCanvas.width, overlayCanvas.height);
 
-  
-  const overlayCanvas = document.getElementById('zadruk-container');
-  const overlayCtx = overlayCanvas.getContext('2d');
-  let horizontalOffset = 0;
-  let rotation = 0;
+const zadrukImg = document.getElementById('zadruk-img');
+if (!zadrukImg) return;
 
-  document.getElementById('zadruk-upload').addEventListener('change', function (event) {
-    const file = event.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = function (e) {
-        const img = new Image();
-        img.src = e.target.result;
-        img.onload = function () {
-          const canvas = document.createElement('canvas');
-          const ctx = canvas.getContext('2d');
-          const maskImg = document.getElementById('zadruk-img') || new Image();
-          maskImg.src = overlayCanvas.toDataURL(); // Jeśli maska jest pusta, generuj pusty obraz.
-          canvas.width = maskImg.width || 600;
-          canvas.height = maskImg.height || 400;
-          ctx.drawImage(maskImg, 0, 0);
-          ctx.globalCompositeOperation = 'source-in';
-          ctx.drawImage(img, 0, 0, maskImg.width, maskImg.height);
-          overlayCtx.drawImage(canvas, 0, 0);
-        };
-      };
-      reader.readAsDataURL(file);
-    }
-  });
+const centerX = overlayCanvas.width / 2 + horizontalOffset;
+const centerY = overlayCanvas.height / 2;
 
-  function drawZadrukImage() {
-    overlayCtx.clearRect(0, 0, overlayCanvas.width, overlayCanvas.height);
+overlayCtx.save();
+overlayCtx.translate(centerX, centerY);
+overlayCtx.rotate((rotation * Math.PI) / 180);
+overlayCtx.translate(-centerX, -centerY);
 
-    const zadrukImg = document.getElementById('zadruk-img') || new Image();
-    if (!zadrukImg.src) return;
+// Skalowanie obrazka z zachowaniem proporcji
+const maxWidth = zadrukImg.width;
+const maxHeight = zadrukImg.height;
+const aspectRatio = image.width / image.height;
 
-    const centerX = overlayCanvas.width / 2 + horizontalOffset;
-    const centerY = overlayCanvas.height / 2;
+let width, height;
 
-    overlayCtx.save();
-    overlayCtx.translate(centerX, centerY);
-    overlayCtx.rotate((rotation * Math.PI) / 180);
-    overlayCtx.translate(-centerX, -centerY);
+if (aspectRatio > 1) {
+width = maxWidth;
+height = maxWidth / aspectRatio;
 
-    const maxWidth = zadrukImg.width || overlayCanvas.width;
-    const maxHeight = zadrukImg.height || overlayCanvas.height;
-    const aspectRatio = zadrukImg.width / zadrukImg.height;
+if (height > maxHeight) {
+height = maxHeight;
+width = maxHeight * aspectRatio;
+}
+} else {
+height = maxHeight;
+width = maxHeight * aspectRatio;
 
-    let width, height;
-    if (aspectRatio > 1) {
-      width = maxWidth;
-      height = maxWidth / aspectRatio;
-      if (height > maxHeight) {
-        height = maxHeight;
-        width = maxHeight * aspectRatio;
-      }
-    } else {
-      height = maxHeight;
-      width = maxHeight * aspectRatio;
-      if (width > maxWidth) {
-        width = maxWidth;
-        height = maxWidth / aspectRatio;
-      }
-    }
+if (width > maxWidth) {
+width = maxWidth;
+height = maxWidth / aspectRatio;
+}
+}
 
-    overlayCtx.drawImage(zadrukImg, centerX - width / 2, centerY - height / 2, width, height);
-    overlayCtx.restore();
-  }
+overlayCtx.drawImage(image, centerX - width / 2, centerY - height / 2, width, height);
 
-  document.getElementById('horizontal-slider-zadruk').addEventListener('input', function (event) {
+overlayCtx.restore();
+}
+
+document.getElementById('horizontal-slider-zadruk').addEventListener('zadruk', function (event) {
+horizontalOffset = parseInt(event.target.value, 10);
+drawZadrukImage();
+	});
+	
+	// Obsługa suwaka przesunięcia
+horizontalSlider.addEventListener('zadruk', (event) => {
     horizontalOffset = parseInt(event.target.value, 10);
     drawZadrukImage();
-  });
 });
-
 
 </script>
 </body>
