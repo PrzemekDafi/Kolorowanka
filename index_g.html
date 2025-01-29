@@ -780,7 +780,7 @@ document.getElementById('zadruk-upload').addEventListener('change', function (ev
 
 function drawZadrukImage() {
     overlayCtx.clearRect(0, 0, overlayCanvas.width, overlayCanvas.height);
-const horizontalSlider2 = document.getElementById('horizontal-slider');
+const horizontalSlider = document.getElementById('horizontal-slider');
 
     const zadrukImg = document.getElementById('zadruk-img');
     if (!zadrukImg) return;
@@ -823,7 +823,7 @@ const horizontalSlider2 = document.getElementById('horizontal-slider');
     overlayCtx.restore();
 }
 
-const horizontalSlider2 = document.getElementById('horizontal-slider-zadruk');
+const horizontalSlider = document.getElementById('horizontal-slider-zadruk');
 horizontalSlider.addEventListener('input', function (event) {
     horizontalOffset = parseInt(event.target.value, 10);
     drawZadrukImage();
