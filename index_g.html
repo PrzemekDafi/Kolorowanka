@@ -777,12 +777,15 @@ drawOverlayImage();
 <script>
 
         // ZADRUK
+   // ZADRUK
         const zadrukUpload = document.getElementById('zadruk-upload');
         const horizontalSliderZadruk = document.getElementById('horizontal-slider-zadruk');
         let zadrukImage = null;
         let horizontalOffsetZadruk = 0;
         const zadrukMask = document.getElementById('zadruk-mask');
         const maskContainer = document.getElementById('mask-container');
+        const overlayCanvas = document.getElementById('overlay-canvas');
+        const overlayCtx = overlayCanvas.getContext('2d');
 
         zadrukUpload.addEventListener('change', (event) => {
             const file = event.target.files[0];
@@ -829,11 +832,11 @@ drawOverlayImage();
 
                 ctx.drawImage(zadrukMask, 0, 0);
                 ctx.globalCompositeOperation = 'source-in';
-                ctx.drawImage(zadrukImage, 0, 0, canvas.width, canvas.height); // Rysujemy obraz na canvas
+                ctx.drawImage(zadrukImage, 0, 0, canvas.width, canvas.height);
 
-                const x = overlayCanvas.width / 2 + horizontalOffsetZadruk - canvas.width / 2; // Używamy wymiarów canvas
-                const y = overlayCanvas.height / 2 - canvas.height / 2; // Używamy wymiarów canvas
-                overlayCtx.drawImage(canvas, x, y); // Rysujemy canvas na overlayCtx
+                const x = overlayCanvas.width / 2 + horizontalOffsetZadruk - canvas.width / 2;
+                const y = overlayCanvas.height / 2 - canvas.height / 2;
+                overlayCtx.drawImage(canvas, x, y);
             }
         }
 
