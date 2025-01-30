@@ -275,7 +275,7 @@ z-index: 1000; /* Obrazek grawer - na wierzchu */
 pointer-events: none; /* Opcjonalne - nie blokuje interakcji z elementami poniżej */
 
 }
-	   /* ... (style bez zmian) ... */
+/* ... (style bez zmian) ... */
         #mask-container {
             position: absolute;
             top: 0;
@@ -283,7 +283,15 @@ pointer-events: none; /* Opcjonalne - nie blokuje interakcji z elementami poniż
             width: 900px;
             height: 900px;
             overflow: hidden;
-            pointer-events: none; /* Uniemożliwia klikanie w maskę */
+            pointer-events: none;
+        }
+
+        #zadruk-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
         }
 
 </style>
@@ -767,30 +775,29 @@ drawOverlayImage();
 });
 </script>
 <script>
-const overlayCanvas = document.getElementById('overlay-canvas');
+  const overlayCanvas = document.getElementById('overlay-canvas');
         const overlayCtx = overlayCanvas.getContext('2d');
         const zadrukUpload = document.getElementById('zadruk-upload');
         const horizontalSliderZadruk = document.getElementById('horizontal-slider-zadruk');
-        const zadrukCanvas = document.getElementById('zadruk-canvas'); // Canvas dla maski
+        const zadrukCanvas = document.getElementById('zadruk-canvas');
         const zadrukCtx = zadrukCanvas.getContext('2d');
         const maskContainer = document.getElementById('mask-container');
         let zadrukImage = null;
         let horizontalOffsetZadruk = 0;
-        let currentMask = null; // Aktualnie używana maska
+        let currentMask = null;
 
-        // Dodajemy obsługę zmiany produktu
         document.getElementById('product-select').addEventListener('change', function () {
             const product = this.value;
+            zadrukCtx.clearRect(0, 0, zadrukCanvas.width, zadrukCanvas.height); // Czyścimy canvas maski
+
             if (product && products[product] && products[product].includes('zadruk')) {
-                // Jeśli produkt ma "zadruk", ładujemy maskę
                 currentMask = new Image();
                 currentMask.src = `images/${product}/zadruk.png`;
                 currentMask.onload = () => {
-                    zadrukCtx.drawImage(currentMask, 0, 0); // Rysujemy maskę na canvas
-                    maskContainer.style.overflow = 'visible'; // Pokazujemy kontener maski
+                    zadrukCtx.drawImage(currentMask, 0, 0, zadrukCanvas.width, zadrukCanvas.height); // Rysujemy maskę na canvas
+                    maskContainer.style.overflow = 'visible';
                 };
             } else {
-                // W przeciwnym razie chowamy maskę
                 maskContainer.style.overflow = 'hidden';
                 currentMask = null;
             }
@@ -826,7 +833,7 @@ const overlayCanvas = document.getElementById('overlay-canvas');
                 canvas.width = zadrukCanvas.width;
                 canvas.height = zadrukCanvas.height;
 
-                ctx.drawImage(zadrukCanvas, 0, 0); // Rysujemy maskę z canvas
+                ctx.drawImage(zadrukCanvas, 0, 0);
                 ctx.globalCompositeOperation = 'source-in';
                 ctx.drawImage(zadrukImage, 0, 0, canvas.width, canvas.height);
 
@@ -835,7 +842,6 @@ const overlayCanvas = document.getElementById('overlay-canvas');
                 overlayCtx.drawImage(canvas, x, y);
             }
         }
-
     </script>
 </body>
 </html>
