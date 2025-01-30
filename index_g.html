@@ -275,6 +275,16 @@ z-index: 1000; /* Obrazek grawer - na wierzchu */
 pointer-events: none; /* Opcjonalne - nie blokuje interakcji z elementami poniżej */
 
 }
+	   /* ... (style bez zmian) ... */
+        #mask-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 900px;
+            height: 900px;
+            overflow: hidden;
+            pointer-events: none; /* Uniemożliwia klikanie w maskę */
+        }
 
 </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" defer></script>
@@ -286,7 +296,9 @@ pointer-events: none; /* Opcjonalne - nie blokuje interakcji z elementami poniż
 <div class="image-column2" id="image-column2">
 <canvas id="base-canvas" width="900px" height="900px" style="position: absolute; z-index: 9999;"></canvas>
 <canvas id="overlay-canvas" width="900px" height="900px" style="position: absolute; z-index: 1000;"></canvas>
-
+<div id="mask-container">
+                <canvas id="zadruk-canvas" width="900" height="900"></canvas>
+            </div>
 <div class="image-column" id="image-column"></div>
 </div>
 
@@ -755,139 +767,75 @@ drawOverlayImage();
 });
 </script>
 <script>
-document.getElementById('zadruk-upload').addEventListener('change', function (event) {
-    const file = event.target.files[0];
-    if (file) {
-        const reader = new FileReader();
-        reader.onload = function (e) {
-            const img = new Image();
-            img.src = e.target.result;
-            img.onload = function () {
+const overlayCanvas = document.getElementById('overlay-canvas');
+        const overlayCtx = overlayCanvas.getContext('2d');
+        const zadrukUpload = document.getElementById('zadruk-upload');
+        const horizontalSliderZadruk = document.getElementById('horizontal-slider-zadruk');
+        const zadrukCanvas = document.getElementById('zadruk-canvas'); // Canvas dla maski
+        const zadrukCtx = zadrukCanvas.getContext('2d');
+        const maskContainer = document.getElementById('mask-container');
+        let zadrukImage = null;
+        let horizontalOffsetZadruk = 0;
+        let currentMask = null; // Aktualnie używana maska
+
+        // Dodajemy obsługę zmiany produktu
+        document.getElementById('product-select').addEventListener('change', function () {
+            const product = this.value;
+            if (product && products[product] && products[product].includes('zadruk')) {
+                // Jeśli produkt ma "zadruk", ładujemy maskę
+                currentMask = new Image();
+                currentMask.src = `images/${product}/zadruk.png`;
+                currentMask.onload = () => {
+                    zadrukCtx.drawImage(currentMask, 0, 0); // Rysujemy maskę na canvas
+                    maskContainer.style.overflow = 'visible'; // Pokazujemy kontener maski
+                };
+            } else {
+                // W przeciwnym razie chowamy maskę
+                maskContainer.style.overflow = 'hidden';
+                currentMask = null;
+            }
+        });
+
+        zadrukUpload.addEventListener('change', (event) => {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    zadrukImage = new Image();
+                    zadrukImage.src = e.target.result;
+                    zadrukImage.onload = () => {
+                        drawZadrukImage();
+                    };
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        horizontalSliderZadruk.addEventListener('input', (event) => {
+            horizontalOffsetZadruk = parseInt(event.target.value, 10);
+            drawZadrukImage();
+        });
+
+        function drawZadrukImage() {
+            overlayCtx.clearRect(0, 0, overlayCanvas.width, overlayCanvas.height);
+
+            if (zadrukImage && currentMask) {
                 const canvas = document.createElement('canvas');
                 const ctx = canvas.getContext('2d');
-                const maskImg = document.getElementById('zadruk-img');
-                canvas.width = maskImg.width;
-                canvas.height = maskImg.height;
-                ctx.drawImage(maskImg, 0, 0);
+
+                canvas.width = zadrukCanvas.width;
+                canvas.height = zadrukCanvas.height;
+
+                ctx.drawImage(zadrukCanvas, 0, 0); // Rysujemy maskę z canvas
                 ctx.globalCompositeOperation = 'source-in';
-                ctx.drawImage(img, 0, 0, maskImg.width, maskImg.height);
-                maskImg.src = canvas.toDataURL();
-            };
-        };
-        reader.readAsDataURL(file);
-    }
-const file = event.target.files[0];
-if (file) {
-const reader = new FileReader();
-reader.onload = function (e) {
-const img = new Image();
-img.src = e.target.result;
-img.onload = function () {
-const canvas = document.createElement('canvas');
-const ctx = canvas.getContext('2d');
-const maskImg = document.getElementById('zadruk-img');
-canvas.width = maskImg.width;
-canvas.height = maskImg.height;
-ctx.drawImage(maskImg, 0, 0);
-ctx.globalCompositeOperation = 'source-in';
-ctx.drawImage(img, 0, 0, maskImg.width, maskImg.height);
-maskImg.src = canvas.toDataURL();
-};
-};
-reader.readAsDataURL(file);
-}
-});
+                ctx.drawImage(zadrukImage, 0, 0, canvas.width, canvas.height);
 
-function drawZadrukImage() {
-    overlayCtx.clearRect(0, 0, overlayCanvas.width, overlayCanvas.height);
-const horizontalSlider = document.getElementById('horizontal-slider');
-overlayCtx.clearRect(0, 0, overlayCanvas.width, overlayCanvas.height);
-
-    const zadrukImg = document.getElementById('zadruk-img');
-    if (!zadrukImg) return;
-const zadrukImg = document.getElementById('zadruk-img');
-if (!zadrukImg) return;
-
-    const centerX = overlayCanvas.width / 2 + horizontalOffset;
-    const centerY = overlayCanvas.height / 2;
-const centerX = overlayCanvas.width / 2 + horizontalOffset;
-const centerY = overlayCanvas.height / 2;
-
-    overlayCtx.save();
-    overlayCtx.translate(centerX, centerY);
-    overlayCtx.rotate((rotation * Math.PI) / 180);
-    overlayCtx.translate(-centerX, -centerY);
-overlayCtx.save();
-overlayCtx.translate(centerX, centerY);
-overlayCtx.rotate((rotation * Math.PI) / 180);
-overlayCtx.translate(-centerX, -centerY);
-
-    // Skalowanie obrazka z zachowaniem proporcji
-    const maxWidth = zadrukImg.width;
-    const maxHeight = zadrukImg.height;
-    const aspectRatio = image.width / image.height;
-// Skalowanie obrazka z zachowaniem proporcji
-const maxWidth = zadrukImg.width;
-const maxHeight = zadrukImg.height;
-const aspectRatio = image.width / image.height;
-
-    let width, height;
-let width, height;
-
-    if (aspectRatio > 1) {
-        width = maxWidth;
-        height = maxWidth / aspectRatio;
-if (aspectRatio > 1) {
-width = maxWidth;
-height = maxWidth / aspectRatio;
-
-        if (height > maxHeight) {
-            height = maxHeight;
-            width = maxHeight * aspectRatio;
+                const x = overlayCanvas.width / 2 + horizontalOffsetZadruk - canvas.width / 2;
+                const y = overlayCanvas.height / 2 - canvas.height / 2;
+                overlayCtx.drawImage(canvas, x, y);
+            }
         }
-    } else {
-        height = maxHeight;
-        width = maxHeight * aspectRatio;
-if (height > maxHeight) {
-height = maxHeight;
-width = maxHeight * aspectRatio;
-}
-} else {
-height = maxHeight;
-width = maxHeight * aspectRatio;
 
-        if (width > maxWidth) {
-            width = maxWidth;
-            height = maxWidth / aspectRatio;
-        }
-    }
-if (width > maxWidth) {
-width = maxWidth;
-height = maxWidth / aspectRatio;
-}
-}
-
-    overlayCtx.drawImage(image, centerX - width / 2, centerY - height / 2, width, height);
-overlayCtx.drawImage(image, centerX - width / 2, centerY - height / 2, width, height);
-
-    overlayCtx.restore();
-overlayCtx.restore();
-}
-
-const horizontalSlider = document.getElementById('horizontal-slider-zadruk');
-horizontalSlider.addEventListener('zadruk', function (event) {
-document.getElementById('horizontal-slider-zadruk').addEventListener('zadruk', function (event) {
-horizontalOffset = parseInt(event.target.value, 10);
-drawOverlayImage();
-	});
-	
-	// Obsługa suwaka przesunięcia
-horizontalSlider.addEventListener('zadruk', (event) => {
-horizontalOffset = parseInt(event.target.value, 10);
-    drawZadrukImage();
-    drawOverlayImage();
-});
-
-</script>
+    </script>
 </body>
 </html>
