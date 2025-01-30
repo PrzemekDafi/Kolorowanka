@@ -801,8 +801,8 @@ function drawZadrukImage() {
 
         maskImg.onload = () => {
             // Skalujemy maskę do wymiarów obrazu "zadruku":
-            const maskWidth = zadrukImage.width;
-            const maskHeight = zadrukImage.height;
+            const maskWidth = 900px;
+            const maskHeight = 900px;
 
             const maskX = x; // Maska powinna być w tym samym miejscu, co obraz "zadruku"
             const maskY = y;
@@ -814,8 +814,6 @@ function drawZadrukImage() {
 
             overlayCtx.globalCompositeOperation = 'source-over';
         };
-    }
-}
 
 
 </script>
