@@ -817,43 +817,23 @@ horizontalSliderZadruk.addEventListener('input', (event) => {
 function drawZadrukImage() {
 
     overlayCtx.clearRect(0, 0, overlayCanvas.width, overlayCanvas.height); // Czyści canvas przed ponownym rysowaniem
-
-
-
-    if (zadrukImage) {
-
-        const x = overlayCanvas.width / 2 + horizontalOffsetZadruk - zadrukImage.width / 2; // Wyśrodkowanie i przesunięcie
-
-        const y = overlayCanvas.height / 2 - zadrukImage.height / 2; // Wyśrodkowanie w pionie
-
-
+ if (zadrukImage) {
+     const x = overlayCanvas.width / 2 + horizontalOffsetZadruk - zadrukImage.width / 2; // Wyśrodkowanie i przesunięcie
+     const y = overlayCanvas.height / 2 - zadrukImage.height / 2; // Wyśrodkowanie w pionie
+        const selectedProduct = document.getElementById('product-select').value; // Pobieramy wybrany produkt
 
         // Rysowanie maski
-
         const maskImg = new Image();
-
-        maskImg.src = 'images/self/zadruk.png';
-
+maskImg.src = `images/${selectedProduct}/zadruk.png`; // Używamy template literal i zmiennej selectedProduct
         maskImg.onload = () => {
-
             overlayCtx.drawImage(maskImg, 0, 0, overlayCanvas.width, overlayCanvas.height);
-
-
-
             // Ustawienie operacji kompozycji
-
             overlayCtx.globalCompositeOperation = 'source-in';
 
-
-
             // Rysowanie obrazka zadrukImage z maską
-
             overlayCtx.drawImage(zadrukImage, x, y, zadrukImage.width, zadrukImage.height);
 
-
-
             // Przywrócenie domyślnej operacji kompozycji
-
             overlayCtx.globalCompositeOperation = 'source-over';
 
         };
