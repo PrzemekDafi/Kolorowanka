@@ -756,58 +756,7 @@ drawOverlayImage();
 </script>
 <script>
 // ZADRUK
-
-document.getElementById('zadruk-upload').addEventListener('change', function (event) {const file = event.target.files[0];if (file) {const reader = new FileReader();reader.onload = function (e) {
-const img = new Image();img.src = e.target.result;img.onload = function () {const canvas = document.createElement('canvas');
-const ctx = canvas.getContext('2d');
-const maskImg = document.getElementById('zadruk-img');
-canvas.width = maskImg.width;
-canvas.height = maskImg.height;
-ctx.drawImage(maskImg, 0, 0);
-ctx.globalCompositeOperation = 'source-in';
-ctx.drawImage(img, 0, 0, maskImg.width, maskImg.height);
-maskImg.src = canvas.toDataURL();
-};
-};
-reader.readAsDataURL(file);
-}
-});
-function drawZadrukImage() {
-overlayCtx.clearRect(0, 0, overlayCanvas.width, overlayCanvas.height);
-const zadrukImg = document.getElementById('zadruk-img');
-if (!zadrukImg) return;
-const centerX = overlayCanvas.width / 2 + horizontalOffset;
-const centerY = overlayCanvas.height / 2;
-overlayCtx.save();
-overlayCtx.translate(centerX, centerY);
-overlayCtx.rotate((rotation * Math.PI) / 180);
-overlayCtx.translate(-centerX, -centerY);
-// Skalowanie obrazka z zachowaniem proporcji
-const maxWidth = zadrukImg.width;
-const maxHeight = zadrukImg.height;
-const aspectRatio = image.width / image.height;
-let width, height;
-if (aspectRatio > 1) {
-width = maxWidth;
-height = maxWidth / aspectRatio;
-if (height > maxHeight) {
-height = maxHeight;
-width = maxHeight * aspectRatio;
-}
-} else {
-height = maxHeight;
-width = maxHeight * aspectRatio;
-if (width > maxWidth) {
-width = maxWidth;
-height = maxWidth / aspectRatio;
-}
-}
-overlayCtx.drawImage(image, centerX - width / 2, centerY - height / 2, width, height);
-overlayCtx.restore();
-}           
-           // // // // // // // //
-
-      const zadrukUpload = document.getElementById('zadruk-upload');
+ const zadrukUpload = document.getElementById('zadruk-upload');
     const horizontalSliderZadruk = document.getElementById('horizontal-slider-zadruk');
     let zadrukImage = null;
     let horizontalOffsetZadruk = 0;
@@ -841,6 +790,7 @@ overlayCtx.restore();
             overlayCtx.drawImage(zadrukImage, x, y, zadrukImage.width, zadrukImage.height);
         }
     }
+
 
 </script>
 </body>
