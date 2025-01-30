@@ -767,73 +767,74 @@ drawOverlayImage();
 </script>
 <script>
  const overlayCanvas = document.getElementById('overlay-canvas');
-        const overlayCtx = overlayCanvas.getContext('2d');
-        const zadrukUpload = document.getElementById('zadruk-upload');
-        const horizontalSliderZadruk = document.getElementById('horizontal-slider-zadruk');
-        const zadrukCanvas = document.getElementById('zadruk-canvas');
-        const zadrukCtx = zadrukCanvas.getContext('2d');
-        const maskContainer = document.getElementById('mask-container');
-        let zadrukImage = null;
-        let horizontalOffsetZadruk = 0;
-        let currentMask = null;
+const overlayCtx = overlayCanvas.getContext('2d');
+const zadrukUpload = document.getElementById('zadruk-upload');
+const horizontalSliderZadruk = document.getElementById('horizontal-slider-zadruk');
+const zadrukCanvas = document.getElementById('zadruk-canvas');
+const zadrukCtx = zadrukCanvas.getContext('2d');
+const maskContainer = document.getElementById('mask-container');
+let zadrukImage = null;
+let horizontalOffsetZadruk = 0;
+let currentMask = null;
 
-        document.getElementById('product-select').addEventListener('change', function () {
-            const product = this.value;
-            zadrukCtx.clearRect(0, 0, zadrukCanvas.width, zadrukCanvas.height);
+document.getElementById('product-select').addEventListener('change', function () {
+    const product = this.value;
+    zadrukCtx.clearRect(0, 0, zadrukCanvas.width, zadrukCanvas.height);
 
-            if (product && products[product] && products[product].includes('zadruk')) {
-                currentMask = new Image();
-                currentMask.src = `images/${product}/zadruk.png`;
-                currentMask.onload = () => {
-                    zadrukCtx.drawImage(currentMask, 0, 0, zadrukCanvas.width, zadrukCanvas.height);
-                    maskContainer.style.overflow = 'visible';
-                    drawZadrukImage();
-                };
-            } else {
-                maskContainer.style.overflow = 'hidden';
-                currentMask = null;
-            }
-        });
-
-        zadrukUpload.addEventListener('change', (event) => {
-            const file = event.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = (e) => {
-                    zadrukImage = new Image();
-                    zadrukImage.src = e.target.result;
-                    zadrukImage.onload = () => {
-                        drawZadrukImage();
-                    };
-                };
-                reader.readAsDataURL(file);
-            }
-        });
-
-        horizontalSliderZadruk.addEventListener('input', (event) => {
-            horizontalOffsetZadruk = parseInt(event.target.value, 10);
+    if (product && products[product] && products[product].includes('zadruk')) {
+        currentMask = new Image();
+        currentMask.src = `images/${product}/zadruk.png`;
+        currentMask.onload = () => {
+            zadrukCtx.drawImage(currentMask, 0, 0, zadrukCanvas.width, zadrukCanvas.height);
+            maskContainer.style.overflow = 'visible';
             drawZadrukImage();
-        });
+        };
+    } else {
+        maskContainer.style.overflow = 'hidden';
+        currentMask = null;
+    }
+});
 
-        function drawZadrukImage() {
-            const canvas = document.createElement('canvas');
-            const ctx = canvas.getContext('2d');
-            canvas.width = zadrukCanvas.width;
-            canvas.height = zadrukCanvas.height;
-            ctx.drawImage(zadrukCanvas, 0, 0);
-            maskContainer.appendChild(canvas);
+zadrukUpload.addEventListener('change', (event) => {
+    const file = event.target.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            zadrukImage = new Image();
+            zadrukImage.src = e.target.result;
+            zadrukImage.onload = () => {
+                drawZadrukImage();
+            };
+        };
+        reader.readAsDataURL(file);
+    }
+});
 
-            if (zadrukImage && currentMask) {
-                ctx.globalCompositeOperation = 'source-in';
-                ctx.drawImage(zadrukImage, 0, 0, canvas.width, canvas.height);
+horizontalSliderZadruk.addEventListener('input', (event) => {
+    horizontalOffsetZadruk = parseInt(event.target.value, 10);
+    drawZadrukImage();
+});
 
-                const x = overlayCanvas.width / 2 + horizontalOffsetZadruk - canvas.width / 2;
-                const y = overlayCanvas.height / 2 - canvas.height / 2;
+function drawZadrukImage() {
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d');
+    canvas.width = zadrukCanvas.width;
+    canvas.height = zadrukCanvas.height;
+    ctx.drawImage(zadrukCanvas, 0, 0);
+    maskContainer.appendChild(canvas);
 
-                overlayCtx.clearRect(x, y, canvas.width, canvas.height);
-                overlayCtx.drawImage(canvas, x, y);
-            }
-            maskContainer.removeChild(canvas);
+    if (zadrukImage && currentMask) {
+        ctx.globalCompositeOperation = 'source-in';
+        ctx.drawImage(zadrukImage, 0, 0, canvas.width, canvas.height);
+
+        const x = overlayCanvas.width / 2 + horizontalOffsetZadruk - canvas.width / 2;
+        const y = overlayCanvas.height / 2 - canvas.height / 2;
+
+        overlayCtx.clearRect(x, y, canvas.width, canvas.height);
+        overlayCtx.drawImage(canvas, x, y);
+    }
+    maskContainer.removeChild(canvas);
+}
     </script>
 </body>
 </html>
