@@ -422,6 +422,7 @@ Srebrny: '#d4d4d4',
 
 let originalImages = {};
 
+let currentMask = null; // Dodajemy zmienną do przechowywania aktualnej maski
 
 document.getElementById('product-select').addEventListener('change', function () {
 const product = this.value;
@@ -480,7 +481,15 @@ handleColorChange(element, selectElement.value, hexInput.value);
 });
 
 // Sprawdź, czy produkt zawiera element "zadruk"
-
+	//
+ if (product && products[product] && products[product].includes('zadruk')) {
+        currentMask = new Image(); // Tworzymy nowy obiekt Image dla maski
+        currentMask.src = `images/${product}/zadruk.png`; // Dynamiczna ścieżka
+        currentMask.onload = () => {
+		 };
+    } else {
+        currentMask = null; // Resetujemy maskę, jeśli produkt nie ma "zadruku"
+       //
 
 function handleColorChange(element, selectedColor, hexValue) {
 if (element === 'zadruk') {
@@ -787,29 +796,22 @@ horizontalSliderZadruk.addEventListener('input', (event) => {
 });
 
 function drawZadrukImage() {
-    overlayCtx.clearRect(0, 0, overlayCanvas.width, overlayCanvas.height); // Czyści canvas przed ponownym rysowaniem
+    overlayCtx.clearRect(0, 0, overlayCanvas.width, overlayCanvas.height);
 
-    if (zadrukImage) {
-        const x = overlayCanvas.width / 2 + horizontalOffsetZadruk - zadrukImage.width / 2; // Wyśrodkowanie i przesunięcie
-        const y = overlayCanvas.height / 2 - zadrukImage.height / 2; // Wyśrodkowanie w pionie
+    if (zadrukImage && currentMask) { // Sprawdzamy, czy istnieje obraz "zadruku" i maska
+        const x = overlayCanvas.width / 2 + horizontalOffsetZadruk - zadrukImage.width / 2;
+        const y = overlayCanvas.height / 2 - zadrukImage.height / 2;
 
-        // Rysowanie maski
-        const maskImg = new Image();
-        maskImg.src = 'images/${product}/zadruk.png';
-        maskImg.onload = () => {
-            overlayCtx.drawImage(maskImg, 0, 0, overlayCanvas.width, overlayCanvas.height);
+        overlayCtx.drawImage(currentMask, 0, 0, overlayCanvas.width, overlayCanvas.height); // Rysujemy maskę
 
-            // Ustawienie operacji kompozycji
-            overlayCtx.globalCompositeOperation = 'source-in';
+        overlayCtx.globalCompositeOperation = 'source-in';
+        overlayCtx.drawImage(zadrukImage, x, y, zadrukImage.width, zadrukImage.height);
 
-            // Rysowanie obrazka zadrukImage z maską
-            overlayCtx.drawImage(zadrukImage, x, y, zadrukImage.width, zadrukImage.height);
-
-            // Przywrócenie domyślnej operacji kompozycji
-            overlayCtx.globalCompositeOperation = 'source-over';
-        };
+        overlayCtx.globalCompositeOperation = 'source-over';
     }
-}
+}    };
+    
+
 
 
 </script>
