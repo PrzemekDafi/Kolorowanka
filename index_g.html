@@ -297,12 +297,12 @@ pointer-events: none; /* Opcjonalne - nie blokuje interakcji z elementami poniż
 <label for="product-select">Wybierz produkt:</label>
 <select id="product-select" class="select-colors">
 <option value="">Wybierz produkt</option>
-<!--  <option value="butelka_soft_03l">Butelka Soft 0,3 l</option> -->
+<!--  <option value="butelka_soft_03l">Butelka Soft 0,3 l</option> -->
 <option value="crystal">Dzbanek Crystal Classic</option>
 <option value="crystal_unimax">Dzbanek Crystal Unimax</option>
 <option value="astra_classic">Dzbanek Astra Classic</option>
 <option value="butelka_soft_05l">Butelka Soft 0,5 l</option>
-<!--  <option value="butelka_soft_07l">Butelka Soft 0,7 l</option>-->
+<!--  <option value="butelka_soft_07l">Butelka Soft 0,7 l</option>-->
 
 <option value="butelka_solid_05l">Butelka Solid 0,5 l</option>
 <option value="butelka_solid_07l">Butelka Solid 0,7 l</option>
@@ -393,7 +393,7 @@ Antracytowy: '#161616',
 Żółty_FCB: '#ffc836',
 Bordowy_FCB: '#a31d45',
 Granatowy_FCB: '#1d3874',
-Barbie: '#e0218a', 
+Barbie: '#e0218a', 
 Flamingowy: '#f04e98',
 Różany: '#ffc0cb',
 Stalowy: '#768692',
@@ -422,7 +422,6 @@ Srebrny: '#d4d4d4',
 
 let originalImages = {};
 
-let currentMask = null; // Dodajemy zmienną do przechowywania aktualnej maski
 
 document.getElementById('product-select').addEventListener('change', function () {
 const product = this.value;
@@ -454,15 +453,15 @@ originalImages[element] = img.src;
 const colorInput = document.createElement('div');
 colorInput.className = 'color-input';
 colorInput.innerHTML = `
-                      <label for="${element}-color">${element}:</label>
-                      <select id="${element}-color">
-                          <option value="">Wybierz kolor</option>
-                          ${Object.keys(colors).map(color => `<option value="${colors[color]}">${color}</option>`).join('')}
-                      </select>
-                      <div class="input-container">   
-                          <input type="text" id="${element}-hex" placeholder="Kolor HEX">
-                      </div>
-                  `;
+                      <label for="${element}-color">${element}:</label>
+                      <select id="${element}-color">
+                          <option value="">Wybierz kolor</option>
+                          ${Object.keys(colors).map(color => `<option value="${colors[color]}">${color}</option>`).join('')}
+                      </select>
+                      <div class="input-container">   
+                          <input type="text" id="${element}-hex" placeholder="Kolor HEX">
+                      </div>
+                  `;
 colorOptions.appendChild(colorInput);
 
 const selectElement = document.getElementById(`${element}-color`);
@@ -481,15 +480,7 @@ handleColorChange(element, selectElement.value, hexInput.value);
 });
 
 // Sprawdź, czy produkt zawiera element "zadruk"
-	//
- if (product && products[product] && products[product].includes('zadruk')) {
-        currentMask = new Image(); // Tworzymy nowy obiekt Image dla maski
-        currentMask.src = `images/${product}/zadruk.png`; // Dynamiczna ścieżka
-        currentMask.onload = () => {
-		 };
-    } else {
-        currentMask = null; // Resetujemy maskę, jeśli produkt nie ma "zadruku"
-       //
+
 
 function handleColorChange(element, selectedColor, hexValue) {
 if (element === 'zadruk') {
@@ -576,12 +567,12 @@ originalImages[element] = img.src;
 const colorInput = document.createElement('div');
 colorInput.className = 'color-input';
 colorInput.innerHTML = `
-      <label for="${element}-color">${element}:</label>
-      <div class="input-container">
-          <input type="color" id="${element}-picker" value="#ffffff">
-          <input type="text" id="${element}-hex" placeholder="#FFFFFF">
-      </div>
-  `;
+      <label for="${element}-color">${element}:</label>
+      <div class="input-container">
+          <input type="color" id="${element}-picker" value="#ffffff">
+          <input type="text" id="${element}-hex" placeholder="#FFFFFF">
+      </div>
+  `;
 colorOptions.appendChild(colorInput);
 
 // Pobieranie elementów po dodaniu ich do DOM
@@ -776,42 +767,46 @@ let zadrukImage = null;
 let horizontalOffsetZadruk = 0;
 
 zadrukUpload.addEventListener('change', (event) => {
-    const file = event.target.files[0];
-    if (file) {
-        const reader = new FileReader();
-        reader.onload = (e) => {
-            zadrukImage = new Image();
-            zadrukImage.src = e.target.result;
-            zadrukImage.onload = () => {
-                drawZadrukImage();
-            };
-        };
-        reader.readAsDataURL(file);
-    }
+    const file = event.target.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            zadrukImage = new Image();
+            zadrukImage.src = e.target.result;
+            zadrukImage.onload = () => {
+                drawZadrukImage();
+            };
+        };
+        reader.readAsDataURL(file);
+    }
 });
 
 horizontalSliderZadruk.addEventListener('input', (event) => {
-    horizontalOffsetZadruk = parseInt(event.target.value, 10);
-    drawZadrukImage();
+    horizontalOffsetZadruk = parseInt(event.target.value, 10);
+    drawZadrukImage();
 });
 
 function drawZadrukImage() {
     overlayCtx.clearRect(0, 0, overlayCanvas.width, overlayCanvas.height);
 
-    if (zadrukImage && currentMask) { // Sprawdzamy, czy istnieje obraz "zadruku" i maska
+    if (zadrukImage) {
         const x = overlayCanvas.width / 2 + horizontalOffsetZadruk - zadrukImage.width / 2;
         const y = overlayCanvas.height / 2 - zadrukImage.height / 2;
 
-        overlayCtx.drawImage(currentMask, 0, 0, overlayCanvas.width, overlayCanvas.height); // Rysujemy maskę
+        const selectedProduct = document.getElementById('product-select').value; // Pobieramy wybrany produkt
 
-        overlayCtx.globalCompositeOperation = 'source-in';
-        overlayCtx.drawImage(zadrukImage, x, y, zadrukImage.width, zadrukImage.height);
+        // *** JEDYNA ZMIANA: ***
+        const maskImg = new Image();
+        maskImg.src = `images/${selectedProduct}/zadruk.png`; // Używamy template literal i zmiennej selectedProduct
 
-        overlayCtx.globalCompositeOperation = 'source-over';
+        maskImg.onload = () => {
+            overlayCtx.drawImage(maskImg, 0, 0, overlayCanvas.width, overlayCanvas.height);
+            overlayCtx.globalCompositeOperation = 'source-in';
+            overlayCtx.drawImage(zadrukImage, x, y, zadrukImage.width, zadrukImage.height);
+            overlayCtx.globalCompositeOperation = 'source-over';
+        };
     }
-}    };
-    
-
+}
 
 
 </script>
