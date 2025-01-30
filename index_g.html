@@ -847,49 +847,49 @@ horizontalSliderZadruk.addEventListener('input', (event) => {
 
 });
 
-
+// Dodajemy obiekt z zdefiniowanymi wysokościami masek:
+const maskHeights = {
+    "self": {
+        "zadruk.png": 500, // Wysokość maski dla produktu "self"
+        // ... inne maski dla produktu "self"
+    },
+    "crystal": {
+        "zadruk.png": 400, // Wysokość maski dla produktu "crystal"
+        // ... inne maski dla produktu "crystal"
+    },
+    // ... inne produkty
+};
 
 function drawZadrukImage() {
+    overlayCtx.clearRect(0, 0, overlayCanvas.width, overlayCanvas.height);
 
-    overlayCtx.clearRect(0, 0, overlayCanvas.width, overlayCanvas.height); // Czyści canvas przed ponownym rysowaniem
- if (zadrukImage) {
-     const x = overlayCanvas.width / 2 + horizontalOffsetZadruk - zadrukImage.width / 2; // Wyśrodkowanie i przesunięcie
-     const y = overlayCanvas.height / 2 - zadrukImage.height / 2; // Wyśrodkowanie w pionie
-        const selectedProduct = document.getElementById('product-select').value; // Pobieramy wybrany produkt
+    if (zadrukImage) {
+        const selectedProduct = document.getElementById('product-select').value;
+        const maskImg = new Image();
+        maskImg.src = `images/${selectedProduct}/zadruk.png`;
 
-        // Rysowanie maski
-        const maskImg = new Image();
-maskImg.src = `images/${selectedProduct}/zadruk.png`; // Używamy template literal i zmiennej selectedProduct
-        maskImg.onload = () => {
-//
-         const maskWidth = maskImg.width; // Szerokość maski
-            const maskHeight = maskImg.height; // Wysokość maski
+        maskImg.onload = () => {
+            // Pobieramy zdefiniowaną wysokość maski:
+            const definedMaskHeight = maskHeights[selectedProduct]["zadruk.png"];
 
             const x = (overlayCanvas.width - zadrukImage.width) / 2 + horizontalOffsetZadruk;
             const y = (overlayCanvas.height - zadrukImage.height) / 2;
 
-            // Skalujemy ZADRUK do wymiarów maski (zachowując proporcje):
+            // Skalujemy "zadruk" do zdefiniowanej wysokości maski (zachowując proporcje):
             const zadrukWidth = zadrukImage.width;
-            const zadrukHeight = (zadrukImage.height * maskHeight) / zadrukWidth; // Skalujemy wysokość proporcjonalnie
-//
-            overlayCtx.drawImage(maskImg, 0, 0, overlayCanvas.width, overlayCanvas.height);
-            // Ustawienie operacji kompozycji
-            overlayCtx.globalCompositeOperation = 'source-in';
+            const zadrukHeight = (zadrukImage.height * definedMaskHeight) / zadrukWidth;
 
-            // Rysowanie obrazka zadrukImage z maską
-            overlayCtx.drawImage(zadrukImage, x, y, zadrukImage.width, zadrukImage.height);
+            overlayCtx.drawImage(zadrukImage, x, y, zadrukWidth, zadrukHeight);
 
-            // Przywrócenie domyślnej operacji kompozycji
-            overlayCtx.globalCompositeOperation = 'source-over';
+            overlayCtx.drawImage(maskImg, 0, 0, overlayCanvas.width, overlayCanvas.height);
 
-        };
+            overlayCtx.globalCompositeOperation = 'source-in';
+            overlayCtx.drawImage(zadrukImage, x, y, zadrukWidth, zadrukHeight);
 
-    }
-
+            overlayCtx.globalCompositeOperation = 'source-over';
+        };
+    }
 }
-
-
-
 
 
 </script>
