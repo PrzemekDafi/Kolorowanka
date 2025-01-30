@@ -807,54 +807,30 @@ drawOverlayImage();
 const zadrukUpload = document.getElementById('zadruk-upload');
 
 const horizontalSliderZadruk = document.getElementById('horizontal-slider-zadruk');
-
 let zadrukImage = null;
-
 let horizontalOffsetZadruk = 0;
-
- 
-
 
 zadrukUpload.addEventListener('change', (event) => {
 
     const file = event.target.files[0];
-
     if (file) {
-
         const reader = new FileReader();
-
         reader.onload = (e) => {
-
             zadrukImage = new Image();
-
             zadrukImage.src = e.target.result;
-
             zadrukImage.onload = () => {
-
                 drawZadrukImage();
-
             };
-
         };
-
         reader.readAsDataURL(file);
-
     }
-
 });
-
-
-
 horizontalSliderZadruk.addEventListener('input', (event) => {
-
-    horizontalOffsetZadruk = parseInt(event.target.value, 10);
-
-    drawZadrukImage();
-
+ horizontalOffsetZadruk = parseInt(event.target.value, 10);
+ drawZadrukImage();
 });
 const scaleSliderZadruk = document.getElementById('scale-slider-zadruk');
 const verticalSliderZadruk = document.getElementById('vertical-slider-zadruk'); // Pobieramy suwak pionowy
-
 let scaleZadruk = 1;
 let verticalOffsetZadruk = 0; // Dodajemy zmienną dla przesunięcia w pionie
 
@@ -877,22 +853,22 @@ function drawZadrukImage() {
         maskImg.src = `images/${selectedProduct}/zadruk.png`;
 
         maskImg.onload = () => {
-            const maskWidth = maskImg.width;
-            const maskHeight = maskImg.height;
-
             const x = (overlayCanvas.width - zadrukImage.width * scaleZadruk) / 2 + horizontalOffsetZadruk;
-            const y = (overlayCanvas.height - zadrukImage.height * scaleZadruk) / 2 + verticalOffsetZadruk; // Dodajemy przesunięcie w pionie
+            const y = (overlayCanvas.height - zadrukImage.height * scaleZadruk) / 2 + verticalOffsetZadruk;
 
             const zadrukWidth = zadrukImage.width * scaleZadruk;
             const zadrukHeight = zadrukImage.height * scaleZadruk;
 
-            overlayCtx.drawImage(zadrukImage, x, y, zadrukWidth, zadrukHeight);
+            // 1. Rysujemy MASKĘ (skalowaną do wymiarów ZADRUKU):
+            overlayCtx.drawImage(maskImg, x, y, zadrukWidth, zadrukHeight); // <--- ZMIANA: Rysujemy maskę jako pierwszą
 
-            overlayCtx.drawImage(maskImg, 0, 0, overlayCanvas.width, overlayCanvas.height);
-
+            // 2. Ustawiamy tryb kompozycji:
             overlayCtx.globalCompositeOperation = 'source-in';
-            overlayCtx.drawImage(zadrukImage, x, y, zadrukWidth, zadrukHeight);
 
+            // 3. Rysujemy ZADRUK (skalowany):
+            overlayCtx.drawImage(zadrukImage, x, y, zadrukWidth, zadrukHeight); // <--- ZMIANA: Rysujemy obraz jako drugi
+
+            // 4. Resetujemy tryb kompozycji (opcjonalnie):
             overlayCtx.globalCompositeOperation = 'source-over';
         };
     }
