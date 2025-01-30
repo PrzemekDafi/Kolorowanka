@@ -795,7 +795,7 @@ function drawZadrukImage() {
 
         // Rysowanie maski
         const maskImg = new Image();
-        maskImg.src = 'zadruk.png';
+        maskImg.src = `images/${product}/zadruk.png`;
         maskImg.onload = () => {
             overlayCtx.drawImage(maskImg, 0, 0, overlayCanvas.width, overlayCanvas.height);
 
