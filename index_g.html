@@ -790,17 +790,19 @@ function drawZadrukImage() {
     overlayCtx.clearRect(0, 0, overlayCanvas.width, overlayCanvas.height);
 
     if (zadrukImage) {
-        const x = overlayCanvas.width / 2 + horizontalOffsetZadruk - zadrukImage.width / 2;
-        const y = overlayCanvas.height / 2 - zadrukImage.height / 2;
-
-        const selectedProduct = document.getElementById('product-select').value; // Pobieramy wybrany produkt
-
-        // *** JEDYNA ZMIANA: ***
+        const selectedProduct = document.getElementById('product-select').value;
         const maskImg = new Image();
-        maskImg.src = `images/${selectedProduct}/zadruk.png`; // Używamy template literal i zmiennej selectedProduct
+        maskImg.src = `images/${selectedProduct}/zadruk.png`;
 
         maskImg.onload = () => {
-            overlayCtx.drawImage(maskImg, 0, 0, overlayCanvas.width, overlayCanvas.height);
+            const maskX = (overlayCanvas.width - maskImg.width) / 2; // Środek canvas w poziomie
+            const maskY = (overlayCanvas.height - maskImg.height) / 2; // Środek canvas w pionie
+
+            overlayCtx.drawImage(maskImg, maskX, maskY, maskImg.width, maskImg.height); // Rysujemy maskę na środku
+
+            const x = overlayCanvas.width / 2 + horizontalOffsetZadruk - zadrukImage.width / 2;
+            const y = overlayCanvas.height / 2 - zadrukImage.height / 2;
+
             overlayCtx.globalCompositeOperation = 'source-in';
             overlayCtx.drawImage(zadrukImage, x, y, zadrukImage.width, zadrukImage.height);
             overlayCtx.globalCompositeOperation = 'source-over';
