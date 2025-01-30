@@ -775,7 +775,7 @@ drawOverlayImage();
 });
 </script>
 <script>
- const overlayCanvas = document.getElementById('overlay-canvas');
+const overlayCanvas = document.getElementById('overlay-canvas');
 const overlayCtx = overlayCanvas.getContext('2d');
 const zadrukUpload = document.getElementById('zadruk-upload');
 const horizontalSliderZadruk = document.getElementById('horizontal-slider-zadruk');
@@ -796,7 +796,7 @@ document.getElementById('product-select').addEventListener('change', function ()
         currentMask.onload = () => {
             zadrukCtx.drawImage(currentMask, 0, 0, zadrukCanvas.width, zadrukCanvas.height);
             maskContainer.style.overflow = 'visible';
-            drawZadrukImage(); // <--- Dodano brakujące wywołanie!
+            drawZadrukImage();
         };
     } else {
         maskContainer.style.overflow = 'hidden';
@@ -825,21 +825,20 @@ horizontalSliderZadruk.addEventListener('input', (event) => {
 });
 
 function drawZadrukImage() {
-    overlayCtx.clearRect(0, 0, overlayCanvas.width, overlayCanvas.height);
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d');
+    canvas.width = zadrukCanvas.width;
+    canvas.height = zadrukCanvas.height;
+    ctx.drawImage(zadrukCanvas, 0, 0);
 
     if (zadrukImage && currentMask) {
-        const canvas = document.createElement('canvas');
-        const ctx = canvas.getContext('2d');
-
-        canvas.width = zadrukCanvas.width;
-        canvas.height = zadrukCanvas.height;
-
-        ctx.drawImage(zadrukCanvas, 0, 0);
         ctx.globalCompositeOperation = 'source-in';
         ctx.drawImage(zadrukImage, 0, 0, canvas.width, canvas.height);
 
         const x = overlayCanvas.width / 2 + horizontalOffsetZadruk - canvas.width / 2;
         const y = overlayCanvas.height / 2 - canvas.height / 2;
+
+        overlayCtx.clearRect(x, y, canvas.width, canvas.height);
         overlayCtx.drawImage(canvas, x, y);
     }
 }
