@@ -364,7 +364,7 @@ select#zadruk-color {
  <label for="vertical-slider-zadruk">Przesunięcie w pionie:</label><br>
  <input type="range" id="vertical-slider-zadruk" min="-500" max="500" value="0"> 
  <label for="scale-slider-zadruk">Skalowanie:</label><br>
- <input type="range" id="scale-slider-zadruk" min="1" max="200" value="20">
+ <input type="range" id="scale-slider-zadruk" min="0.1" max="200" value="10">
 
 </div>
 <div class="grawer-column">
@@ -375,9 +375,9 @@ select#zadruk-color {
 <input type="range" id="rotate-slider" min="0" max="360" value="0">
 <br>
 <label for="vertical-slider">Przesunięcie w pionie:</label><br>
-<input type="range" id="vertical-slider" min="-200" max="200" value="0"><br>
+<input type="range" id="vertical-slider" min="-500" max="500" value="0"><br>
 <label for="horizontal-slider">Przesunięcie w poziomie:</label><br>
-<input type="range" id="horizontal-slider" min="-200" max="200" value="0"><br>
+<input type="range" id="horizontal-slider" min="-500" max="500" value="0"><br>
 <label for="size-slider">Rozmiar obrazka:</label><br>
 <input id="size-slider" type="range" min="10" max="100" value="80">
 </div>
@@ -835,7 +835,7 @@ let scaleZadruk = 1;
 let verticalOffsetZadruk = 0; // Dodajemy zmienną dla przesunięcia w pionie
 
 scaleSliderZadruk.addEventListener('input', (event) => {
-    scaleZadruk = parseInt(event.target.value, 10) / 100;
+    scaleZadruk = parseInt(event.target.value, 1) / 100;
     drawZadrukImage();
 });
 
