@@ -771,18 +771,7 @@ drawOverlayImage();
         if (file) {
             const reader = new FileReader();
             reader.onload = (e) => {
-		    //
-		     const canvas = document.createElement('canvas');
-                const ctx = canvas.getContext('2d');
-                const maskImg = document.getElementById('zadruk-img');
-                canvas.width = maskImg.width;
-                canvas.height = maskImg.height;
-                ctx.drawImage(maskImg, 0, 0);
-                ctx.globalCompositeOperation = 'source-in';
-                ctx.drawImage(img, 0, 0, maskImg.width, maskImg.height);
-                maskImg.src = canvas.toDataURL();
-		    //
-                zadrukImage = new Image();
+		              zadrukImage = new Image();
                 zadrukImage.src = e.target.result;
                 zadrukImage.onload = () => {
                     drawZadrukImage();
@@ -804,6 +793,15 @@ drawOverlayImage();
             const x = overlayCanvas.width / 2 + horizontalOffsetZadruk - zadrukImage.width / 2; // Wyśrodkowanie i przesunięcie
             const y = overlayCanvas.height / 2 - zadrukImage.height / 2; // Wyśrodkowanie w pionie
             overlayCtx.drawImage(zadrukImage, x, y, zadrukImage.width, zadrukImage.height);
+		//
+		 const maskImg = document.getElementById('zadruk-img');
+                canvas.width = maskImg.width;
+                canvas.height = maskImg.height;
+                ctx.drawImage(maskImg, 0, 0);
+                ctx.globalCompositeOperation = 'source-in';
+                ctx.drawImage(img, 0, 0, maskImg.width, maskImg.height);
+                maskImg.src = canvas.toDataURL();
+		//
         }
     }
 
