@@ -757,15 +757,13 @@ drawOverlayImage();
 </script>
 <script>
 
-           
-// ZADRUK
- // ZADRUK
+        // ZADRUK
         const zadrukUpload = document.getElementById('zadruk-upload');
         const horizontalSliderZadruk = document.getElementById('horizontal-slider-zadruk');
         let zadrukImage = null;
         let horizontalOffsetZadruk = 0;
-        const zadrukMask = document.getElementById('zadruk-mask'); // Obraz maski
-        const maskContainer = document.getElementById('mask-container'); // Kontener maski
+        const zadrukMask = document.getElementById('zadruk-mask');
+        const maskContainer = document.getElementById('mask-container');
 
         zadrukUpload.addEventListener('change', (event) => {
             const file = event.target.files[0];
@@ -775,7 +773,6 @@ drawOverlayImage();
                     zadrukImage = new Image();
                     zadrukImage.src = e.target.result;
                     zadrukImage.onload = () => {
-                        // Po załadowaniu obrazu, pokazujemy maskę i rysujemy obraz
                         zadrukMask.style.opacity = 1;
                         maskContainer.style.overflow = 'visible';
                         resizeAndDrawZadrukImage();
@@ -792,12 +789,12 @@ drawOverlayImage();
 
         function resizeAndDrawZadrukImage() {
             if (zadrukImage && zadrukMask) {
-                const maskHeight = zadrukMask.clientHeight; // Wysokość maski
+                const maskHeight = zadrukMask.clientHeight;
                 const imageAspectRatio = zadrukImage.width / zadrukImage.height;
                 const newImageWidth = maskHeight * imageAspectRatio;
-                zadrukImage.width = newImageWidth; // Ustawiamy szerokość obrazu
+                zadrukImage.width = newImageWidth;
 
-                drawZadrukImage(); // Rysujemy obraz po zmianie rozmiaru
+                drawZadrukImage();
             }
         }
 
@@ -805,9 +802,19 @@ drawOverlayImage();
             overlayCtx.clearRect(0, 0, overlayCanvas.width, overlayCanvas.height);
 
             if (zadrukImage && zadrukMask) {
-                const x = overlayCanvas.width / 2 + horizontalOffsetZadruk - zadrukImage.width / 2;
-                const y = overlayCanvas.height / 2 - zadrukImage.height / 2;
-                overlayCtx.drawImage(zadrukImage, x, y, zadrukImage.width, zadrukImage.height);
+                const canvas = document.createElement('canvas');
+                const ctx = canvas.getContext('2d');
+
+                canvas.width = zadrukMask.width;
+                canvas.height = zadrukMask.height;
+
+                ctx.drawImage(zadrukMask, 0, 0);
+                ctx.globalCompositeOperation = 'source-in';
+                ctx.drawImage(zadrukImage, 0, 0, canvas.width, canvas.height); // Rysujemy obraz na canvas
+
+                const x = overlayCanvas.width / 2 + horizontalOffsetZadruk - canvas.width / 2; // Używamy wymiarów canvas
+                const y = overlayCanvas.height / 2 - canvas.height / 2; // Używamy wymiarów canvas
+                overlayCtx.drawImage(canvas, x, y); // Rysujemy canvas na overlayCtx
             }
         }
 
