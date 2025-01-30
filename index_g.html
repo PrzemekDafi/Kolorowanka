@@ -786,36 +786,28 @@ horizontalSliderZadruk.addEventListener('input', (event) => {
     drawZadrukImage();
 });
 
+// ... (inne części kodu bez zmian)
+
 function drawZadrukImage() {
     overlayCtx.clearRect(0, 0, overlayCanvas.width, overlayCanvas.height);
 
     if (zadrukImage) {
-        const x = (overlayCanvas.width - zadrukImage.width) / 2 + horizontalOffsetZadruk; // Środek canvas + przesunięcie
-        const y = (overlayCanvas.height - zadrukImage.height) / 2; // Środek canvas
+        const x = overlayCanvas.width / 2 + horizontalOffsetZadruk - zadrukImage.width / 2;
+        const y = overlayCanvas.height / 2 - zadrukImage.height / 2;
 
-        overlayCtx.drawImage(zadrukImage, x, y, zadrukImage.width, zadrukImage.height); // Rysujemy obraz "zadruku" na środku
+        const selectedProduct = document.getElementById('product-select').value; // Pobieramy wybrany produkt
 
-        const selectedProduct = document.getElementById('product-select').value;
+        // *** JEDYNA ZMIANA: ***
         const maskImg = new Image();
-        maskImg.src = `images/${selectedProduct}/zadruk.png`;
+        maskImg.src = `images/${selectedProduct}/zadruk.png`; // Używamy template literal i zmiennej selectedProduct
 
         maskImg.onload = () => {
-            // Skalujemy maskę do wymiarów obrazu "zadruku":
-            const maskWidth = 900px;
-            const maskHeight = 900px;
-
-            const maskX = x; // Maska powinna być w tym samym miejscu, co obraz "zadruku"
-            const maskY = y;
-
-            overlayCtx.drawImage(maskImg, maskX, maskY, maskWidth, maskHeight); // Rysujemy maskę, skalując ją
-
+            overlayCtx.drawImage(maskImg, 0, 0, overlayCanvas.width, overlayCanvas.height);
             overlayCtx.globalCompositeOperation = 'source-in';
-            overlayCtx.drawImage(zadrukImage, x, y, zadrukImage.width, zadrukImage.height); // Ponownie rysujemy obraz "zadruku", aby na pewno był widoczny
-
+            overlayCtx.drawImage(zadrukImage, x, y, zadrukImage.width, zadrukImage.height);
             overlayCtx.globalCompositeOperation = 'source-over';
         };
-
-
+    
 </script>
 </body>
 </html>
