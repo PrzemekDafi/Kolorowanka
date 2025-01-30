@@ -786,8 +786,6 @@ horizontalSliderZadruk.addEventListener('input', (event) => {
     drawZadrukImage();
 });
 
-// ... (inne części kodu bez zmian)
-
 function drawZadrukImage() {
     overlayCtx.clearRect(0, 0, overlayCanvas.width, overlayCanvas.height);
 
@@ -797,7 +795,6 @@ function drawZadrukImage() {
 
         const selectedProduct = document.getElementById('product-select').value; // Pobieramy wybrany produkt
 
-        // *** JEDYNA ZMIANA: ***
         const maskImg = new Image();
         maskImg.src = `images/${selectedProduct}/zadruk.png`; // Używamy template literal i zmiennej selectedProduct
 
@@ -806,7 +803,7 @@ function drawZadrukImage() {
             overlayCtx.globalCompositeOperation = 'source-in';
             overlayCtx.drawImage(zadrukImage, x, y, zadrukImage.width, zadrukImage.height);
             overlayCtx.globalCompositeOperation = 'source-over';
-        };
+        });
     
 </script>
 </body>
