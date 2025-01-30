@@ -360,9 +360,11 @@ select#zadruk-color {
 <label for="zadruk-upload">Wgraj obrazek dla zadruku 360:</label>
 <input type="file" id="zadruk-upload" accept="image/*"><br>
 <label for="horizontal-slider-zadruk">Przesunięcie w poziomie:</label><br>
-<input type="range" id="horizontal-slider-zadruk" min="-200" max="200" value="0"><br>
+<input type="range" id="horizontal-slider-zadruk" min="-500" max="500" value="0"><br>
+ <label for="vertical-slider-zadruk">Przesunięcie w pionie:</label><br>
+ <input type="range" id="vertical-slider-zadruk" min="-500" max="500" value="0"> 
  <label for="scale-slider-zadruk">Skalowanie:</label><br>
-    <input type="range" id="scale-slider-zadruk" min="10" max="200" value="70">
+ <input type="range" id="scale-slider-zadruk" min="1" max="200" value="20">
 
 </div>
 <div class="grawer-column">
@@ -810,6 +812,21 @@ let zadrukImage = null;
 
 let horizontalOffsetZadruk = 0;
 
+ const scaleSliderZadruk = document.getElementById('scale-slider-zadruk');
+const verticalSliderZadruk = document.getElementById('vertical-slider-zadruk'); // Pobieramy suwak pionowy
+
+let scaleZadruk = 1;
+let verticalOffsetZadruk = 0; // Dodajemy zmienną dla przesunięcia w pionie
+
+scaleSliderZadruk.addEventListener('input', (event) => {
+    scaleZadruk = parseInt(event.target.value, 10) / 100;
+    drawZadrukImage();
+});
+
+verticalSliderZadruk.addEventListener('input', (event) => { // Obsługa suwaka pionowego
+    verticalOffsetZadruk = parseInt(event.target.value, 10);
+    drawZadrukImage();
+});
 
 
 zadrukUpload.addEventListener('change', (event) => {
