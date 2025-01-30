@@ -773,108 +773,39 @@ maskImg.src = canvas.toDataURL();
 reader.readAsDataURL(file);
 }
 });
-
-
-
 function drawZadrukImage() {
-
 overlayCtx.clearRect(0, 0, overlayCanvas.width, overlayCanvas.height);
-
-
-
 const zadrukImg = document.getElementById('zadruk-img');
-
 if (!zadrukImg) return;
-
-
-
 const centerX = overlayCanvas.width / 2 + horizontalOffset;
-
 const centerY = overlayCanvas.height / 2;
-
-
-
 overlayCtx.save();
-
 overlayCtx.translate(centerX, centerY);
-
 overlayCtx.rotate((rotation * Math.PI) / 180);
-
 overlayCtx.translate(-centerX, -centerY);
-
-
-
 // Skalowanie obrazka z zachowaniem proporcji
-
 const maxWidth = zadrukImg.width;
-
 const maxHeight = zadrukImg.height;
-
 const aspectRatio = image.width / image.height;
-
-
-
 let width, height;
-
-
-
 if (aspectRatio > 1) {
-
 width = maxWidth;
-
 height = maxWidth / aspectRatio;
-
-
-
 if (height > maxHeight) {
-
 height = maxHeight;
-
 width = maxHeight * aspectRatio;
-
 }
-
 } else {
-
 height = maxHeight;
-
 width = maxHeight * aspectRatio;
-
-
-
 if (width > maxWidth) {
-
 width = maxWidth;
-
 height = maxWidth / aspectRatio;
-
 }
-
 }
-
-
-
 overlayCtx.drawImage(image, centerX - width / 2, centerY - height / 2, width, height);
-
-
-
 overlayCtx.restore();
-
-}
-
-
-
-document.getElementById('horizontal-slider-zadruk').addEventListener('zadruk', function (event) {
-
-horizontalOffset = parseInt(event.target.value, 10);
-
-drawOverlayImage();
-
-});
-
-
-
-           
+}           
            // // // // // // // //
 
       const zadrukUpload = document.getElementById('zadruk-upload');
