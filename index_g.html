@@ -758,7 +758,29 @@ drawOverlayImage();
 
 	///
 	///
+	document.getElementById('zadruk-upload').addEventListener('change', function (event) {
+    const file = event.target.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function (e) {
+            const img = new Image();
+            img.src = e.target.result;
+            img.onload = function () {
+                const canvas = document.createElement('canvas');
+                const ctx = canvas.getContext('2d');
+                const maskImg = document.getElementById('zadruk-img');
+                canvas.width = maskImg.width;
+                canvas.height = maskImg.height;
+                ctx.drawImage(maskImg, 0, 0);
+                ctx.globalCompositeOperation = 'source-in';
+                ctx.drawImage(img, 0, 0, maskImg.width, maskImg.height);
+                maskImg.src = canvas.toDataURL();
+            };
+        };
+        reader.readAsDataURL(file);
+    }
 	///
+	
 	const zadrukUpload = document.getElementById('zadruk-upload');
     const horizontalSliderZadruk = document.getElementById('horizontal-slider-zadruk');
     let zadrukImage = null;
