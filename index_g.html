@@ -756,12 +756,28 @@ drawOverlayImage();
 </script>
 <script>
 // ZADRUK
+     // ZADRUK
         const zadrukUpload = document.getElementById('zadruk-upload');
         const horizontalSliderZadruk = document.getElementById('horizontal-slider-zadruk');
         let zadrukImage = null;
         let horizontalOffsetZadruk = 0;
-        const maskImage = new Image(); // Dodajemy obraz maski
-        maskImage.src = 'zadruk.png'; // Ścieżka do pliku maski
+        const maskImage = new Image();
+        maskImage.src = 'zadruk.png';
+
+        // Funkcja do rysowania zamaskowanego obrazu na canvas
+        function drawMaskedImage(image, mask, ctx) {
+            const canvas = document.createElement('canvas');
+            const tempCtx = canvas.getContext('2d');
+
+            canvas.width = mask.width;
+            canvas.height = mask.height;
+
+            tempCtx.drawImage(mask, 0, 0);
+            tempCtx.globalCompositeOperation = 'source-in';
+            tempCtx.drawImage(image, 0, 0, mask.width, mask.height);
+
+            return canvas;
+        }
 
         zadrukUpload.addEventListener('change', (event) => {
             const file = event.target.files[0];
@@ -771,6 +787,7 @@ drawOverlayImage();
                     zadrukImage = new Image();
                     zadrukImage.src = e.target.result;
                     zadrukImage.onload = () => {
+                        // Po załadowaniu obrazu "zadruk", rysujemy go od razu
                         drawZadrukImage();
                     };
                 };
@@ -787,29 +804,16 @@ drawOverlayImage();
             overlayCtx.clearRect(0, 0, overlayCanvas.width, overlayCanvas.height);
 
             if (zadrukImage && maskImage) {
-                const canvas = document.createElement('canvas');
-                const ctx = canvas.getContext('2d');
+                // Rysujemy zamaskowany obraz na oddzielnym canvas
+                const maskedCanvas = drawMaskedImage(zadrukImage, maskImage, overlayCtx);
 
-                // Ustawiamy wymiary canvas na wymiary maski
-                canvas.width = maskImage.width;
-                canvas.height = maskImage.height;
-
-                // Rysujemy maskę na canvas
-                ctx.drawImage(maskImage, 0, 0);
-
-                // Ustawiamy tryb kompozycji na "source-in", aby nałożyć obraz na maskę
-                ctx.globalCompositeOperation = 'source-in';
-
-                // Rysujemy obraz "zadruk" na canvas
-                ctx.drawImage(zadrukImage, 0, 0, maskImage.width, maskImage.height);
-
-                // Rysujemy zamaskowany obraz na overlay-canvas
+                // Teraz możemy narysować zamaskowany obraz na overlayCanvas z uwzględnieniem przesunięcia
                 const x = overlayCanvas.width / 2 + horizontalOffsetZadruk - maskImage.width / 2;
                 const y = overlayCanvas.height / 2 - maskImage.height / 2;
-                overlayCtx.drawImage(canvas, x, y);
+                overlayCtx.drawImage(maskedCanvas, x, y);
             }
         }
-
+           });
 
 </script>
 </body>
