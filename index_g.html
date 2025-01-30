@@ -27,11 +27,11 @@ height: 100%;
 
 .image-column, .options-column {
 flex: 1;
-padding: 20px;
+padding: 0px;
 max-width: 900px;
 min-width: auto;
 }
-.image-column, .image-column2 {
+.image-column, {
 display: flex;
 position: relative;
 justify-content: center;
@@ -40,7 +40,16 @@ background-color: #fff;
 border-radius: 20px;
 box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
-
+.image-column2 {
+display: flex;
+position: relative;
+justify-content: center;
+align-items: center;
+background-color: #fff;
+border-radius: 20px;
+ padding: 20px; 
+box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
 @media (max-width: 768px) {
 .image-column, .image-column2 {
 width: 100%;
