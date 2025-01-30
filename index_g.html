@@ -853,11 +853,26 @@ function drawZadrukImage() {
         maskImg.src = `images/${selectedProduct}/zadruk.png`;
 
         maskImg.onload = () => {
+            const maskWidth = maskImg.width;
+            const maskHeight = maskImg.height;
+
             const x = horizontalOffsetZadruk; // Przesunięcie poziome
             const y = verticalOffsetZadruk;   // Przesunięcie pionowe
 
-            const zadrukWidth = zadrukImage.width * scaleZadruk;
-            const zadrukHeight = zadrukImage.height * scaleZadruk;
+            let zadrukWidth = zadrukImage.width * scaleZadruk;
+            let zadrukHeight = zadrukImage.height * scaleZadruk;
+
+            // Skalowanie proporcjonalne do maski (jeśli obraz jest mniejszy):
+            if (zadrukWidth < maskWidth || zadrukHeight < maskHeight) {
+                const scaleFactor = Math.min(maskWidth / zadrukWidth, maskHeight / zadrukHeight);
+                zadrukWidth *= scaleFactor;
+                zadrukHeight *= scaleFactor;
+            }
+
+            // Centrowanie obrazu w masce (po skalowaniu):
+            const centeredX = (maskWidth - zadrukWidth) / 2 + x;
+            const centeredY = (maskHeight - zadrukHeight) / 2 + y;
+
 
             // 1. Tworzymy nowy canvas na obraz "zadruk":
             const zadrukCanvas = document.createElement('canvas');
@@ -879,7 +894,7 @@ function drawZadrukImage() {
 
             // 5. Rysujemy canvas z obrazem "zadruk" na głównym canvas (z przesunięciem):
 
-            overlayCtx.drawImage(zadrukCanvas, maskX, maskY, maskImg.width, maskImg.height);
+            overlayCtx.drawImage(zadrukCanvas, maskX + centeredX, maskY + centeredY, zadrukWidth, zadrukHeight);
 
             // 6. Resetujemy tryb kompozycji (opcjonalnie):
             overlayCtx.globalCompositeOperation = 'source-over';
