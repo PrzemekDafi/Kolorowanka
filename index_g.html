@@ -861,6 +861,17 @@ function drawZadrukImage() {
         const maskImg = new Image();
 maskImg.src = `images/${selectedProduct}/zadruk.png`; // Używamy template literal i zmiennej selectedProduct
         maskImg.onload = () => {
+//
+         const maskWidth = maskImg.width; // Szerokość maski
+            const maskHeight = maskImg.height; // Wysokość maski
+
+            const x = (overlayCanvas.width - zadrukImage.width) / 2 + horizontalOffsetZadruk;
+            const y = (overlayCanvas.height - zadrukImage.height) / 2;
+
+            // Skalujemy ZADRUK do wymiarów maski (zachowując proporcje):
+            const zadrukWidth = zadrukImage.width;
+            const zadrukHeight = (zadrukImage.height * maskHeight) / zadrukWidth; // Skalujemy wysokość proporcjonalnie
+//
             overlayCtx.drawImage(maskImg, 0, 0, overlayCanvas.width, overlayCanvas.height);
             // Ustawienie operacji kompozycji
             overlayCtx.globalCompositeOperation = 'source-in';
