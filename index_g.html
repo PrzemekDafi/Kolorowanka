@@ -756,66 +756,161 @@ drawOverlayImage();
 </script>
 <script>
 // ZADRUK
-     
+     <script>
+
+document.getElementById('zadruk-upload').addEventListener('change', function (event) {const file = event.target.files[0];if (file) {const reader = new FileReader();reader.onload = function (e) {
+const img = new Image();img.src = e.target.result;img.onload = function () {const canvas = document.createElement('canvas');
+const ctx = canvas.getContext('2d');
+const maskImg = document.getElementById('zadruk-img');
+canvas.width = maskImg.width;
+canvas.height = maskImg.height;
+ctx.drawImage(maskImg, 0, 0);
+ctx.globalCompositeOperation = 'source-in';
+ctx.drawImage(img, 0, 0, maskImg.width, maskImg.height);
+maskImg.src = canvas.toDataURL();
+};
+};
+reader.readAsDataURL(file);
+}
+});
+
+
+
+function drawZadrukImage() {
+
+overlayCtx.clearRect(0, 0, overlayCanvas.width, overlayCanvas.height);
+
+
+
+const zadrukImg = document.getElementById('zadruk-img');
+
+if (!zadrukImg) return;
+
+
+
+const centerX = overlayCanvas.width / 2 + horizontalOffset;
+
+const centerY = overlayCanvas.height / 2;
+
+
+
+overlayCtx.save();
+
+overlayCtx.translate(centerX, centerY);
+
+overlayCtx.rotate((rotation * Math.PI) / 180);
+
+overlayCtx.translate(-centerX, -centerY);
+
+
+
+// Skalowanie obrazka z zachowaniem proporcji
+
+const maxWidth = zadrukImg.width;
+
+const maxHeight = zadrukImg.height;
+
+const aspectRatio = image.width / image.height;
+
+
+
+let width, height;
+
+
+
+if (aspectRatio > 1) {
+
+width = maxWidth;
+
+height = maxWidth / aspectRatio;
+
+
+
+if (height > maxHeight) {
+
+height = maxHeight;
+
+width = maxHeight * aspectRatio;
+
+}
+
+} else {
+
+height = maxHeight;
+
+width = maxHeight * aspectRatio;
+
+
+
+if (width > maxWidth) {
+
+width = maxWidth;
+
+height = maxWidth / aspectRatio;
+
+}
+
+}
+
+
+
+overlayCtx.drawImage(image, centerX - width / 2, centerY - height / 2, width, height);
+
+
+
+overlayCtx.restore();
+
+}
+
+
+
+document.getElementById('horizontal-slider-zadruk').addEventListener('zadruk', function (event) {
+
+horizontalOffset = parseInt(event.target.value, 10);
+
+drawOverlayImage();
+
+});
+
+
 
            
-        const zadrukUpload = document.getElementById('zadruk-upload');
-        const horizontalSliderZadruk = document.getElementById('horizontal-slider-zadruk');
-        let zadrukImage = null;
-        let horizontalOffsetZadruk = 0;
-        const maskImage = new Image();
-        maskImage.src = canvas.toDataURL();
+           // // // // // // // //
 
-        // Funkcja do rysowania zamaskowanego obrazu na canvas
-        function drawMaskedImage(image, mask, ctx) {
-            const canvas = document.createElement('canvas');
-            const tempCtx = canvas.getContext('2d');
+      const zadrukUpload = document.getElementById('zadruk-upload');
+    const horizontalSliderZadruk = document.getElementById('horizontal-slider-zadruk');
+    let zadrukImage = null;
+    let horizontalOffsetZadruk = 0;
 
-            canvas.width = mask.width;
-            canvas.height = mask.height;
-
-            tempCtx.drawImage(mask, 0, 0);
-            tempCtx.globalCompositeOperation = 'source-in';
-            tempCtx.drawImage(image, 0, 0, mask.width, mask.height);
-
-            return canvas;
-        }
-
-        zadrukUpload.addEventListener('change', (event) => {
-            const file = event.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = (e) => {
-                    zadrukImage = new Image();
-                    zadrukImage.src = e.target.result;
-                    zadrukImage.onload = () => {
-                        // Po załadowaniu obrazu "zadruk", rysujemy go od razu
-                        drawZadrukImage();
-                    };
+    zadrukUpload.addEventListener('change', (event) => {
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                zadrukImage = new Image();
+                zadrukImage.src = e.target.result;
+                zadrukImage.onload = () => {
+                    drawZadrukImage();
                 };
-                reader.readAsDataURL(file);
-            }
-        });
-
-        horizontalSliderZadruk.addEventListener('input', (event) => {
-            horizontalOffsetZadruk = parseInt(event.target.value, 10);
-            drawZadrukImage();
-        });
-
-        function drawZadrukImage() {
-            overlayCtx.clearRect(0, 0, overlayCanvas.width, overlayCanvas.height);
-
-            if (zadrukImage && maskImage) {
-                // Rysujemy zamaskowany obraz na oddzielnym canvas
-                const maskedCanvas = drawMaskedImage(zadrukImage, maskImage, overlayCtx);
-
-                // Teraz możemy narysować zamaskowany obraz na overlayCanvas z uwzględnieniem przesunięcia
-                const x = overlayCanvas.width / 2 + horizontalOffsetZadruk - maskImage.width / 2;
-                const y = overlayCanvas.height / 2 - maskImage.height / 2;
-                overlayCtx.drawImage(maskedCanvas, x, y);
-            }
+            };
+            reader.readAsDataURL(file);
         }
-           });
+    });
+
+    horizontalSliderZadruk.addEventListener('input', (event) => {
+        horizontalOffsetZadruk = parseInt(event.target.value, 10);
+        drawZadrukImage();
+    });
+
+    function drawZadrukImage() {
+        overlayCtx.clearRect(0, 0, overlayCanvas.width, overlayCanvas.height); // Czyści canvas przed ponownym rysowaniem
+
+        if (zadrukImage) {
+            const x = overlayCanvas.width / 2 + horizontalOffsetZadruk - zadrukImage.width / 2; // Wyśrodkowanie i przesunięcie
+            const y = overlayCanvas.height / 2 - zadrukImage.height / 2; // Wyśrodkowanie w pionie
+            overlayCtx.drawImage(zadrukImage, x, y, zadrukImage.width, zadrukImage.height);
+        }
+    }
 
 </script>
 </body>
