@@ -793,13 +793,8 @@ drawOverlayImage();
             const x = overlayCanvas.width / 2 + horizontalOffsetZadruk - zadrukImage.width / 2; // Wyśrodkowanie i przesunięcie
             const y = overlayCanvas.height / 2 - zadrukImage.height / 2; // Wyśrodkowanie w pionie
 		//
-		 const maskImg = document.getElementById('zadruk-img');
-                canvas.width = maskImg.width;
-                canvas.height = maskImg.height;
-                ctx.drawImage(maskImg, 0, 0);
+	
 
-		ctx.drawImage(img, 0, 0, maskImg.width, maskImg.height);
-                maskImg.src = canvas.toDataURL();
 		//
             overlayCtx.drawImage(zadrukImage, x, y, zadrukImage.width, zadrukImage.height);
 		
