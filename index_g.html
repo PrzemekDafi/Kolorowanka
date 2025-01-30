@@ -871,10 +871,9 @@ function drawZadrukImage() {
 
             overlayCtx.drawImage(maskImg, maskX, maskY, maskImg.width, maskImg.height); // Rysujemy maskę na środku
 
-            const x = overlayCanvas.width / 2 + horizontalOffsetZadruk - zadrukImage.width / 2;
-            const y = overlayCanvas.height / 2 - zadrukImage.height / 2;
+                  //   const x = overlayCanvas.width / 2 + horizontalOffsetZadruk - zadrukImage.width / 2;
+            //const y = overlayCanvas.height / 2 - zadrukImage.height / 2;
 
-         //
          const x = (overlayCanvas.width - zadrukImage.width * scaleZadruk) / 2 + horizontalOffsetZadruk; // Uwzględniamy skalę przy przesunięciu
             const y = (overlayCanvas.height - zadrukImage.height * scaleZadruk) / 2;
 
