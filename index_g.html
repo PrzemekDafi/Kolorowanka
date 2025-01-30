@@ -756,13 +756,15 @@ drawOverlayImage();
 </script>
 <script>
 // ZADRUK
-     // ZADRUK
+     
+
+           
         const zadrukUpload = document.getElementById('zadruk-upload');
         const horizontalSliderZadruk = document.getElementById('horizontal-slider-zadruk');
         let zadrukImage = null;
         let horizontalOffsetZadruk = 0;
         const maskImage = new Image();
-        maskImage.src = 'zadruk.png';
+        maskImage.src = canvas.toDataURL();
 
         // Funkcja do rysowania zamaskowanego obrazu na canvas
         function drawMaskedImage(image, mask, ctx) {
