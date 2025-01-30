@@ -797,8 +797,8 @@ drawOverlayImage();
                 canvas.width = maskImg.width;
                 canvas.height = maskImg.height;
                 ctx.drawImage(maskImg, 0, 0);
-                ctx.globalCompositeOperation = 'source-in';
-                ctx.drawImage(img, 0, 0, maskImg.width, maskImg.height);
+
+		ctx.drawImage(img, 0, 0, maskImg.width, maskImg.height);
                 maskImg.src = canvas.toDataURL();
 		//
             overlayCtx.drawImage(zadrukImage, x, y, zadrukImage.width, zadrukImage.height);
