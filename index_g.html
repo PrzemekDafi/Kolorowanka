@@ -275,24 +275,6 @@ z-index: 1000; /* Obrazek grawer - na wierzchu */
 pointer-events: none; /* Opcjonalne - nie blokuje interakcji z elementami poniżej */
 
 }
-                 /* ... style bez zmian ... */
-        #mask-container {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
-        }
-        #zadruk-mask {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-            opacity: 0;
-        }
 
 </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" defer></script>
@@ -304,9 +286,7 @@ pointer-events: none; /* Opcjonalne - nie blokuje interakcji z elementami poniż
 <div class="image-column2" id="image-column2">
 <canvas id="base-canvas" width="900px" height="900px" style="position: absolute; z-index: 9999;"></canvas>
 <canvas id="overlay-canvas" width="900px" height="900px" style="position: absolute; z-index: 1000;"></canvas>
- <div id="mask-container">
-                <img id="zadruk-mask" src="zadruk.png" alt="Maska zadruku">
-            </div>
+
 <div class="image-column" id="image-column"></div>
 </div>
 
@@ -341,31 +321,31 @@ pointer-events: none; /* Opcjonalne - nie blokuje interakcji z elementami poniż
 <div id="color-options">
 <!-- Kolory dla elementów będą generowane dynamicznie -->
 </div>
-           <div class="zadruk-container">
-                <label for="zadruk-upload">Wgraj obrazek dla zadruku 360:</label>
-                <input type="file" id="zadruk-upload" accept="image/*"><br>
-                <label for="horizontal-slider-zadruk">Przesunięcie w poziomie:</label><br>
-                <input type="range" id="horizontal-slider-zadruk" min="-200" max="200" value="0">
-            </div>
+<div class="zadruk-container">
+<label for="zadruk-upload">Wgraj obrazek dla zadruku 360:</label>
+<input type="file" id="zadruk-upload" accept="image/*"><br>
+<label for="horizontal-slider-zadruk">Przesunięcie w poziomie:</label><br>
+<input type="range" id="horizontal-slider-zadruk" min="-200" max="200" value="0"><br>
+</div>
 <div class="grawer-column">
-  <label for="file-upload"><b>NOWOŚĆ</b> Wgraj grawer:</label>
-  <input type="file" id="file-upload" accept="image/*">
-  <br>
-  <label for="rotate-slider">Obrót:</label><br>
-  <input type="range" id="rotate-slider" min="0" max="360" value="0">
-  <br>
-  <label for="vertical-slider">Przesunięcie w pionie:</label><br>
-  <input type="range" id="vertical-slider" min="-200" max="200" value="0"><br>
-  <label for="horizontal-slider">Przesunięcie w poziomie:</label><br>
-  <input type="range" id="horizontal-slider" min="-200" max="200" value="0"><br>
-  <label for="size-slider">Rozmiar obrazka:</label><br>
-  <input id="size-slider" type="range" min="10" max="100" value="80">
+<label for="file-upload"><b>NOWOŚĆ</b> Wgraj grawer:</label>
+<input type="file" id="file-upload" accept="image/*">
+<br>
+<label for="rotate-slider">Obrót:</label><br>
+<input type="range" id="rotate-slider" min="0" max="360" value="0">
+<br>
+<label for="vertical-slider">Przesunięcie w pionie:</label><br>
+<input type="range" id="vertical-slider" min="-200" max="200" value="0"><br>
+<label for="horizontal-slider">Przesunięcie w poziomie:</label><br>
+<input type="range" id="horizontal-slider" min="-200" max="200" value="0"><br>
+<label for="size-slider">Rozmiar obrazka:</label><br>
+<input id="size-slider" type="range" min="10" max="100" value="80">
 </div>
 
 
 
 <div>
-  <button id="saveBtn">Zapisz jako JPG</button>
+<button id="saveBtn">Zapisz jako JPG</button>
 </div>
 
 
@@ -473,15 +453,15 @@ originalImages[element] = img.src;
 const colorInput = document.createElement('div');
 colorInput.className = 'color-input';
 colorInput.innerHTML = `
-                       <label for="${element}-color">${element}:</label>
-                       <select id="${element}-color">
-                           <option value="">Wybierz kolor</option>
-                           ${Object.keys(colors).map(color => `<option value="${colors[color]}">${color}</option>`).join('')}
-                       </select>
-                       <div class="input-container">   
-                           <input type="text" id="${element}-hex" placeholder="Kolor HEX">
-                       </div>
-                   `;
+                      <label for="${element}-color">${element}:</label>
+                      <select id="${element}-color">
+                          <option value="">Wybierz kolor</option>
+                          ${Object.keys(colors).map(color => `<option value="${colors[color]}">${color}</option>`).join('')}
+                      </select>
+                      <div class="input-container">   
+                          <input type="text" id="${element}-hex" placeholder="Kolor HEX">
+                      </div>
+                  `;
 colorOptions.appendChild(colorInput);
 
 const selectElement = document.getElementById(`${element}-color`);
@@ -587,12 +567,12 @@ originalImages[element] = img.src;
 const colorInput = document.createElement('div');
 colorInput.className = 'color-input';
 colorInput.innerHTML = `
-       <label for="${element}-color">${element}:</label>
-       <div class="input-container">
-           <input type="color" id="${element}-picker" value="#ffffff">
-           <input type="text" id="${element}-hex" placeholder="#FFFFFF">
-       </div>
-   `;
+      <label for="${element}-color">${element}:</label>
+      <div class="input-container">
+          <input type="color" id="${element}-picker" value="#ffffff">
+          <input type="text" id="${element}-hex" placeholder="#FFFFFF">
+      </div>
+  `;
 colorOptions.appendChild(colorInput);
 
 // Pobieranie elementów po dodaniu ich do DOM
@@ -775,81 +755,138 @@ drawOverlayImage();
 });
 </script>
 <script>
-
-        // ZADRUK
-   // ZADRUK
-        const zadrukUpload = document.getElementById('zadruk-upload');
-        const horizontalSliderZadruk = document.getElementById('horizontal-slider-zadruk');
-        let zadrukImage = null;
-        let horizontalOffsetZadruk = 0;
-        const zadrukMask = document.getElementById('zadruk-mask');
-        const maskContainer = document.getElementById('mask-container');
-        const overlayCanvas = document.getElementById('overlay-canvas');
-        const overlayCtx = overlayCanvas.getContext('2d');
-
-        zadrukUpload.addEventListener('change', (event) => {
-            const file = event.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = (e) => {
-                    zadrukImage = new Image();
-                    zadrukImage.src = e.target.result;
-                    zadrukImage.onload = () => {
-                        zadrukMask.style.opacity = 1;
-                        maskContainer.style.overflow = 'visible';
-                        resizeAndDrawZadrukImage();
-                    };
-                };
-                reader.readAsDataURL(file);
-            }
-        });
-
-        horizontalSliderZadruk.addEventListener('input', (event) => {
-            horizontalOffsetZadruk = parseInt(event.target.value, 10);
-            drawZadrukImage();
-        });
-
-        function resizeAndDrawZadrukImage() {
-            if (zadrukImage && zadrukMask) {
-                const maskHeight = zadrukMask.clientHeight;
-                const imageAspectRatio = zadrukImage.width / zadrukImage.height;
-                const newImageWidth = maskHeight * imageAspectRatio;
-                zadrukImage.width = newImageWidth;
-
-                drawZadrukImage();
-            }
-        }
-
-        function drawZadrukImage() {
-            overlayCtx.clearRect(0, 0, overlayCanvas.width, overlayCanvas.height);
-
-            if (zadrukImage && zadrukMask) {
+document.getElementById('zadruk-upload').addEventListener('change', function (event) {
+    const file = event.target.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function (e) {
+            const img = new Image();
+            img.src = e.target.result;
+            img.onload = function () {
                 const canvas = document.createElement('canvas');
                 const ctx = canvas.getContext('2d');
-
-                canvas.width = zadrukMask.width;
-                canvas.height = zadrukMask.height;
-
-                ctx.drawImage(zadrukMask, 0, 0);
+                const maskImg = document.getElementById('zadruk-img');
+                canvas.width = maskImg.width;
+                canvas.height = maskImg.height;
+                ctx.drawImage(maskImg, 0, 0);
                 ctx.globalCompositeOperation = 'source-in';
-                ctx.drawImage(zadrukImage, 0, 0, canvas.width, canvas.height);
+                ctx.drawImage(img, 0, 0, maskImg.width, maskImg.height);
+                maskImg.src = canvas.toDataURL();
+            };
+        };
+        reader.readAsDataURL(file);
+    }
+const file = event.target.files[0];
+if (file) {
+const reader = new FileReader();
+reader.onload = function (e) {
+const img = new Image();
+img.src = e.target.result;
+img.onload = function () {
+const canvas = document.createElement('canvas');
+const ctx = canvas.getContext('2d');
+const maskImg = document.getElementById('zadruk-img');
+canvas.width = maskImg.width;
+canvas.height = maskImg.height;
+ctx.drawImage(maskImg, 0, 0);
+ctx.globalCompositeOperation = 'source-in';
+ctx.drawImage(img, 0, 0, maskImg.width, maskImg.height);
+maskImg.src = canvas.toDataURL();
+};
+};
+reader.readAsDataURL(file);
+}
+});
 
-                const x = overlayCanvas.width / 2 + horizontalOffsetZadruk - canvas.width / 2;
-                const y = overlayCanvas.height / 2 - canvas.height / 2;
-                overlayCtx.drawImage(canvas, x, y);
-            }
+function drawZadrukImage() {
+    overlayCtx.clearRect(0, 0, overlayCanvas.width, overlayCanvas.height);
+const horizontalSlider = document.getElementById('horizontal-slider');
+overlayCtx.clearRect(0, 0, overlayCanvas.width, overlayCanvas.height);
+
+    const zadrukImg = document.getElementById('zadruk-img');
+    if (!zadrukImg) return;
+const zadrukImg = document.getElementById('zadruk-img');
+if (!zadrukImg) return;
+
+    const centerX = overlayCanvas.width / 2 + horizontalOffset;
+    const centerY = overlayCanvas.height / 2;
+const centerX = overlayCanvas.width / 2 + horizontalOffset;
+const centerY = overlayCanvas.height / 2;
+
+    overlayCtx.save();
+    overlayCtx.translate(centerX, centerY);
+    overlayCtx.rotate((rotation * Math.PI) / 180);
+    overlayCtx.translate(-centerX, -centerY);
+overlayCtx.save();
+overlayCtx.translate(centerX, centerY);
+overlayCtx.rotate((rotation * Math.PI) / 180);
+overlayCtx.translate(-centerX, -centerY);
+
+    // Skalowanie obrazka z zachowaniem proporcji
+    const maxWidth = zadrukImg.width;
+    const maxHeight = zadrukImg.height;
+    const aspectRatio = image.width / image.height;
+// Skalowanie obrazka z zachowaniem proporcji
+const maxWidth = zadrukImg.width;
+const maxHeight = zadrukImg.height;
+const aspectRatio = image.width / image.height;
+
+    let width, height;
+let width, height;
+
+    if (aspectRatio > 1) {
+        width = maxWidth;
+        height = maxWidth / aspectRatio;
+if (aspectRatio > 1) {
+width = maxWidth;
+height = maxWidth / aspectRatio;
+
+        if (height > maxHeight) {
+            height = maxHeight;
+            width = maxHeight * aspectRatio;
         }
+    } else {
+        height = maxHeight;
+        width = maxHeight * aspectRatio;
+if (height > maxHeight) {
+height = maxHeight;
+width = maxHeight * aspectRatio;
+}
+} else {
+height = maxHeight;
+width = maxHeight * aspectRatio;
 
-    function drawZadrukImage() {
-        overlayCtx.clearRect(0, 0, overlayCanvas.width, overlayCanvas.height); // Czyści canvas przed ponownym rysowaniem
-
-        if (zadrukImage) {
-            const x = overlayCanvas.width / 2 + horizontalOffsetZadruk - zadrukImage.width / 2; // Wyśrodkowanie i przesunięcie
-            const y = overlayCanvas.height / 2 - zadrukImage.height / 2; // Wyśrodkowanie w pionie
-            overlayCtx.drawImage(zadrukImage, x, y, zadrukImage.width, zadrukImage.height);
+        if (width > maxWidth) {
+            width = maxWidth;
+            height = maxWidth / aspectRatio;
         }
     }
+if (width > maxWidth) {
+width = maxWidth;
+height = maxWidth / aspectRatio;
+}
+}
 
+    overlayCtx.drawImage(image, centerX - width / 2, centerY - height / 2, width, height);
+overlayCtx.drawImage(image, centerX - width / 2, centerY - height / 2, width, height);
+
+    overlayCtx.restore();
+overlayCtx.restore();
+}
+
+const horizontalSlider = document.getElementById('horizontal-slider-zadruk');
+horizontalSlider.addEventListener('zadruk', function (event) {
+document.getElementById('horizontal-slider-zadruk').addEventListener('zadruk', function (event) {
+horizontalOffset = parseInt(event.target.value, 10);
+drawOverlayImage();
+	});
+	
+	// Obsługa suwaka przesunięcia
+horizontalSlider.addEventListener('zadruk', (event) => {
+horizontalOffset = parseInt(event.target.value, 10);
+    drawZadrukImage();
+    drawOverlayImage();
+});
 
 </script>
 </body>
