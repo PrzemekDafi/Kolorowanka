@@ -275,6 +275,7 @@ z-index: 1000; /* Obrazek grawer - na wierzchu */
 pointer-events: none; /* Opcjonalne - nie blokuje interakcji z elementami poniżej */
 
 }
+           
 
 </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" defer></script>
@@ -755,31 +756,60 @@ drawOverlayImage();
 });
 </script>
 <script>
+
+           
 // ZADRUK
- const zadrukUpload = document.getElementById('zadruk-upload');
-    const horizontalSliderZadruk = document.getElementById('horizontal-slider-zadruk');
-    let zadrukImage = null;
-    let horizontalOffsetZadruk = 0;
+ // ZADRUK
+        const zadrukUpload = document.getElementById('zadruk-upload');
+        const horizontalSliderZadruk = document.getElementById('horizontal-slider-zadruk');
+        let zadrukImage = null;
+        let horizontalOffsetZadruk = 0;
+        const zadrukMask = document.getElementById('zadruk-mask'); // Obraz maski
+        const maskContainer = document.getElementById('mask-container'); // Kontener maski
 
-    zadrukUpload.addEventListener('change', (event) => {
-        const file = event.target.files[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = (e) => {
-                zadrukImage = new Image();
-                zadrukImage.src = e.target.result;
-                zadrukImage.onload = () => {
-                    drawZadrukImage();
+        zadrukUpload.addEventListener('change', (event) => {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    zadrukImage = new Image();
+                    zadrukImage.src = e.target.result;
+                    zadrukImage.onload = () => {
+                        // Po załadowaniu obrazu, pokazujemy maskę i rysujemy obraz
+                        zadrukMask.style.opacity = 1;
+                        maskContainer.style.overflow = 'visible';
+                        resizeAndDrawZadrukImage();
+                    };
                 };
-            };
-            reader.readAsDataURL(file);
-        }
-    });
+                reader.readAsDataURL(file);
+            }
+        });
 
-    horizontalSliderZadruk.addEventListener('input', (event) => {
-        horizontalOffsetZadruk = parseInt(event.target.value, 10);
-        drawZadrukImage();
-    });
+        horizontalSliderZadruk.addEventListener('input', (event) => {
+            horizontalOffsetZadruk = parseInt(event.target.value, 10);
+            drawZadrukImage();
+        });
+
+        function resizeAndDrawZadrukImage() {
+            if (zadrukImage && zadrukMask) {
+                const maskHeight = zadrukMask.clientHeight; // Wysokość maski
+                const imageAspectRatio = zadrukImage.width / zadrukImage.height;
+                const newImageWidth = maskHeight * imageAspectRatio;
+                zadrukImage.width = newImageWidth; // Ustawiamy szerokość obrazu
+
+                drawZadrukImage(); // Rysujemy obraz po zmianie rozmiaru
+            }
+        }
+
+        function drawZadrukImage() {
+            overlayCtx.clearRect(0, 0, overlayCanvas.width, overlayCanvas.height);
+
+            if (zadrukImage && zadrukMask) {
+                const x = overlayCanvas.width / 2 + horizontalOffsetZadruk - zadrukImage.width / 2;
+                const y = overlayCanvas.height / 2 - zadrukImage.height / 2;
+                overlayCtx.drawImage(zadrukImage, x, y, zadrukImage.width, zadrukImage.height);
+            }
+        }
 
     function drawZadrukImage() {
         overlayCtx.clearRect(0, 0, overlayCanvas.width, overlayCanvas.height); // Czyści canvas przed ponownym rysowaniem
