@@ -301,76 +301,67 @@ pointer-events: none; /* Opcjonalne - nie blokuje interakcji z elementami poniż
 </head>
 <body>
 <div class="container">
-<div class="image-column2" id="image-column2">
-<canvas id="base-canvas" width="900px" height="900px" style="position: absolute; z-index: 9999;"></canvas>
-<canvas id="overlay-canvas" width="900px" height="900px" style="position: absolute; z-index: 1000;"></canvas>
-<div id="mask-container">
+        <div class="image-column2" id="image-column2">
+            <canvas id="base-canvas" width="900px" height="900px"></canvas>
+            <canvas id="overlay-canvas" width="900px" height="900px"></canvas>
+            <div id="mask-container">
                 <canvas id="zadruk-canvas" width="900" height="900"></canvas>
             </div>
-<div class="image-column" id="image-column"></div>
-</div>
+            <div class="image-column" id="image-column"></div>
+        </div>
 
+        <div class="options-column">
+            <h1>Nowości: GRAWER! + Dzbanki + Saturator butelka</h1>
+            <label for="product-select">Wybierz produkt:</label>
+            <select id="product-select" class="select-colors">
+                <option value="">Wybierz produkt</option>
+                <option value="crystal">Dzbanek Crystal Classic</option>
+                <option value="crystal_unimax">Dzbanek Crystal Unimax</option>
+                <option value="astra_classic">Dzbanek Astra Classic</option>
+                <option value="butelka_soft_05l">Butelka Soft 0,5 l</option>
+                <option value="butelka_solid_05l">Butelka Solid 0,5 l</option>
+                <option value="butelka_solid_07l">Butelka Solid 0,7 l</option>
+                <option value="butelka_solid_steel_07l">Butelka Solid Steel 0,7 l</option>
+                <option value="bidon_twist">Bidon Twist</option>
+                <option value="bidon_klasyczny">Bidon Dafi</option>
+                <option value="shape_t">Shape T</option>
+                <option value="shape">Shape</option>
+                <option value="self">Self</option>
+                <option value="easy">Easy</option>
+                <option value="saturator">PushAir</option>
+                <option value="saturator_butelka">PushAir Butelka 0,7</option>
+            </select>
+            <div id="color-options">
+                </div>
+            <div class="zadruk-container">
+                <label for="zadruk-upload">Wgraj obrazek dla zadruku 360:</label>
+                <input type="file" id="zadruk-upload" accept="image/*"><br>
+                <label for="horizontal-slider-zadruk">Przesunięcie w poziomie:</label><br>
+                <input type="range" id="horizontal-slider-zadruk" min="-200" max="200" value="0"><br>
+            </div>
+            <div class="grawer-column">
+                <label for="file-upload"><b>NOWOŚĆ</b> Wgraj grawer:</label>
+                <input type="file" id="file-upload" accept="image/*">
+                <br>
+                <label for="rotate-slider">Obrót:</label><br>
+                <input type="range" id="rotate-slider" min="0" max="360" value="0">
+                <br>
+                <label for="vertical-slider">Przesunięcie w pionie:</label><br>
+                <input type="range" id="vertical-slider" min="-200" max="200" value="0"><br>
+                <label for="horizontal-slider">Przesunięcie w poziomie:</label><br>
+                <input type="range" id="horizontal-slider" min="-200" max="200" value="0"><br>
+                <label for="size-slider">Rozmiar obrazka:</label><br>
+                <input id="size-slider" type="range" min="10" max="100" value="80">
+            </div>
 
+            <div>
+                <button id="saveBtn">Zapisz jako JPG</button>
+            </div>
 
-<div class="options-column">
-<h1>Nowości: GRAWER! + Dzbanki + Saturator butelka</h1>
-<label for="product-select">Wybierz produkt:</label>
-<select id="product-select" class="select-colors">
-<option value="">Wybierz produkt</option>
-<!--  <option value="butelka_soft_03l">Butelka Soft 0,3 l</option> -->
-<option value="crystal">Dzbanek Crystal Classic</option>
-<option value="crystal_unimax">Dzbanek Crystal Unimax</option>
-<option value="astra_classic">Dzbanek Astra Classic</option>
-<option value="butelka_soft_05l">Butelka Soft 0,5 l</option>
-<!--  <option value="butelka_soft_07l">Butelka Soft 0,7 l</option>-->
+            <div id="loadingMessage">Trwa zapis obrazu, proszę czekać...</div>
+        </div>
+    </div>
 
-<option value="butelka_solid_05l">Butelka Solid 0,5 l</option>
-<option value="butelka_solid_07l">Butelka Solid 0,7 l</option>
-<option value="butelka_solid_steel_07l">Butelka Solid Steel 0,7 l</option>
-<option value="bidon_twist">Bidon Twist</option>
-<option value="bidon_klasyczny">Bidon Dafi</option>
-<option value="shape_t">Shape T</option>
-<option value="shape">Shape</option>
-<option value="self">Self</option>
-<option value="easy">Easy</option>
-
-<option value="saturator">PushAir</option>
-<option value="saturator_butelka">PushAir Butelka 0,7</option>
-
-</select>
-<div id="color-options">
-<!-- Kolory dla elementów będą generowane dynamicznie -->
-</div>
-<div class="zadruk-container">
-<label for="zadruk-upload">Wgraj obrazek dla zadruku 360:</label>
-<input type="file" id="zadruk-upload" accept="image/*"><br>
-<label for="horizontal-slider-zadruk">Przesunięcie w poziomie:</label><br>
-<input type="range" id="horizontal-slider-zadruk" min="-200" max="200" value="0"><br>
-</div>
-<div class="grawer-column">
-<label for="file-upload"><b>NOWOŚĆ</b> Wgraj grawer:</label>
-<input type="file" id="file-upload" accept="image/*">
-<br>
-<label for="rotate-slider">Obrót:</label><br>
-<input type="range" id="rotate-slider" min="0" max="360" value="0">
-<br>
-<label for="vertical-slider">Przesunięcie w pionie:</label><br>
-<input type="range" id="vertical-slider" min="-200" max="200" value="0"><br>
-<label for="horizontal-slider">Przesunięcie w poziomie:</label><br>
-<input type="range" id="horizontal-slider" min="-200" max="200" value="0"><br>
-<label for="size-slider">Rozmiar obrazka:</label><br>
-<input id="size-slider" type="range" min="10" max="100" value="80">
-</div>
-
-
-
-<div>
-<button id="saveBtn">Zapisz jako JPG</button>
-</div>
-
-
-<div id="loadingMessage">Trwa zapis obrazu, proszę czekać...</div>
-</div>
 <script>
 
 const products = {
@@ -775,73 +766,74 @@ drawOverlayImage();
 });
 </script>
 <script>
-const overlayCanvas = document.getElementById('overlay-canvas');
-const overlayCtx = overlayCanvas.getContext('2d');
-const zadrukUpload = document.getElementById('zadruk-upload');
-const horizontalSliderZadruk = document.getElementById('horizontal-slider-zadruk');
-const zadrukCanvas = document.getElementById('zadruk-canvas');
-const zadrukCtx = zadrukCanvas.getContext('2d');
-const maskContainer = document.getElementById('mask-container');
-let zadrukImage = null;
-let horizontalOffsetZadruk = 0;
-let currentMask = null;
+ const overlayCanvas = document.getElementById('overlay-canvas');
+        const overlayCtx = overlayCanvas.getContext('2d');
+        const zadrukUpload = document.getElementById('zadruk-upload');
+        const horizontalSliderZadruk = document.getElementById('horizontal-slider-zadruk');
+        const zadrukCanvas = document.getElementById('zadruk-canvas');
+        const zadrukCtx = zadrukCanvas.getContext('2d');
+        const maskContainer = document.getElementById('mask-container');
+        let zadrukImage = null;
+        let horizontalOffsetZadruk = 0;
+        let currentMask = null;
 
-document.getElementById('product-select').addEventListener('change', function () {
-    const product = this.value;
-    zadrukCtx.clearRect(0, 0, zadrukCanvas.width, zadrukCanvas.height);
+        document.getElementById('product-select').addEventListener('change', function () {
+            const product = this.value;
+            zadrukCtx.clearRect(0, 0, zadrukCanvas.width, zadrukCanvas.height);
 
-    if (product && products[product] && products[product].includes('zadruk')) {
-        currentMask = new Image();
-        currentMask.src = `images/${product}/zadruk.png`;
-        currentMask.onload = () => {
-            zadrukCtx.drawImage(currentMask, 0, 0, zadrukCanvas.width, zadrukCanvas.height);
-            maskContainer.style.overflow = 'visible';
+            if (product && products[product] && products[product].includes('zadruk')) {
+                currentMask = new Image();
+                currentMask.src = `images/${product}/zadruk.png`;
+                currentMask.onload = () => {
+                    zadrukCtx.drawImage(currentMask, 0, 0, zadrukCanvas.width, zadrukCanvas.height);
+                    maskContainer.style.overflow = 'visible';
+                    drawZadrukImage();
+                };
+            } else {
+                maskContainer.style.overflow = 'hidden';
+                currentMask = null;
+            }
+        });
+
+        zadrukUpload.addEventListener('change', (event) => {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    zadrukImage = new Image();
+                    zadrukImage.src = e.target.result;
+                    zadrukImage.onload = () => {
+                        drawZadrukImage();
+                    };
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        horizontalSliderZadruk.addEventListener('input', (event) => {
+            horizontalOffsetZadruk = parseInt(event.target.value, 10);
             drawZadrukImage();
-        };
-    } else {
-        maskContainer.style.overflow = 'hidden';
-        currentMask = null;
-    }
-});
+        });
 
-zadrukUpload.addEventListener('change', (event) => {
-    const file = event.target.files[0];
-    if (file) {
-        const reader = new FileReader();
-        reader.onload = (e) => {
-            zadrukImage = new Image();
-            zadrukImage.src = e.target.result;
-            zadrukImage.onload = () => {
-                drawZadrukImage();
-            };
-        };
-        reader.readAsDataURL(file);
-    }
-});
+        function drawZadrukImage() {
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            canvas.width = zadrukCanvas.width;
+            canvas.height = zadrukCanvas.height;
+            ctx.drawImage(zadrukCanvas, 0, 0);
+            maskContainer.appendChild(canvas);
 
-horizontalSliderZadruk.addEventListener('input', (event) => {
-    horizontalOffsetZadruk = parseInt(event.target.value, 10);
-    drawZadrukImage();
-});
+            if (zadrukImage && currentMask) {
+                ctx.globalCompositeOperation = 'source-in';
+                ctx.drawImage(zadrukImage, 0, 0, canvas.width, canvas.height);
 
-function drawZadrukImage() {
-    const canvas = document.createElement('canvas');
-    const ctx = canvas.getContext('2d');
-    canvas.width = zadrukCanvas.width;
-    canvas.height = zadrukCanvas.height;
-    ctx.drawImage(zadrukCanvas, 0, 0);
+                const x = overlayCanvas.width / 2 + horizontalOffsetZadruk - canvas.width / 2;
+                const y = overlayCanvas.height / 2 - canvas.height / 2;
 
-    if (zadrukImage && currentMask) {
-        ctx.globalCompositeOperation = 'source-in';
-        ctx.drawImage(zadrukImage, 0, 0, canvas.width, canvas.height);
-
-        const x = overlayCanvas.width / 2 + horizontalOffsetZadruk - canvas.width / 2;
-        const y = overlayCanvas.height / 2 - canvas.height / 2;
-
-        overlayCtx.clearRect(x, y, canvas.width, canvas.height);
-        overlayCtx.drawImage(canvas, x, y);
-    }
-}
+                overlayCtx.clearRect(x, y, canvas.width, canvas.height);
+                overlayCtx.drawImage(canvas, x, y);
+            }
+            maskContainer.removeChild(canvas);
     </script>
 </body>
 </html>
