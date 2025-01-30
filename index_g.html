@@ -361,6 +361,9 @@ select#zadruk-color {
 <input type="file" id="zadruk-upload" accept="image/*"><br>
 <label for="horizontal-slider-zadruk">Przesunięcie w poziomie:</label><br>
 <input type="range" id="horizontal-slider-zadruk" min="-200" max="200" value="0"><br>
+ <label for="scale-slider-zadruk">Skalowanie:</label><br>
+    <input type="range" id="scale-slider-zadruk" min="10" max="200" value="70">
+
 </div>
 <div class="grawer-column">
 <label for="file-upload"><b>NOWOŚĆ</b> Wgraj grawer:</label>
@@ -846,6 +849,14 @@ horizontalSliderZadruk.addEventListener('input', (event) => {
     drawZadrukImage();
 
 });
+ const scaleSliderZadruk = document.getElementById('scale-slider-zadruk'); // Pobieramy suwak
+
+let scaleZadruk = 1; // Początkowa skala
+
+scaleSliderZadruk.addEventListener('input', (event) => {
+    scaleZadruk = parseInt(event.target.value, 10) / 100; // Skala od 0.1 do 2.0
+    drawZadrukImage();
+});
 function drawZadrukImage() {
     overlayCtx.clearRect(0, 0, overlayCanvas.width, overlayCanvas.height);
 
@@ -863,6 +874,14 @@ function drawZadrukImage() {
             const x = overlayCanvas.width / 2 + horizontalOffsetZadruk - zadrukImage.width / 2;
             const y = overlayCanvas.height / 2 - zadrukImage.height / 2;
 
+         //
+         const x = (overlayCanvas.width - zadrukImage.width * scaleZadruk) / 2 + horizontalOffsetZadruk; // Uwzględniamy skalę przy przesunięciu
+            const y = (overlayCanvas.height - zadrukImage.height * scaleZadruk) / 2;
+
+            const zadrukWidth = zadrukImage.width * scaleZadruk; // Skalujemy szerokość
+            const zadrukHeight = zadrukImage.height * scaleZadruk; // Skalujemy wysokość
+
+         //
             overlayCtx.globalCompositeOperation = 'source-in';
             overlayCtx.drawImage(zadrukImage, x, y, zadrukImage.width, zadrukImage.height);
             overlayCtx.globalCompositeOperation = 'source-over';
