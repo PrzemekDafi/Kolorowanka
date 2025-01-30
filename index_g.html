@@ -812,21 +812,7 @@ let zadrukImage = null;
 
 let horizontalOffsetZadruk = 0;
 
- const scaleSliderZadruk = document.getElementById('scale-slider-zadruk');
-const verticalSliderZadruk = document.getElementById('vertical-slider-zadruk'); // Pobieramy suwak pionowy
-
-let scaleZadruk = 1;
-let verticalOffsetZadruk = 0; // Dodajemy zmienną dla przesunięcia w pionie
-
-scaleSliderZadruk.addEventListener('input', (event) => {
-    scaleZadruk = parseInt(event.target.value, 10) / 100;
-    drawZadrukImage();
-});
-
-verticalSliderZadruk.addEventListener('input', (event) => { // Obsługa suwaka pionowego
-    verticalOffsetZadruk = parseInt(event.target.value, 10);
-    drawZadrukImage();
-});
+ 
 
 
 zadrukUpload.addEventListener('change', (event) => {
@@ -866,14 +852,22 @@ horizontalSliderZadruk.addEventListener('input', (event) => {
     drawZadrukImage();
 
 });
- const scaleSliderZadruk = document.getElementById('scale-slider-zadruk'); // Pobieramy suwak
+const scaleSliderZadruk = document.getElementById('scale-slider-zadruk');
+const verticalSliderZadruk = document.getElementById('vertical-slider-zadruk'); // Pobieramy suwak pionowy
 
-let scaleZadruk = 1; // Początkowa skala
+let scaleZadruk = 1;
+let verticalOffsetZadruk = 0; // Dodajemy zmienną dla przesunięcia w pionie
 
 scaleSliderZadruk.addEventListener('input', (event) => {
-    scaleZadruk = parseInt(event.target.value, 10) / 100; // Skala od 0.1 do 2.0
+    scaleZadruk = parseInt(event.target.value, 10) / 100;
     drawZadrukImage();
 });
+
+verticalSliderZadruk.addEventListener('input', (event) => { // Obsługa suwaka pionowego
+    verticalOffsetZadruk = parseInt(event.target.value, 10);
+    drawZadrukImage();
+});
+
 function drawZadrukImage() {
     overlayCtx.clearRect(0, 0, overlayCanvas.width, overlayCanvas.height);
 
@@ -883,28 +877,26 @@ function drawZadrukImage() {
         maskImg.src = `images/${selectedProduct}/zadruk.png`;
 
         maskImg.onload = () => {
-            const maskX = (overlayCanvas.width - maskImg.width) / 2; // Środek canvas w poziomie
-            const maskY = (overlayCanvas.height - maskImg.height) / 2; // Środek canvas w pionie
+            const maskWidth = maskImg.width;
+            const maskHeight = maskImg.height;
 
-            overlayCtx.drawImage(maskImg, maskX, maskY, maskImg.width, maskImg.height); // Rysujemy maskę na środku
+            const x = (overlayCanvas.width - zadrukImage.width * scaleZadruk) / 2 + horizontalOffsetZadruk;
+            const y = (overlayCanvas.height - zadrukImage.height * scaleZadruk) / 2 + verticalOffsetZadruk; // Dodajemy przesunięcie w pionie
 
-                  //   const x = overlayCanvas.width / 2 + horizontalOffsetZadruk - zadrukImage.width / 2;
-            //const y = overlayCanvas.height / 2 - zadrukImage.height / 2;
+            const zadrukWidth = zadrukImage.width * scaleZadruk;
+            const zadrukHeight = zadrukImage.height * scaleZadruk;
 
-         const x = (overlayCanvas.width - zadrukImage.width * scaleZadruk) / 2 + horizontalOffsetZadruk; // Uwzględniamy skalę przy przesunięciu
-            const y = (overlayCanvas.height - zadrukImage.height * scaleZadruk) / 2;
+            overlayCtx.drawImage(zadrukImage, x, y, zadrukWidth, zadrukHeight);
 
-            const zadrukWidth = zadrukImage.width * scaleZadruk; // Skalujemy szerokość
-            const zadrukHeight = zadrukImage.height * scaleZadruk; // Skalujemy wysokość
+            overlayCtx.drawImage(maskImg, 0, 0, overlayCanvas.width, overlayCanvas.height);
 
-         //
             overlayCtx.globalCompositeOperation = 'source-in';
-            overlayCtx.drawImage(zadrukImage, x, y, zadrukImage.width, zadrukImage.height);
+            overlayCtx.drawImage(zadrukImage, x, y, zadrukWidth, zadrukHeight);
+
             overlayCtx.globalCompositeOperation = 'source-over';
         };
     }
 }
-
 
 </script>
 </body>
