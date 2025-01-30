@@ -755,56 +755,117 @@ drawOverlayImage();
 });
 </script>
 <script>
+///
 
-	///
-	///
+///
 
-	///
-	
-	const zadrukUpload = document.getElementById('zadruk-upload');
+
+
+///
+
+
+const zadrukUpload = document.getElementById('zadruk-upload');
+
 const horizontalSliderZadruk = document.getElementById('horizontal-slider-zadruk');
+
 let zadrukImage = null;
+
 let horizontalOffsetZadruk = 0;
 
+
+
 zadrukUpload.addEventListener('change', (event) => {
+
     const file = event.target.files[0];
+
     if (file) {
+
         const reader = new FileReader();
+
         reader.onload = (e) => {
+
             zadrukImage = new Image();
+
             zadrukImage.src = e.target.result;
+
             zadrukImage.onload = () => {
+
                 drawZadrukImage();
+
             };
+
         };
+
         reader.readAsDataURL(file);
+
     }
+
 });
+
+
 
 horizontalSliderZadruk.addEventListener('input', (event) => {
+
     horizontalOffsetZadruk = parseInt(event.target.value, 10);
+
     drawZadrukImage();
+
 });
 
+
+
 function drawZadrukImage() {
-    overlayCtx.clearRect(0, 0, overlayCanvas.width, overlayCanvas.height);
 
-    if (zadrukImage) {
-        const x = overlayCanvas.width / 2 + horizontalOffsetZadruk - zadrukImage.width / 2;
-        const y = overlayCanvas.height / 2 - zadrukImage.height / 2;
+    overlayCtx.clearRect(0, 0, overlayCanvas.width, overlayCanvas.height); // Czyści canvas przed ponownym rysowaniem
 
-        const selectedProduct = document.getElementById('product-select').value; // Pobieramy wybrany produkt
 
-        const maskImg = new Image();
-        maskImg.src = `images/${selectedProduct}/zadruk.png`; // Używamy template literal i zmiennej selectedProduct
 
-        maskImg.onload = () => {
-            overlayCtx.drawImage(maskImg, 0, 0, overlayCanvas.width, overlayCanvas.height);
-            overlayCtx.globalCompositeOperation = 'source-in';
-            overlayCtx.drawImage(zadrukImage, x, y, zadrukImage.width, zadrukImage.height);
-            overlayCtx.globalCompositeOperation = 'source-over';
-        });
-    
+    if (zadrukImage) {
+
+        const x = overlayCanvas.width / 2 + horizontalOffsetZadruk - zadrukImage.width / 2; // Wyśrodkowanie i przesunięcie
+
+        const y = overlayCanvas.height / 2 - zadrukImage.height / 2; // Wyśrodkowanie w pionie
+
+
+
+        // Rysowanie maski
+
+        const maskImg = new Image();
+
+        maskImg.src = 'images/self/zadruk.png';
+
+        maskImg.onload = () => {
+
+            overlayCtx.drawImage(maskImg, 0, 0, overlayCanvas.width, overlayCanvas.height);
+
+
+
+            // Ustawienie operacji kompozycji
+
+            overlayCtx.globalCompositeOperation = 'source-in';
+
+
+
+            // Rysowanie obrazka zadrukImage z maską
+
+            overlayCtx.drawImage(zadrukImage, x, y, zadrukImage.width, zadrukImage.height);
+
+
+
+            // Przywrócenie domyślnej operacji kompozycji
+
+            overlayCtx.globalCompositeOperation = 'source-over';
+
+        };
+
+    }
+
+}
+
+
+
+
+
 </script>
 </body>
 </html>
