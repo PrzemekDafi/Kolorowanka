@@ -853,22 +853,35 @@ function drawZadrukImage() {
         maskImg.src = `images/${selectedProduct}/zadruk.png`;
 
         maskImg.onload = () => {
-            const x = (overlayCanvas.width - zadrukImage.width * scaleZadruk) / 2 + horizontalOffsetZadruk;
-            const y = (overlayCanvas.height - zadrukImage.height * scaleZadruk) / 2 + verticalOffsetZadruk;
+            const x = horizontalOffsetZadruk; // Przesunięcie poziome
+            const y = verticalOffsetZadruk;   // Przesunięcie pionowe
 
             const zadrukWidth = zadrukImage.width * scaleZadruk;
             const zadrukHeight = zadrukImage.height * scaleZadruk;
 
-            // 1. Rysujemy MASKĘ (skalowaną do wymiarów ZADRUKU):
-            overlayCtx.drawImage(maskImg, x, y, zadrukWidth, zadrukHeight); // <--- ZMIANA: Rysujemy maskę jako pierwszą
+            // 1. Tworzymy nowy canvas na obraz "zadruk":
+            const zadrukCanvas = document.createElement('canvas');
+            zadrukCanvas.width = zadrukWidth;
+            zadrukCanvas.height = zadrukHeight;
+            const zadrukCtx = zadrukCanvas.getContext('2d');
 
-            // 2. Ustawiamy tryb kompozycji:
+            // 2. Rysujemy obraz "zadruk" na nowym canvas (z przesunięciem i skalowaniem):
+            zadrukCtx.drawImage(zadrukImage, 0, 0, zadrukWidth, zadrukHeight);
+
+
+            // 3. Rysujemy maskę na głównym canvas:
+            const maskX = (overlayCanvas.width - maskImg.width) / 2; // Wyśrodkowanie maski
+            const maskY = (overlayCanvas.height - maskImg.height) / 2; // Wyśrodkowanie maski
+            overlayCtx.drawImage(maskImg, maskX, maskY, maskImg.width, maskImg.height);
+
+            // 4. Ustawiamy tryb kompozycji:
             overlayCtx.globalCompositeOperation = 'source-in';
 
-            // 3. Rysujemy ZADRUK (skalowany):
-            overlayCtx.drawImage(zadrukImage, x, y, zadrukWidth, zadrukHeight); // <--- ZMIANA: Rysujemy obraz jako drugi
+            // 5. Rysujemy canvas z obrazem "zadruk" na głównym canvas (z przesunięciem):
 
-            // 4. Resetujemy tryb kompozycji (opcjonalnie):
+            overlayCtx.drawImage(zadrukCanvas, maskX, maskY, maskImg.width, maskImg.height);
+
+            // 6. Resetujemy tryb kompozycji (opcjonalnie):
             overlayCtx.globalCompositeOperation = 'source-over';
         };
     }
