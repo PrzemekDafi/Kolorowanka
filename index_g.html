@@ -863,11 +863,11 @@ function drawZadrukImage() {
             let zadrukHeight = zadrukImage.height * scaleZadruk;
 
             // Skalowanie proporcjonalne do maski (jeśli obraz jest mniejszy):
-            if (zadrukWidth < maskWidth || zadrukHeight < maskHeight) {
-                const scaleFactor = Math.min(maskWidth / zadrukWidth, maskHeight / zadrukHeight);
-                zadrukWidth *= scaleFactor;
-                zadrukHeight *= scaleFactor;
-            }
+          //  if (zadrukWidth < maskWidth || zadrukHeight < maskHeight) {
+          //      const scaleFactor = Math.min(maskWidth / zadrukWidth, maskHeight / zadrukHeight);
+          //      zadrukWidth *= scaleFactor;
+          //      zadrukHeight *= scaleFactor;
+          //  }
 
             // Centrowanie obrazu w masce (po skalowaniu):
             const centeredX = (maskWidth - zadrukWidth) / 1 + x;
@@ -885,8 +885,8 @@ function drawZadrukImage() {
 
 
             // 3. Rysujemy maskę na głównym canvas:
-            const maskX = (overlayCanvas.width - maskImg.width) / 2; // Wyśrodkowanie maski
-            const maskY = (overlayCanvas.height - maskImg.height) / 2; // Wyśrodkowanie maski
+            const maskX = (overlayCanvas.width - maskImg.width) / 1; // Wyśrodkowanie maski
+            const maskY = (overlayCanvas.height - maskImg.height) / 1; // Wyśrodkowanie maski
             overlayCtx.drawImage(maskImg, maskX, maskY, maskImg.width, maskImg.height);
 
             // 4. Ustawiamy tryb kompozycji:
