@@ -844,83 +844,104 @@ verticalSliderZadruk.addEventListener('input', (event) => { // Obsługa suwaka p
     drawZadrukImage();
 });
 
+const zadrukUpload = document.getElementById('zadruk-upload');
+
+const horizontalSliderZadruk = document.getElementById('horizontal-slider-zadruk');
+let zadrukImage = null;
+let horizontalOffsetZadruk = 0;
+
+zadrukUpload.addEventListener('change', (event) => {
+
+    const file = event.target.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            zadrukImage = new Image();
+            zadrukImage.src = e.target.result;
+            zadrukImage.onload = () => {
+                drawZadrukImage();
+            };
+        };
+        reader.readAsDataURL(file);
+    }
+});
+horizontalSliderZadruk.addEventListener('input', (event) => {
+ horizontalOffsetZadruk = parseInt(event.target.value, 10);
+ drawZadrukImage();
+});
+const scaleSliderZadruk = document.getElementById('scale-slider-zadruk');
+const verticalSliderZadruk = document.getElementById('vertical-slider-zadruk'); // Pobieramy suwak pionowy
+let scaleZadruk = 1;
+let verticalOffsetZadruk = 0; // Dodajemy zmienną dla przesunięcia w pionie
+
+scaleSliderZadruk.addEventListener('input', (event) => {
+    scaleZadruk = parseInt(event.target.value, 10) / 80;
+    drawZadrukImage();
+});
+
+verticalSliderZadruk.addEventListener('input', (event) => { // Obsługa suwaka pionowego
+    verticalOffsetZadruk = parseInt(event.target.value, 10);
+    drawZadrukImage();
+});
+
 function drawZadrukImage() {
-    overlayCtx.clearRect(0, 0, overlayCanvas.width, overlayCanvas.height);
+    overlayCtx.clearRect(0, 0, overlayCanvas.width, overlayCanvas.height);
 
-    if (zadrukImage) {
-        const selectedProduct = document.getElementById('product-select').value;
-        const maskImg = new Image();
-        maskImg.src = `images/${selectedProduct}/zadruk.png`;
+    if (zadrukImage) {
+        const selectedProduct = document.getElementById('product-select').value;
+        const maskImg = new Image();
+        maskImg.src = `images/${selectedProduct}/zadruk.png`;
 
-        maskImg.onload = () => {
-            const maskWidth = maskImg.width;
-            const maskHeight = maskImg.height;
+        maskImg.onload = () => {
+            const maskWidth = maskImg.width;
+            const maskHeight = maskImg.height;
 
-            const x = horizontalOffsetZadruk;
-            const y = verticalOffsetZadruk;
+            const x = horizontalOffsetZadruk; // Przesunięcie poziome
+            const y = verticalOffsetZadruk;   // Przesunięcie pionowe
 
-            let zadrukWidth = zadrukImage.width * scaleZadruk;
-            let zadrukHeight = zadrukImage.height * scaleZadruk;
+            let zadrukWidth = zadrukImage.width * scaleZadruk;
+            let zadrukHeight = zadrukImage.height * scaleZadruk;
 
-            const centeredX = (maskWidth - zadrukWidth) / 1 + x;
-            const centeredY = (maskHeight - zadrukHeight) / 1 + y;
+            // Skalowanie proporcjonalne do maski (jeśli obraz jest mniejszy):
+          //  if (zadrukWidth < maskWidth || zadrukHeight < maskHeight) {
+          //      const scaleFactor = Math.min(maskWidth / zadrukWidth, maskHeight / zadrukHeight);
+          //      zadrukWidth *= scaleFactor;
+          //      zadrukHeight *= scaleFactor;
+          //  }
 
-            const zadrukCanvas = document.createElement('canvas');
-            zadrukCanvas.width = zadrukWidth;
-            zadrukCanvas.height = zadrukHeight;
-            const zadrukCtx = zadrukCanvas.getContext('2d');
+            // Centrowanie obrazu w masce (po skalowaniu):
+            const centeredX = (maskWidth - zadrukWidth) / 1 + x;
+            const centeredY = (maskHeight - zadrukHeight) / 1 + y;
 
-            zadrukCtx.drawImage(zadrukImage, 0, 0, zadrukWidth, zadrukHeight);
 
-            const maskX = (overlayCanvas.width - maskImg.width) / 1;
-            const maskY = (overlayCanvas.height - maskImg.height) / 1;
-            overlayCtx.drawImage(maskImg, maskX, maskY, maskImg.width, maskImg.height);
+            // 1. Tworzymy nowy canvas na obraz "zadruk":
+            const zadrukCanvas = document.createElement('canvas');
+            zadrukCanvas.width = zadrukWidth;
+            zadrukCanvas.height = zadrukHeight;
+            const zadrukCtx = zadrukCanvas.getContext('2d');
 
-            // Pobieramy dane pikseli z maski i "zadruku":
-            const maskData = overlayCtx.getImageData(maskX, maskY, maskWidth, maskHeight).data;
-            const zadrukData = zadrukCtx.getImageData(0, 0, zadrukWidth, zadrukHeight).data;
+            // 2. Rysujemy obraz "zadruk" na nowym canvas (z przesunięciem i skalowaniem):
+            zadrukCtx.drawImage(zadrukImage, 0, 0, zadrukWidth, zadrukHeight);
 
-            // Tworzymy nowy obraz wynikowy:
-            const resultCanvas = document.createElement('canvas');
-            resultCanvas.width = maskWidth;
-            resultCanvas.height = maskHeight;
-            const resultCtx = resultCanvas.getContext('2d');
-            const resultData = resultCtx.createImageData(maskWidth, maskHeight);
 
-            // Pętla po pikselach:
-            for (let i = 0; i < maskData.length; i += 4) {
-                const maskR = maskData[i];
-                const maskG = maskData[i + 1];
-                const maskB = maskData[i + 2];
+            // 3. Rysujemy maskę na głównym canvas:
+            const maskX = (overlayCanvas.width - maskImg.width) / 1; // Wyśrodkowanie maski
+            const maskY = (overlayCanvas.height - maskImg.height) / 1; // Wyśrodkowanie maski
+            overlayCtx.drawImage(maskImg, maskX, maskY, maskImg.width, maskImg.height);
 
-                const zadrukX = Math.floor(i / 4 % maskWidth * (zadrukWidth / maskWidth)); // Skalowanie X
-                const zadrukY = Math.floor(i / 4 / maskWidth * (zadrukHeight / maskHeight)); // Skalowanie Y
+            // 4. Ustawiamy tryb kompozycji:
+            overlayCtx.globalCompositeOperation = 'source-in';
 
-                const zadrukIndex = (zadrukY * zadrukWidth + zadrukX) * 4;
+            // 5. Rysujemy canvas z obrazem "zadruk" na głównym canvas (z przesunięciem):
 
-                const zadrukR = zadrukData[zadrukIndex];
-                const zadrukG = zadrukData[zadrukIndex + 1];
-                const zadrukB = zadrukData[zadrukIndex + 2];
+            overlayCtx.drawImage(zadrukCanvas, maskX + centeredX, maskY + centeredY, //zadrukWidth, zadrukHeight//
+                                 );
 
-                // Mnożenie kolorów (normalizacja do 0-1):
-                const resultR = (maskR / 255) * (zadrukR / 255) * 255;
-                const resultG = (maskG / 255) * (zadrukG / 255) * 255;
-                const resultB = (maskB / 255) * (zadrukB / 255) * 255;
-
-                resultData.data[i] = resultR;
-                resultData.data[i + 1] = resultG;
-                resultData.data[i + 2] = resultB;
-                resultData.data[i + 3] = 255; // Alpha
-            }
-
-            resultCtx.putImageData(resultData, 0, 0);
-
-            // Rysujemy wynikowy obraz na głównym canvas:
-            overlayCtx.drawImage(resultCanvas, maskX + centeredX, maskY + centeredY);
-
-        };
-    }
-}
+            // 6. Resetujemy tryb kompozycji (opcjonalnie):
+            overlayCtx.globalCompositeOperation = 'source-over';
+        };
+    }
+} czy da się tutaj zrobić tak, żeby wgrywany zadruk.png był nakładany na maskę np przez mnożenie tak jak to ma miejsce np w photoshopie?
 
 </script>
 </body>
