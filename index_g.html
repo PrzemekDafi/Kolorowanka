@@ -856,49 +856,68 @@ function drawZadrukImage() {
             const maskWidth = maskImg.width;
             const maskHeight = maskImg.height;
 
-            const x = horizontalOffsetZadruk; // Przesunięcie poziome
-            const y = verticalOffsetZadruk;   // Przesunięcie pionowe
+            const x = horizontalOffsetZadruk;
+            const y = verticalOffsetZadruk;
 
             let zadrukWidth = zadrukImage.width * scaleZadruk;
             let zadrukHeight = zadrukImage.height * scaleZadruk;
 
-            // Skalowanie proporcjonalne do maski (jeśli obraz jest mniejszy):
-          //  if (zadrukWidth < maskWidth || zadrukHeight < maskHeight) {
-          //      const scaleFactor = Math.min(maskWidth / zadrukWidth, maskHeight / zadrukHeight);
-          //      zadrukWidth *= scaleFactor;
-          //      zadrukHeight *= scaleFactor;
-          //  }
-
-            // Centrowanie obrazu w masce (po skalowaniu):
             const centeredX = (maskWidth - zadrukWidth) / 1 + x;
             const centeredY = (maskHeight - zadrukHeight) / 1 + y;
 
-
-            // 1. Tworzymy nowy canvas na obraz "zadruk":
             const zadrukCanvas = document.createElement('canvas');
             zadrukCanvas.width = zadrukWidth;
             zadrukCanvas.height = zadrukHeight;
             const zadrukCtx = zadrukCanvas.getContext('2d');
 
-            // 2. Rysujemy obraz "zadruk" na nowym canvas (z przesunięciem i skalowaniem):
             zadrukCtx.drawImage(zadrukImage, 0, 0, zadrukWidth, zadrukHeight);
 
-
-            // 3. Rysujemy maskę na głównym canvas:
-            const maskX = (overlayCanvas.width - maskImg.width) / 1; // Wyśrodkowanie maski
-            const maskY = (overlayCanvas.height - maskImg.height) / 1; // Wyśrodkowanie maski
+            const maskX = (overlayCanvas.width - maskImg.width) / 1;
+            const maskY = (overlayCanvas.height - maskImg.height) / 1;
             overlayCtx.drawImage(maskImg, maskX, maskY, maskImg.width, maskImg.height);
 
-            // 4. Ustawiamy tryb kompozycji:
-            overlayCtx.globalCompositeOperation = 'source-in';
+            // Pobieramy dane pikseli z maski i "zadruku":
+            const maskData = overlayCtx.getImageData(maskX, maskY, maskWidth, maskHeight).data;
+            const zadrukData = zadrukCtx.getImageData(0, 0, zadrukWidth, zadrukHeight).data;
 
-            // 5. Rysujemy canvas z obrazem "zadruk" na głównym canvas (z przesunięciem):
+            // Tworzymy nowy obraz wynikowy:
+            const resultCanvas = document.createElement('canvas');
+            resultCanvas.width = maskWidth;
+            resultCanvas.height = maskHeight;
+            const resultCtx = resultCanvas.getContext('2d');
+            const resultData = resultCtx.createImageData(maskWidth, maskHeight);
 
-            overlayCtx.drawImage(zadrukCanvas, maskX + centeredX, maskY + centeredY, //zadrukWidth, zadrukHeight//
-                                 );
+            // Pętla po pikselach:
+            for (let i = 0; i < maskData.length; i += 4) {
+                const maskR = maskData[i];
+                const maskG = maskData[i + 1];
+                const maskB = maskData[i + 2];
 
-            // 6. Resetujemy tryb kompozycji (opcjonalnie):
-            overlayCtx.globalCompositeOperation = 'source-over';
+                const zadrukX = Math.floor(i / 4 % maskWidth * (zadrukWidth / maskWidth)); // Skalowanie X
+                const zadrukY = Math.floor(i / 4 / maskWidth * (zadrukHeight / maskHeight)); // Skalowanie Y
+
+                const zadrukIndex = (zadrukY * zadrukWidth + zadrukX) * 4;
+
+                const zadrukR = zadrukData[zadrukIndex];
+                const zadrukG = zadrukData[zadrukIndex + 1];
+                const zadrukB = zadrukData[zadrukIndex + 2];
+
+                // Mnożenie kolorów (normalizacja do 0-1):
+                const resultR = (maskR / 255) * (zadrukR / 255) * 255;
+                const resultG = (maskG / 255) * (zadrukG / 255) * 255;
+                const resultB = (maskB / 255) * (zadrukB / 255) * 255;
+
+                resultData.data[i] = resultR;
+                resultData.data[i + 1] = resultG;
+                resultData.data[i + 2] = resultB;
+                resultData.data[i + 3] = 255; // Alpha
+            }
+
+            resultCtx.putImageData(resultData, 0, 0);
+
+            // Rysujemy wynikowy obraz na głównym canvas:
+            overlayCtx.drawImage(resultCanvas, maskX + centeredX, maskY + centeredY);
+
         };
     }
 }
