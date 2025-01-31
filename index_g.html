@@ -835,7 +835,7 @@ let scaleZadruk = 1;
 let verticalOffsetZadruk = 0; // Dodajemy zmienną dla przesunięcia w pionie
 
 scaleSliderZadruk.addEventListener('input', (event) => {
-    scaleZadruk = parseInt(event.target.value, 1) / 100;
+    scaleZadruk = parseInt(event.target.value, 10) / 80;
     drawZadrukImage();
 });
 
