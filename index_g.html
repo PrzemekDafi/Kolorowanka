@@ -715,6 +715,7 @@ let scale = 0.2 // Domyślny rozmiar 100% (1.0)
 
 
 function drawOverlayImage() {
+     if (!image.src) return; // Nie rysuj jeśli brak obrazka
 overlayCtx.clearRect(0, 0, overlayCanvas.width, overlayCanvas.height);
 
 const centerX = overlayCanvas.width / 2 + horizontalOffset;
@@ -839,8 +840,18 @@ scaleSliderZadruk.addEventListener('input', (event) => {
     drawZadrukImage();
 });
 
-verticalSliderZadruk.addEventListener('input', (event) => { // Obsługa suwaka pionowego
+verticalSliderZadruk.addEventListener('input', (event) => {
     verticalOffsetZadruk = parseInt(event.target.value, 10);
+    drawZadrukImage();
+});
+
+horizontalSliderZadruk.addEventListener('input', (event) => {
+    horizontalOffsetZadruk = parseInt(event.target.value, 10);
+    drawZadrukImage();
+});
+
+scaleSliderZadruk.addEventListener('input', (event) => {
+    scaleZadruk = parseInt(event.target.value, 10) / 80;
     drawZadrukImage();
 });
 
@@ -885,63 +896,54 @@ verticalSliderZadruk.addEventListener('input', (event) => { // Obsługa suwaka p
 });
 
 function drawZadrukImage() {
-    overlayCtx.clearRect(0, 0, overlayCanvas.width, overlayCanvas.height);
+    // Użyj osobnego canvasu dla zadruku
+    const zadrukCanvas = document.createElement('canvas');
+    zadrukCanvas.width = overlayCanvas.width;
+    zadrukCanvas.height = overlayCanvas.height;
+    const zadrukCtx = zadrukCanvas.getContext('2d');
 
-    if (zadrukImage) {
-        const selectedProduct = document.getElementById('product-select').value;
-        const maskImg = new Image();
-        maskImg.src = `images/${selectedProduct}/zadruk.png`;
+    if (zadrukImage) {
+        const selectedProduct = document.getElementById('product-select').value;
+        const maskImg = new Image();
+        maskImg.src = `images/${selectedProduct}/zadruk.png`;
 
-        maskImg.onload = () => {
-            const maskWidth = maskImg.width;
-            const maskHeight = maskImg.height;
-
-            const x = horizontalOffsetZadruk; // Przesunięcie poziome
-            const y = verticalOffsetZadruk;   // Przesunięcie pionowe
-
-            let zadrukWidth = zadrukImage.width * scaleZadruk;
-            let zadrukHeight = zadrukImage.height * scaleZadruk;
-
-            // Skalowanie proporcjonalne do maski (jeśli obraz jest mniejszy):
-          //  if (zadrukWidth < maskWidth || zadrukHeight < maskHeight) {
-          //      const scaleFactor = Math.min(maskWidth / zadrukWidth, maskHeight / zadrukHeight);
-          //      zadrukWidth *= scaleFactor;
-          //      zadrukHeight *= scaleFactor;
-          //  }
-
-            // Centrowanie obrazu w masce (po skalowaniu):
-            const centeredX = (maskWidth - zadrukWidth) / 1 + x;
-            const centeredY = (maskHeight - zadrukHeight) / 1 + y;
-
-
-            // 1. Tworzymy nowy canvas na obraz "zadruk":
-            const zadrukCanvas = document.createElement('canvas');
-            zadrukCanvas.width = zadrukWidth;
-            zadrukCanvas.height = zadrukHeight;
-            const zadrukCtx = zadrukCanvas.getContext('2d');
-
-            // 2. Rysujemy obraz "zadruk" na nowym canvas (z przesunięciem i skalowaniem):
-            zadrukCtx.drawImage(zadrukImage, 0, 0, zadrukWidth, zadrukHeight);
-
-
-            // 3. Rysujemy maskę na głównym canvas:
-            const maskX = (overlayCanvas.width - maskImg.width) / 1; // Wyśrodkowanie maski
-            const maskY = (overlayCanvas.height - maskImg.height) / 1; // Wyśrodkowanie maski
-            overlayCtx.drawImage(maskImg, maskX, maskY, maskImg.width, maskImg.height);
-
-            // 4. Ustawiamy tryb kompozycji:
-            overlayCtx.globalCompositeOperation = 'source-in';
-
-            // 5. Rysujemy canvas z obrazem "zadruk" na głównym canvas (z przesunięciem):
-
-            overlayCtx.drawImage(zadrukCanvas, maskX + centeredX, maskY + centeredY, //zadrukWidth, zadrukHeight//
-                                 );
-
-            // 6. Resetujemy tryb kompozycji (opcjonalnie):
-            overlayCtx.globalCompositeOperation = 'source-over';
-        };
-    }
-} 
+        maskImg.onload = () => {
+            // Wyczyść canvas zadruku
+            zadrukCtx.clearRect(0, 0, zadrukCanvas.width, zadrukCanvas.height);
+            
+            // 1. Narysuj obraz zadruku (ze skalowaniem i przesunięciem)
+            const centerX = zadrukCanvas.width / 2 + horizontalOffsetZadruk;
+            const centerY = zadrukCanvas.height / 2 + verticalOffsetZadruk;
+            
+            // Oblicz skalowane rozmiary
+            const scaledWidth = zadrukImage.width * scaleZadruk;
+            const scaledHeight = zadrukImage.height * scaleZadruk;
+            
+            // Narysuj obraz zadruku
+            zadrukCtx.drawImage(
+                zadrukImage,
+                centerX - scaledWidth / 2,
+                centerY - scaledHeight / 2,
+                scaledWidth,
+                scaledHeight
+            );
+            
+            // 2. Nałóż maskę
+            zadrukCtx.globalCompositeOperation = 'destination-in';
+            zadrukCtx.drawImage(
+                maskImg,
+                (zadrukCanvas.width - maskImg.width) / 2,
+                (zadrukCanvas.height - maskImg.height) / 2
+            );
+            
+            // 3. Wyczyść overlay i narysuj wynikowy zadruk
+            overlayCtx.clearRect(0, 0, overlayCanvas.width, overlayCanvas.height);
+            overlayCtx.drawImage(zadrukCanvas, 0, 0);
+        };
+        
+        maskImg.onerror = () => console.error('Błąd ładowania maski zadruku');
+    }
+}
 </script>
 </body>
 </html>
