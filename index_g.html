@@ -738,160 +738,29 @@ let verticalOffsetZadruk = 0;
 let scaleZadruk = 1;
 let wrapFactor = 0; // Stopień zawijania (0-1)
 
-// Nowa funkcja do cylindrycznego zawijania obrazka
+// POPRAWIONA FUNKCJA DO ZAWIJANIA WOKÓŁ PIONOWEGO CYLINDRA
 function applyCylindricalWrap(ctx, img, centerX, centerY, width, height, wrapFactor) {
-    const segments = 20; // Liczba segmentów do podziału obrazka
-    const segmentWidth = width / segments;
-    const radius = width / (2 * Math.PI) * wrapFactor;
-    
+    const cylinderRadius = width / (2 * Math.PI) * wrapFactor;
+    const segments = 36; // Więcej segmentów = płynniejszy efekt
+    const segmentAngle = (2 * Math.PI) / segments;
+
+    // Przesunięcie środka cylindra w dół, aby lepiej pasowało do butelki
+    const cylinderCenterY = centerY + height * 0.2;
+
     for (let i = 0; i < segments; i++) {
-        const srcX = i * segmentWidth;
-        const angle = (i / segments) * 2 * Math.PI;
+        const angle = i * segmentAngle;
+        const nextAngle = (i + 1) * segmentAngle;
         
-        // Współrzędne docelowe (przekształcone cylindrycznie)
-        const destX = centerX + Math.sin(angle) * radius;
-        const destY = centerY - Math.cos(angle) * radius;
+        // Oblicz współrzędne dla obecnego i następnego segmentu
+        const x1 = centerX + cylinderRadius * Math.sin(angle);
+        const y1 = cylinderCenterY + cylinderRadius * Math.cos(angle);
+        const x2 = centerX + cylinderRadius * Math.sin(nextAngle);
+        const y2 = cylinderCenterY + cylinderRadius * Math.cos(nextAngle);
         
-        // Pobierz segment obrazka
+        // Oblicz pozycje tekstury
+        const textureX1 = (i / segments) * width;
+        const textureX2 = ((i + 1) / segments) * width;
+        
+        // Utwórz canvas dla segmentu
         const segmentCanvas = document.createElement('canvas');
-        segmentCanvas.width = segmentWidth;
-        segmentCanvas.height = height;
-        const segmentCtx = segmentCanvas.getContext('2d');
-        segmentCtx.drawImage(
-            img, 
-            srcX, 0, segmentWidth, height,
-            0, 0, segmentWidth, height
-        );
-        
-        // Oblicz skalowanie dla efektu perspektywy
-        const scaleY = 1 + Math.abs(Math.cos(angle)) * 0.3 * wrapFactor;
-        
-        // Zapisz transformację
-        ctx.save();
-        
-        // Przesuń do środka segmentu
-        ctx.translate(destX, destY);
-        
-        // Obrót do pozycji cylindrycznej
-        ctx.rotate(angle + Math.PI/2);
-        
-        // Zastosuj skalowanie dla efektu głębi
-        ctx.scale(1, scaleY);
-        
-        // Narysuj segment
-        ctx.drawImage(
-            segmentCanvas, 
-            -segmentWidth/2, 
-            -height/2, 
-            segmentWidth, 
-            height
-        );
-        
-        // Przywróć transformację
-        ctx.restore();
-    }
-}
-
-zadrukUpload.addEventListener('change', (event) => {
-    const file = event.target.files[0];
-    if (file) {
-        const reader = new FileReader();
-        reader.onload = (e) => {
-            zadrukImage = new Image();
-            zadrukImage.src = e.target.result;
-            zadrukImage.onload = () => {
-                drawZadrukImage();
-            };
-        };
-        reader.readAsDataURL(file);
-    }
-});
-
-horizontalSliderZadruk.addEventListener('input', (event) => {
-    horizontalOffsetZadruk = parseInt(event.target.value, 10);
-    drawZadrukImage();
-});
-
-verticalSliderZadruk.addEventListener('input', (event) => {
-    verticalOffsetZadruk = parseInt(event.target.value, 10);
-    drawZadrukImage();
-});
-
-scaleSliderZadruk.addEventListener('input', (event) => {
-    scaleZadruk = parseInt(event.target.value, 10) / 80;
-    drawZadrukImage();
-});
-
-wrapSlider.addEventListener('input', (event) => {
-    wrapFactor = parseInt(event.target.value) / 100;
-    drawZadrukImage();
-});
-
-function drawZadrukImage() {
-    // Użyj osobnego canvasu dla zadruku
-    const zadrukCanvas = document.createElement('canvas');
-    zadrukCanvas.width = overlayCanvas.width;
-    zadrukCanvas.height = overlayCanvas.height;
-    const zadrukCtx = zadrukCanvas.getContext('2d');
-
-    if (zadrukImage) {
-        const selectedProduct = document.getElementById('product-select').value;
-        const maskImg = new Image();
-        maskImg.src = `images/${selectedProduct}/zadruk.png`;
-
-        maskImg.onload = () => {
-            // Wyczyść canvas zadruku
-            zadrukCtx.clearRect(0, 0, zadrukCanvas.width, zadrukCanvas.height);
-            
-            // 1. Narysuj obraz zadruku (ze skalowaniem i przesunięciem)
-            const centerX = zadrukCanvas.width / 2 + horizontalOffsetZadruk;
-            const centerY = zadrukCanvas.height / 2 + verticalOffsetZadruk;
-            
-            // Oblicz skalowane rozmiary
-            const scaledWidth = zadrukImage.width * scaleZadruk;
-            const scaledHeight = zadrukImage.height * scaleZadruk;
-            
-            // Użyj cylindrycznego zawijania jeśli wrapFactor > 0
-            if (wrapFactor > 0.01) {
-                applyCylindricalWrap(
-                    zadrukCtx,
-                    zadrukImage,
-                    centerX,
-                    centerY,
-                    scaledWidth,
-                    scaledHeight,
-                    wrapFactor
-                );
-            } else {
-                // Standardowe rysowanie bez zawijania
-                zadrukCtx.drawImage(
-                    zadrukImage,
-                    centerX - scaledWidth / 2,
-                    centerY - scaledHeight / 2,
-                    scaledWidth,
-                    scaledHeight
-                );
-            }
-            
-            // 2. Nałóż maskę
-            zadrukCtx.globalCompositeOperation = 'destination-in';
-            zadrukCtx.drawImage(
-                maskImg,
-                (zadrukCanvas.width - maskImg.width) / 2,
-                (zadrukCanvas.height - maskImg.height) / 2
-            );
-            
-            // 3. Wyczyść overlay i narysuj wynikowy zadruk
-            overlayCtx.clearRect(0, 0, overlayCanvas.width, overlayCanvas.height);
-            overlayCtx.drawImage(zadrukCanvas, 0, 0);
-        };
-        
-        maskImg.onerror = () => console.error('Błąd ładowania maski zadruku');
-    } else {
-        // Jeśli nie ma zadruku, wyczyść overlay
-        overlayCtx.clearRect(0, 0, overlayCanvas.width, overlayCanvas.height);
-    }
-}
-</script>
-</body>
-</html>
+        segmentCanvas.width = Math.abs(textureX2 -
