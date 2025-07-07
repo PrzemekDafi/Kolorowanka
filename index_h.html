@@ -46,7 +46,7 @@
             flex: 1;
             justify-content: center;
             align-items: center;
-            padding: 0; /* Usunięte dla canvasa */
+            padding: 0;
         }
         .product-frame {
             position: relative;
@@ -123,6 +123,9 @@
         .checkbox-group input { margin-right: 10px; width: 18px; height: 18px; }
         .personalization-choice { display: flex; gap: 10px; margin-top: 15px; }
         .personalization-choice label { display: flex; align-items: center; gap: 5px; }
+        .color-input { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+        .color-input label { flex-basis: 120px; flex-shrink: 0; }
+        .input-container { display: flex; flex-grow: 1; }
     </style>
 </head>
 <body>
@@ -160,8 +163,17 @@
                 </div>
             </div>
 
-            <div id="grawer-controls" class="grawer-column">
-                <!-- Oryginalne kontrolki do graweru -->
+            <div id="grawer-controls" class="grawer-column" style="display:none;">
+                <label for="file-upload">Wgraj grawer:</label>
+                <input type="file" id="file-upload" accept="image/*">
+                <label for="rotate-slider">Obrót:</label>
+                <input type="range" id="rotate-slider" min="0" max="360" value="0">
+                <label for="vertical-slider">Przesunięcie w pionie:</label>
+                <input type="range" id="vertical-slider" min="-200" max="200" value="0">
+                <label for="horizontal-slider">Przesunięcie w poziomie:</label>
+                <input type="range" id="horizontal-slider" min="-200" max="200" value="0">
+                <label for="size-slider">Rozmiar obrazka:</label>
+                <input id="size-slider" type="range" min="10" max="100" value="80">
             </div>
 
             <div id="zadruk3d-controls" style="display: none;">
@@ -196,16 +208,13 @@
 
         <div class="image-column">
             <div class="product-frame" id="product-frame">
-                <!-- Widok 2D (oryginalny) -->
                 <div id="2d-view" class="image-wrapper"></div>
-                <!-- Widok 3D -->
                 <canvas id="viewer-canvas"></canvas>
             </div>
         </div>
     </div>
 
     <script>
-        // --- ORYGINALNY SKRYPT UŻYTKOWNIKA (Z MODYFIKACJAMI) ---
         document.addEventListener('DOMContentLoaded', () => {
             const products = {
                 astra_classic: { elements: ['pokrywka','raczka', 'zbiornik'] },
@@ -221,7 +230,7 @@
                 bidon_klasyczny: { elements: ['bidon_zatyczka', 'bidon_zakretka', 'bidon_zbiornik'] },
                 self: { 
                     elements: ['self_zakretka', 'self_zatyczka', 'self-zbiornik-wewnetrzny', 'self-zbiornik-zewnetrzny'],
-                    aspectRatio: 762 / 257 // Proporcje dla 3D
+                    aspectRatio: 762 / 257
                 },
                 easy: { elements: ['elastometr', 'sama_gora_zakretki', 'zbiornik', 'gora_zakretki', 'guma_zakretki'] },
                 saturator: { elements: ['saturator_gora_korpus', 'saturator_butelka', 'satuator_korpus', 'przycisk_saturatora', 'saturator_gora_klapka', 'pushair_logo'] },
@@ -244,7 +253,6 @@
                 const productKey = this.value;
                 const productData = products[productKey];
                 
-                // Reset
                 colorOptions.innerHTML = '';
                 view2D.innerHTML = '';
                 viewerCanvas.style.display = 'none';
@@ -255,7 +263,6 @@
 
                 if (!productData) return;
 
-                // Ładowanie obrazów 2D
                 productData.elements.forEach((element, index) => {
                     const wrapper = document.createElement('div');
                     wrapper.className = 'image-wrapper';
@@ -269,12 +276,31 @@
                     view2D.appendChild(wrapper);
                     originalImages[element] = img.src;
 
-                    // Tworzenie opcji kolorów
-                    // ... (logika tworzenia opcji kolorów jak w oryginale)
+                    const colorInput = document.createElement('div');
+                    colorInput.className = 'color-input';
+                    colorInput.innerHTML = `
+                        <label for="${element}-color">${element}:</label>
+                        <div class="input-container">
+                            <input type="color" id="${element}-picker" value="#ffffff" style="flex-shrink: 0; width: 40px; padding: 0; border: none;">
+                            <input type="text" id="${element}-hex" placeholder="#FFFFFF">
+                        </div>`;
+                    colorOptions.appendChild(colorInput);
+
+                    const colorPicker = document.getElementById(`${element}-picker`);
+                    const hexInput = document.getElementById(`${element}-hex`);
+                    colorPicker.addEventListener('input', () => {
+                        hexInput.value = colorPicker.value.toUpperCase();
+                        colorizeImage(element, colorPicker.value);
+                    });
+                    hexInput.addEventListener('input', () => {
+                        if (/^#([0-9A-F]{3}){1,2}$/i.test(hexInput.value)) {
+                            colorPicker.value = hexInput.value;
+                            colorizeImage(element, hexInput.value);
+                        }
+                    });
                 });
                 view2D.style.display = 'block';
 
-                // Sprawdzenie czy istnieje opcja 3D
                 const maskUrl = `images/${productKey}/zadruk.png`;
                 checkResourceExists(maskUrl).then(exists => {
                     if (exists) {
@@ -282,7 +308,7 @@
                         document.querySelector('input[name="personalization"][value="grawer"]').checked = true;
                         grawerControls.style.display = 'block';
                     } else {
-                        grawerControls.style.display = 'block'; // Lub inna domyślna opcja
+                        grawerControls.style.display = 'block';
                     }
                 });
             });
@@ -292,8 +318,8 @@
                     const is3d = this.value === 'zadruk3d';
                     grawerControls.style.display = is3d ? 'none' : 'block';
                     zadruk3dControls.style.display = is3d ? 'block' : 'none';
-                    viewerCanvas.style.display = 'none'; // Zawsze resetuj canvas przy zmianie
-                    view2D.style.display = 'block'; // Pokaż widok 2D
+                    viewerCanvas.style.display = 'none';
+                    view2D.style.display = 'block';
                 });
             });
 
@@ -308,10 +334,37 @@
                     detail: { 
                         file: event.target.files[0],
                         maskUrl: `images/${productKey}/zadruk.png`,
-                        aspectRatio: product.aspectRatio || (762 / 257) // Domyślny aspect ratio
+                        aspectRatio: product.aspectRatio || (762 / 257)
                     }
                 }));
             });
+            
+            function colorizeImage(element, color) {
+                const img = document.getElementById(`${element}-img`);
+                const canvas = document.createElement('canvas');
+                const ctx = canvas.getContext('2d');
+                const originalImg = new Image();
+                originalImg.crossOrigin = "Anonymous";
+                originalImg.src = originalImages[element];
+                originalImg.onload = () => {
+                    canvas.width = originalImg.width;
+                    canvas.height = originalImg.height;
+                    ctx.drawImage(originalImg, 0, 0);
+                    const rgb = hexToRgb(color);
+                    if (!rgb) return;
+                    ctx.globalCompositeOperation = 'multiply';
+                    ctx.fillStyle = color;
+                    ctx.fillRect(0, 0, canvas.width, canvas.height);
+                    ctx.globalCompositeOperation = 'destination-in';
+                    ctx.drawImage(originalImg, 0, 0);
+                    img.src = canvas.toDataURL();
+                };
+            }
+            
+            function hexToRgb(hex) {
+                const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+                return result ? { r: parseInt(result[1], 16), g: parseInt(result[2], 16), b: parseInt(result[3], 16) } : null;
+            }
 
             function checkResourceExists(url) {
                 return new Promise(resolve => {
@@ -329,7 +382,6 @@
     </script>
 
     <script type="module">
-        // --- MODUŁ WIZUALIZATORA 3D ---
         import * as THREE from 'three';
         import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 
@@ -349,25 +401,20 @@
                 scene = new THREE.Scene();
             }
             scene.background = new THREE.Color(0xffffff);
-
             const container = document.querySelector('.image-column');
             const viewerCanvas = document.getElementById('viewer-canvas');
-            
             camera = new THREE.PerspectiveCamera(30, container.clientWidth / container.clientHeight, 0.1, 1000);
             camera.position.set(0, 0, 8);
-
             if(renderer) renderer.dispose();
             renderer = new THREE.WebGLRenderer({ canvas: viewerCanvas, antialias: true, preserveDrawingBuffer: true });
             renderer.setSize(container.clientWidth, container.clientHeight);
             renderer.setPixelRatio(window.devicePixelRatio);
             renderer.outputColorSpace = THREE.SRGBColorSpace;
-
             const ambientLight = new THREE.AmbientLight(0xffffff, 0.8);
             scene.add(ambientLight);
             const directionalLight = new THREE.DirectionalLight(0xffffff, 1.2);
             directionalLight.position.set(5, 10, 7.5);
             scene.add(directionalLight);
-
             if(controls) controls.dispose();
             controls = new OrbitControls(camera, renderer.domElement);
             controls.enableDamping = true;
@@ -385,7 +432,7 @@
                 renderer.render(scene, camera);
             }
         }
-        animate(); // Uruchom pętlę animacji raz
+        animate();
 
         function generateModelAndApplyTexture(textureDataUrl, maskUrl, aspectRatio) {
             setup3DViewer();
@@ -395,16 +442,13 @@
                 const profilePoints = getProfileFromMask(maskImage);
                 const smoothedProfile = smoothProfile(profilePoints, 5);
                 const geometry = createGeometryFromProfile(smoothedProfile, aspectRatio);
-                
                 const textureLoader = new THREE.TextureLoader();
                 textureLoader.load(textureDataUrl, (texture) => {
                     texture.colorSpace = THREE.SRGBColorSpace;
                     texture.wrapS = THREE.RepeatWrapping;
                     texture.wrapT = THREE.ClampToEdgeWrapping; 
-
                     const printMaterial = new THREE.MeshStandardMaterial({ map: texture, metalness: 0.0, roughness: 0.8 });
                     const capMaterial = new THREE.MeshBasicMaterial({ transparent: true, opacity: 0 });
-
                     updateModel(geometry, [printMaterial, capMaterial, capMaterial]);
                     updateMaterialTransparency();
                     updateTextureScale();
@@ -425,7 +469,6 @@
             const imageData = ctx.getImageData(0, 0, w, h);
             const data = imageData.data;
             const profilePoints = [];
-
             let overallMaxWidth = 0;
             for (let y = 0; y < h; y++) {
                 let minX = w, maxX = 0;
@@ -438,9 +481,7 @@
                 const widthAtY = maxX > minX ? maxX - minX : 0;
                 if (widthAtY > overallMaxWidth) overallMaxWidth = widthAtY;
             }
-
             if (overallMaxWidth === 0) return [];
-
             for (let y = 0; y < h; y++) {
                 let minX = w, maxX = 0;
                 for (let x = 0; x < w; x++) {
@@ -477,21 +518,16 @@
 
         function createGeometryFromProfile(profilePoints, aspectRatio) {
             if (profilePoints.length < 2) return null;
-            
             const MODEL_WIDTH = 2.5;
             const MODEL_HEIGHT = MODEL_WIDTH * aspectRatio;
-
             const lathePoints = profilePoints.map(p => new THREE.Vector2(p.x * (MODEL_WIDTH / 2), p.y * MODEL_HEIGHT));
-            
             if (lathePoints[0].x > 0.01) lathePoints.unshift(new THREE.Vector2(0, lathePoints[0].y));
             const last = lathePoints[lathePoints.length - 1];
             if (last.x > 0.01) lathePoints.push(new THREE.Vector2(0, last.y));
-            
             const geometry = new THREE.LatheGeometry(lathePoints, 128);
             geometry.clearGroups();
-            geometry.addGroup(0, Infinity, 0); // Materiał główny (zadruk)
-            geometry.addGroup(0, 1, 1); // Materiał na spód (przezroczysty)
-            geometry.addGroup(geometry.attributes.position.count - 2, 1, 2); // Materiał na górę (przezroczysty)
+            const bodyVertices = (geometry.attributes.position.count / (lathePoints.length * 2)) * (lathePoints.length - 2) * 2;
+            geometry.addGroup(0, Infinity, 0);
             return geometry;
         }
 
@@ -500,9 +536,13 @@
             if (bottleMesh) {
                 scene.remove(bottleMesh);
                 bottleMesh.geometry.dispose();
-                bottleMesh.material.forEach(m => m.dispose());
+                if (Array.isArray(bottleMesh.material)) {
+                    bottleMesh.material.forEach(m => m.dispose());
+                } else {
+                    bottleMesh.material.dispose();
+                }
             }
-            bottleMesh = new THREE.Mesh(geometry, materials);
+            bottleMesh = new THREE.Mesh(geometry, materials[0]); // Użyj tylko materiału druku
             bottleMesh.geometry.computeBoundingBox();
             const height = bottleMesh.geometry.boundingBox.max.y - bottleMesh.geometry.boundingBox.min.y;
             bottleMesh.position.y = -height / 2;
@@ -512,17 +552,17 @@
         function updateMaterialTransparency() {
             if (!bottleMesh) return;
             const isWhitePrint = document.getElementById('white-print-checkbox').checked;
-            bottleMesh.material[0].transparent = !isWhitePrint;
-            bottleMesh.material[0].alphaTest = isWhitePrint ? 0 : 0.1; 
-            bottleMesh.material[0].needsUpdate = true;
+            bottleMesh.material.transparent = !isWhitePrint;
+            bottleMesh.material.alphaTest = isWhitePrint ? 0 : 0.1; 
+            bottleMesh.material.needsUpdate = true;
         }
 
         function updateTextureScale() {
-            if (!bottleMesh || !bottleMesh.material[0].map) return;
+            if (!bottleMesh || !bottleMesh.material.map) return;
             const scale = document.getElementById('texture-scale-slider').value / 100;
-            bottleMesh.material[0].map.repeat.set(scale, scale);
-            bottleMesh.material[0].map.offset.set((1 - scale) / 2, (1 - scale) / 2);
-            bottleMesh.material[0].map.needsUpdate = true;
+            bottleMesh.material.map.repeat.set(scale, scale);
+            bottleMesh.material.map.offset.set((1 - scale) / 2, (1 - scale) / 2);
+            bottleMesh.material.map.needsUpdate = true;
         }
 
         function updateTextureUVs() {
@@ -531,19 +571,16 @@
             const uv = geometry.attributes.uv;
             const pos = geometry.attributes.position;
             const height = geometry.boundingBox.max.y - geometry.boundingBox.min.y;
-            
             const start = document.getElementById('texture-start-slider').value / 100;
             const end = document.getElementById('texture-end-slider').value / 100;
             const range = end - start;
             if (range <= 0) return;
-
             for (let i = 0; i < uv.count; i++) {
                 const y = (pos.getY(i) - geometry.boundingBox.min.y) / height;
                 uv.setY(i, (y - start) / range);
             }
             uv.needsUpdate = true;
         }
-
     </script>
 </body>
 </html>
