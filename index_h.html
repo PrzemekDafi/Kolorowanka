@@ -5,134 +5,282 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Personalizacja Produktów</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/dom-to-image/2.6.0/dom-to-image.min.js"></script>
     <style>
-        :root {
-            --panel-padding: 20px;
-            --container-gap: 15px;
-        }
         body {
             font-family: 'Poppins', sans-serif;
             display: flex;
             margin: 0;
+            padding: 0;
+            box-sizing: border-box;
             background-color: #f8f8f8;
             height: 100vh;
-            overflow: hidden;
         }
         .container {
             display: flex;
             width: 100%;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
             height: 100%;
-            padding: var(--container-gap);
-            box-sizing: border-box;
-            gap: var(--container-gap);
         }
         .image-column, .options-column {
+            flex: 1;
+            padding: 20px;
+            max-width: 900px;
+            min-width: auto;
+        }
+        .image-column, .image-column2 {
+            display: flex;
+            position: relative;
+            justify-content: center;
+            align-items: center;
             background-color: #fff;
             border-radius: 20px;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-            padding: var(--panel-padding);
-            display: flex;
-            flex-direction: column;
-            position: relative;
         }
-        .options-column {
-            flex-basis: 30%;
-            min-width: 320px;
-            max-width: 400px;
-            overflow-y: auto;
-        }
-        .image-column {
-            flex: 1;
-            justify-content: center;
-            align-items: center;
-            padding: 0;
+        @media (max-width: 768px) {
+            .image-column, .image-column2 {
+                width: 100%;
+                height: auto;
+                justify-content: center;
+            }
+            .image-column img, .image-column2 img {
+                width: 100%;
+                height: auto;
+                object-fit: contain;
+                justify-content: center;
+            }
         }
         .product-frame {
             position: relative;
             width: 100%;
-            height: 100%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            max-width: 900px;
+            min-width: 400px;
+            aspect-ratio: 1 / 1;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            border-radius: 20px;
+            overflow: hidden;
         }
         .image-wrapper {
             position: absolute;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
         }
         .image-wrapper img {
-            width: 100%; height: 100%;
+            width: 100%;
+            height: 100%;
             object-fit: contain;
-        }
-        #viewer-canvas {
-            display: none;
-            width: 100%; height: 100%;
             border-radius: 20px;
         }
-        .grawer-column, #zadruk3d-controls {
-            background-color: #fdfdfd;
-            padding: 20px;
-            margin: 20px 0 10px 0;
-            border-radius: 20px;
-            border: 1px solid #eee;
+        .color-input {
+            margin: 20px;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            gap: 10px;
         }
-        h1, h2, h3 {
+        .color-input label {
+            font-size: 16px;
             font-weight: 600;
             color: #333;
-            text-align: center;
+            margin-bottom: 8px;
         }
-        h1 { font-size: 1.2em; }
-        h2 { font-size: 1.1em; margin: 0 0 15px 0; }
-        h3 { font-size: 1em; margin-top: 20px; }
-        .input-group, .slider-group, .checkbox-group {
-            margin-top: 15px;
+        .product-select, {
+            margin-bottom: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
         }
-        label {
-            font-size: 14px;
-            color: #555;
-            margin-bottom: 5px;
-            display: block;
-        }
-        select, input[type="text"], input[type="range"], .btn, #saveBtn {
-            width: 100%;
-            padding: 10px;
+        .product-select label {
             font-size: 16px;
-            border-radius: 8px;
-            border: 1px solid #ccc;
-            box-sizing: border-box;
-        }
-        .btn, #saveBtn {
-            border: 2px solid #27ae60;
-            color: #27ae60;
-            background-color: white;
-            cursor: pointer;
-            transition: all 0.3s ease;
             font-weight: 600;
+            color: #333;
+            margin-bottom: 8px;
+        }
+        .grawer-column, #zadruk3d-controls {
+            justify-content: center;
+            align-items: center;
+            background-color: #fff;
+            padding: 20px;
+            margin: 10px 0 10px 0;
+            border-radius: 20px;
+            width: auto;
+        }
+        #file-upload {
+            font-size: 16px;
+            font-weight: 600;
+            color: #fff;
+            background-color: #28a745;
+            margin-bottom: 10px;
             margin-top: 10px;
         }
-        .btn:hover, #saveBtn:hover { background-color: #27ae60; color: white; }
-        .upload-btn-wrapper { position: relative; overflow: hidden; display: block; }
-        .upload-btn-wrapper input[type=file] {
-            position: absolute; left: 0; top: 0;
-            opacity: 0; width: 100%; height: 100%; cursor: pointer;
+        h1 {
+            font-size: 16px;
+            font-weight: 600;
+            color: #fff;
+            border-radius: 50px;
+            text-wrap: wrap;
+            background-color: #28a745;
+            padding: 15px;
+            width: 300px;
         }
-        .checkbox-group label {
-            display: flex; align-items: center; cursor: pointer;
+        .product-select,
+        .product-select, input {
+            padding: 10px;
+            font-size: 16px;
+            border-radius: 50px;
+            border: 1px solid #ccc;
+            width: 100%;
+            max-width: 300px;
+            box-sizing: border-box;
+            transition: all 0.3s ease;
         }
-        .checkbox-group input { margin-right: 10px; width: 18px; height: 18px; }
-        .personalization-choice { display: flex; gap: 10px; margin-top: 15px; }
+        .product-select select:focus,
+        .product-select input:focus {
+            border-color: #007bff;
+            outline: none;
+        }
+        .color-input select,
+        .color-input input {
+            padding: 10px;
+            font-size: 16px;
+            border-radius: 50px;
+            border: 1px solid #ccc;
+            width: 100%;
+            max-width: 300px;
+            box-sizing: border-box;
+            transition: all 0.3s ease;
+        }
+        .color-input select:focus,
+        .color-input input:focus {
+            border-color: #007bff;
+            outline: none;
+        }
+        .input-container {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        .color-input select {
+            background-color: #f9f9f9;
+        }
+        .input-container input {
+            background-color: #f9f9f9;
+            width: 100%;
+        }
+        .ok-button {
+            padding: 8px 16px;
+            font-size: 16px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .ok-button:hover {
+            background-color: #0056b3;
+        }
+        #saveBtn {
+            margin-top: 30px;
+            padding: 12px 24px;
+            font-size: 18px;
+            font-weight: 600;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        #saveBtn:hover {
+            background-color: #218838;
+        }
+        .error-message {
+            color: red;
+            font-size: 14px;
+            margin-top: 10px;
+        }
+        #loadingMessage {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            padding: 20px;
+            background-color: rgba(0, 0, 0, 0.8);
+            color: white;
+            font-size: 18px;
+            border-radius: 10px;
+            z-index: 1000;
+        }
+        .no-border-radius {
+            border-radius: 0 !important;
+        }
+        .select-colors {
+            background-color: #f0f0f0;
+            border: 1px solid #ccc;
+            padding: 5px;
+            font-size: 16px;
+            border-radius: 4px;
+            color: #333;
+            width: auto%;
+        }
+        #image-column {
+            position: relative;
+            min-width: 900px;
+            max-width: 900px;
+            min-height: 900px;
+            max-height: 900px;
+        }
+        #base-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 9999;
+        }
+        #overlay-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+            pointer-events: none;
+        }
+        /* Style dla kontrolek 3D */
+        #zadruk3d-controls { display: none; }
+        #personalization-options { display: none; margin-top: 15px; }
+        .personalization-choice { display: flex; gap: 10px; }
         .personalization-choice label { display: flex; align-items: center; gap: 5px; }
-        .color-input { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
-        .color-input label { flex-basis: 120px; flex-shrink: 0; }
-        .input-container { display: flex; flex-grow: 1; }
+        #viewer-canvas {
+            display: none;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
     </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dom-to-image/2.6.0/dom-to-image.min.js"></script>
 </head>
 <body>
     <div class="container">
+        <div class="image-column2" id="image-column2">
+            <canvas id="base-canvas" width="900px" height="900px" style="position: absolute; z-index: 1;"></canvas>
+            <canvas id="overlay-canvas" width="900px" height="900px" style="position: absolute; z-index: 1000;"></canvas>
+            <div class="image-column" id="image-column"></div>
+            <canvas id="viewer-canvas"></canvas>
+        </div>
+
         <div class="options-column">
-            <h2>Wybierz produkt i personalizację</h2>
-            <select id="product-select">
+            <h1>Nowości: GRAWER! + Dzbanki + Saturator butelka</h1>
+            <label for="product-select">Wybierz produkt:</label>
+            <select id="product-select" class="select-colors">
                 <option value="">Wybierz produkt</option>
                 <option value="crystal">Dzbanek Crystal Classic</option>
                 <option value="crystal_unimax">Dzbanek Crystal Unimax</option>
@@ -152,10 +300,9 @@
                 <option value="saturator_butelka_05">PushAir Butelka 0,5</option>
                 <option value="filtr_butelkowy">Filtr butelkowy</option>
             </select>
-
             <div id="color-options"></div>
 
-            <div id="personalization-options" style="display: none;">
+            <div id="personalization-options">
                 <h3>Typ personalizacji</h3>
                 <div class="personalization-choice">
                     <label><input type="radio" name="personalization" value="grawer" checked> Grawer</label>
@@ -163,145 +310,139 @@
                 </div>
             </div>
 
-            <div id="grawer-controls" class="grawer-column" style="display:none;">
-                <label for="file-upload">Wgraj grawer:</label>
+            <div class="grawer-column" id="grawer-controls">
+                <label for="file-upload"><b>NOWOŚĆ</b> Wgraj grawer:</label>
                 <input type="file" id="file-upload" accept="image/*">
-                <label for="rotate-slider">Obrót:</label>
+                <br>
+                <label for="rotate-slider">Obrót:</label><br>
                 <input type="range" id="rotate-slider" min="0" max="360" value="0">
-                <label for="vertical-slider">Przesunięcie w pionie:</label>
-                <input type="range" id="vertical-slider" min="-200" max="200" value="0">
-                <label for="horizontal-slider">Przesunięcie w poziomie:</label>
-                <input type="range" id="horizontal-slider" min="-200" max="200" value="0">
-                <label for="size-slider">Rozmiar obrazka:</label>
+                <br>
+                <label for="vertical-slider">Przesunięcie w pionie:</label><br>
+                <input type="range" id="vertical-slider" min="-200" max="200" value="0"><br>
+                <label for="horizontal-slider">Przesunięcie w poziomie:</label><br>
+                <input type="range" id="horizontal-slider" min="-200" max="200" value="0"><br>
+                <label for="size-slider">Rozmiar obrazka:</label><br>
                 <input id="size-slider" type="range" min="10" max="100" value="80">
             </div>
 
-            <div id="zadruk3d-controls" style="display: none;">
+            <div id="zadruk3d-controls">
                 <h3>Ustawienia nadruku 3D</h3>
-                <div class="input-group">
-                    <div class="upload-btn-wrapper">
-                        <button class="btn">Wgraj plik z nadrukiem</button>
-                        <input type="file" id="texture-uploader" accept="image/*" />
-                    </div>
+                <div class="upload-btn-wrapper">
+                    <button class="btn">Wgraj plik z nadrukiem</button>
+                    <input type="file" id="texture-uploader" accept="image/*" />
                 </div>
                 <div class="checkbox-group">
-                     <label for="white-print-checkbox">
-                        <input type="checkbox" id="white-print-checkbox">
-                        Biały zadruk (pełne krycie)
-                    </label>
+                     <label><input type="checkbox" id="white-print-checkbox"> Biały zadruk (pełne krycie)</label>
                 </div>
                  <div class="slider-group">
-                    <label for="texture-scale-slider">Skala nadruku</label>
+                    <label>Skala nadruku</label>
                     <input type="range" id="texture-scale-slider" min="50" max="200" value="100" />
                 </div>
                 <div class="slider-group">
-                    <label for="texture-start-slider">Początek nadruku (od dołu)</label>
+                    <label>Początek nadruku (od dołu)</label>
                     <input type="range" id="texture-start-slider" min="0" max="100" value="2" />
                 </div>
                 <div class="slider-group">
-                    <label for="texture-end-slider">Koniec nadruku (do góry)</label>
+                    <label>Koniec nadruku (do góry)</label>
                     <input type="range" id="texture-end-slider" min="0" max="100" value="98" />
                 </div>
             </div>
-            <button id="saveBtn">Zapisz jako JPG</button>
-        </div>
 
-        <div class="image-column">
-            <div class="product-frame" id="product-frame">
-                <div id="2d-view" class="image-wrapper"></div>
-                <canvas id="viewer-canvas"></canvas>
+            <div>
+                <button id="saveBtn">Zapisz jako JPG</button>
             </div>
         </div>
+        <div id="loadingMessage">Trwa zapis obrazu, proszę czekać...</div>
     </div>
-
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const products = {
-                astra_classic: { elements: ['pokrywka','raczka', 'zbiornik'] },
-                crystal: { elements: ['pokrywka', 'obudowa', 'raczka', 'zbiornik'] },
-                crystal_unimax: { elements: ['pokrywka', 'obudowa', 'raczka', 'zbiornik'] },
-                butelka_soft_05l: { elements: ['ustnik', 'zakretka_z_gumka', 'filtr'] },
-                butelka_solid_05l: { elements: ['elastometr', 'elastometr_uchwyty', 'przycisk', 'zakretka_dol', 'zakretka_gora', 'filtr', 'zbiornik'] },
-                butelka_solid_07l: { elements: ['elastometr', 'elastometr_uchwyty', 'przycisk', 'zakretka_dol', 'zakretka_gora', 'zbiornik_solid', 'rurka'] },
-                butelka_solid_steel_07l: { elements: ['elastometr', 'elastometr_uchwyty', 'przycisk', 'zakretka_dol', 'zakretka_gora','zbiornik_solid_steel'] },
-                shape_t: { elements: ['zakretka_shape', 'uszczelka_shape', 'wewnetrzna_gumka'] },
-                shape: { elements: ['shape_zbiornik', 'zakretka_shape', 'uszczelka_shape', 'wewnetrzna_gumka'] },
-                bidon_twist: { elements: ['twist-ustnik', 'twist_zakretka', 'twist_zakretka-dol', 'twist_zbiornik'] },
-                bidon_klasyczny: { elements: ['bidon_zatyczka', 'bidon_zakretka', 'bidon_zbiornik'] },
-                self: { 
-                    elements: ['self_zakretka', 'self_zatyczka', 'self-zbiornik-wewnetrzny', 'self-zbiornik-zewnetrzny'],
-                    aspectRatio: 762 / 257
-                },
-                easy: { elements: ['elastometr', 'sama_gora_zakretki', 'zbiornik', 'gora_zakretki', 'guma_zakretki'] },
-                saturator: { elements: ['saturator_gora_korpus', 'saturator_butelka', 'satuator_korpus', 'przycisk_saturatora', 'saturator_gora_klapka', 'pushair_logo'] },
-                saturator_butelka: { elements: ['zakretka', 'dol'] },
-                saturator_butelka_05: { elements: ['zakretka', 'dol'] },
-                filtr_butelkowy: { elements: ['filtr'] },
-            };
-            const colors = { Antracytowy_Czarny: '#161616', Arctic_Blue: '#95d6dc', Baby_Pink: '#F4C2C2', Barbie: '#e0218a', Biały: '#ffffff', Bursztynowy: '#ed7e2a', Butter_Yellow: '#FFECB5', Cappuccino_Pantone_4775C: '#D7C4B7', Clicks: '#C4D600', Cobblestone: '#a99b8f', Cornflower_Blue: '#7391c9', Cytrynowy: '#F3E500', Dove_Blue: '#A4BCC2', Flamingowy: '#f04e98', FCB_Bordowy: '#a31d45', FCB_Granatowy: '#1d3874', FCB_Żółty: '#ffc836', Gardenia: '#f0e9e0', Jeansowy: '#7b879e', Lavender: '#afa4ce', Lazurowy_Pantone_7542C: '#A4BCC2', Makowy: '#E4002B', Mandarynkowy: '#FF8200', Miętowy_Dafi: '#88DBDF', Miętowy_Pantone_5507C: '#9db0ac', Mocha_Mousse_Pantone: '#a47764', Niebiański: '#6CACE4', Peach: '#f5c09e', Piaskowy_Pantone_Warm_Gray: '#CBC4BC', Pistachio: '#d4eb8e', Rose_Tan: '#d29d98', Różany: '#ffc0cb', Srebrny: '#d4d4d4', Stalowy_Dafi: '#768692', Stalowy_Pantone_430C: '#7C878E', Szafirowy: '#355ca8', Szałwiowy_Pantone_5615C: '#5e7461', Tendril: '#899f6a', Turkusowy: '#58c4c5', Waniliowy: '#fdd26e', Willow: '#9a8b4f', Wrzosowy: '#A7A4E0', Viola: '#a793b8', Złoty: '#D1B464' };
-            let originalImages = {};
+        const products = {
+            astra_classic: { elements: ['pokrywka','raczka', 'zbiornik'] },
+            crystal: { elements: ['pokrywka', 'obudowa', 'raczka', 'zbiornik'] },
+            crystal_unimax: { elements: ['pokrywka', 'obudowa', 'raczka', 'zbiornik'] },
+            butelka_soft_03l: { elements: ['ustnik', 'zakretka_z_gumka', 'filtr'] },
+            butelka_soft_05l: { elements: ['ustnik', 'zakretka_z_gumka', 'filtr'] },
+            butelka_soft_07l: { elements: ['ustnik', 'zakretka_z_gumka', 'filtr'] },
+            butelka_solid_05l: { elements: ['elastometr', 'elastometr_uchwyty', 'przycisk', 'zakretka_dol', 'zakretka_gora', 'filtr', 'zbiornik',] },
+            butelka_solid_07l: { elements: ['elastometr', 'elastometr_uchwyty', 'przycisk', 'zakretka_dol', 'zakretka_gora', 'zbiornik_solid', 'rurka'] },
+            butelka_solid_steel_07l: { elements: ['elastometr', 'elastometr_uchwyty', 'przycisk', 'zakretka_dol', 'zakretka_gora','zbiornik_solid_steel'] },
+            shape_t: { elements: ['zakretka_shape', 'uszczelka_shape', 'wewnetrzna_gumka'] },
+            shape: { elements: ['shape_zbiornik', 'zakretka_shape', 'uszczelka_shape', 'wewnetrzna_gumka'] },
+            bidon_twist: { elements: ['twist-ustnik', 'twist_zakretka', 'twist_zakretka-dol', 'twist_zbiornik'] },
+            bidon_klasyczny: { elements: ['bidon_zatyczka', 'bidon_zakretka', 'bidon_zbiornik'] },
+            self: { 
+                elements: ['self_zakretka', 'self_zatyczka', 'self-zbiornik-wewnetrzny', 'self-zbiornik-zewnetrzny'],
+                aspectRatio: 762 / 257
+            },
+            easy: { elements: ['elastometr', 'sama_gora_zakretki', 'zbiornik', 'gora_zakretki', 'guma_zakretki'] },
+            saturator: { elements: ['saturator_gora_korpus', 'saturator_butelka', 'satuator_korpus', 'przycisk_saturatora', 'saturator_gora_klapka', 'pushair_logo'] },
+            saturator_butelka: { elements: ['zakretka', 'dol'] },
+            saturator_butelka_05: { elements: ['zakretka', 'dol'] },
+            filtr_butelkowy: { elements: ['filtr'] },
+        };
+        const colors = { Antracytowy_Czarny: '#161616', Arctic_Blue: '#95d6dc', Baby_Pink: '#F4C2C2', Barbie: '#e0218a', Biały: '#ffffff', Bursztynowy: '#ed7e2a', Butter_Yellow: '#FFECB5', Cappuccino_Pantone_4775C: '#D7C4B7', Clicks: '#C4D600', Cobblestone: '#a99b8f', Cornflower_Blue: '#7391c9', Cytrynowy: '#F3E500', Dove_Blue: '#A4BCC2', Flamingowy: '#f04e98', FCB_Bordowy: '#a31d45', FCB_Granatowy: '#1d3874', FCB_Żółty: '#ffc836', Gardenia: '#f0e9e0', Jeansowy: '#7b879e', Lavender: '#afa4ce', Lazurowy_Pantone_7542C: '#A4BCC2', Makowy: '#E4002B', Mandarynkowy: '#FF8200', Miętowy_Dafi: '#88DBDF', Miętowy_Pantone_5507C: '#9db0ac', Mocha_Mousse_Pantone: '#a47764', Niebiański: '#6CACE4', Peach: '#f5c09e', Piaskowy_Pantone_Warm_Gray: '#CBC4BC', Pistachio: '#d4eb8e', Rose_Tan: '#d29d98', Różany: '#ffc0cb', Srebrny: '#d4d4d4', Stalowy_Dafi: '#768692', Stalowy_Pantone_430C: '#7C878E', Szafirowy: '#355ca8', Szałwiowy_Pantone_5615C: '#5e7461', Tendril: '#899f6a', Turkusowy: '#58c4c5', Waniliowy: '#fdd26e', Willow: '#9a8b4f', Wrzosowy: '#A7A4E0', Viola: '#a793b8', Złoty: '#D1B464' };
+        let originalImages = {};
 
-            const productSelect = document.getElementById('product-select');
+        document.getElementById('product-select').addEventListener('change', function () {
+            const product = this.value;
             const colorOptions = document.getElementById('color-options');
-            const view2D = document.getElementById('2d-view');
-            const viewerCanvas = document.getElementById('viewer-canvas');
+            const imageColumn = document.getElementById('image-column');
             const personalizationOptions = document.getElementById('personalization-options');
             const grawerControls = document.getElementById('grawer-controls');
             const zadruk3dControls = document.getElementById('zadruk3d-controls');
+            const viewerCanvas = document.getElementById('viewer-canvas');
 
-            productSelect.addEventListener('change', function() {
-                const productKey = this.value;
-                const productData = products[productKey];
-                
-                colorOptions.innerHTML = '';
-                view2D.innerHTML = '';
-                viewerCanvas.style.display = 'none';
-                personalizationOptions.style.display = 'none';
-                grawerControls.style.display = 'none';
-                zadruk3dControls.style.display = 'none';
-                originalImages = {};
+            colorOptions.innerHTML = '';
+            imageColumn.innerHTML = '';
+            originalImages = {};
+            personalizationOptions.style.display = 'none';
+            grawerControls.style.display = 'none';
+            zadruk3dControls.style.display = 'none';
+            viewerCanvas.style.display = 'none';
 
-                if (!productData) return;
+            if (product && products[product]) {
+                const productFrame = document.createElement('div');
+                productFrame.className = 'product-frame';
+                productFrame.style.backgroundImage = `url('images/${product}.jpg')`;
+                imageColumn.appendChild(productFrame);
 
-                productData.elements.forEach((element, index) => {
+                products[product].elements.forEach((element, index) => {
                     const wrapper = document.createElement('div');
                     wrapper.className = 'image-wrapper';
                     wrapper.style.zIndex = index + 1;
                     const img = document.createElement('img');
-                    img.src = `images/${productKey}/${element}.png`;
+                    img.src = `images/${product}/${element}.png`;
                     img.alt = element;
                     img.id = `${element}-img`;
                     img.crossOrigin = "Anonymous";
                     wrapper.appendChild(img);
-                    view2D.appendChild(wrapper);
+                    productFrame.appendChild(wrapper);
                     originalImages[element] = img.src;
 
                     const colorInput = document.createElement('div');
                     colorInput.className = 'color-input';
                     colorInput.innerHTML = `
                         <label for="${element}-color">${element}:</label>
+                        <select id="${element}-color">
+                            <option value="">Wybierz kolor</option>
+                            ${Object.keys(colors).map(color => `<option value="${colors[color]}">${color}</option>`).join('')}
+                        </select>
                         <div class="input-container">
-                            <input type="color" id="${element}-picker" value="#ffffff" style="flex-shrink: 0; width: 40px; padding: 0; border: none;">
-                            <input type="text" id="${element}-hex" placeholder="#FFFFFF">
+                            <input type="text" id="${element}-hex" placeholder="Kolor HEX">
                         </div>`;
                     colorOptions.appendChild(colorInput);
 
-                    const colorPicker = document.getElementById(`${element}-picker`);
+                    const selectElement = document.getElementById(`${element}-color`);
                     const hexInput = document.getElementById(`${element}-hex`);
-                    colorPicker.addEventListener('input', () => {
-                        hexInput.value = colorPicker.value.toUpperCase();
-                        colorizeImage(element, colorPicker.value);
+                    selectElement.addEventListener('change', function () {
+                        hexInput.value = '';
+                        handleColorChange(element, selectElement.value, hexInput.value);
                     });
-                    hexInput.addEventListener('input', () => {
-                        if (/^#([0-9A-F]{3}){1,2}$/i.test(hexInput.value)) {
-                            colorPicker.value = hexInput.value;
-                            colorizeImage(element, hexInput.value);
-                        }
+                    hexInput.addEventListener('input', function () {
+                        handleColorChange(element, selectElement.value, hexInput.value);
                     });
                 });
-                view2D.style.display = 'block';
 
-                const maskUrl = `images/${productKey}/zadruk.png`;
+                const maskUrl = `images/${product}/zadruk.png`;
                 checkResourceExists(maskUrl).then(exists => {
                     if (exists) {
                         personalizationOptions.style.display = 'block';
@@ -311,80 +452,192 @@
                         grawerControls.style.display = 'block';
                     }
                 });
-            });
+            }
+        });
 
-            document.querySelectorAll('input[name="personalization"]').forEach(radio => {
-                radio.addEventListener('change', function() {
-                    const is3d = this.value === 'zadruk3d';
-                    grawerControls.style.display = is3d ? 'none' : 'block';
-                    zadruk3dControls.style.display = is3d ? 'block' : 'none';
-                    viewerCanvas.style.display = 'none';
-                    view2D.style.display = 'block';
+        function handleColorChange(element, selectedColor, hexValue) {
+            let color = selectedColor;
+            if (hexValue && isValidHex(hexValue)) {
+                color = `#${hexValue.startsWith('#') ? hexValue.slice(1) : hexValue}`;
+            } else if (!selectedColor && !isValidHex(hexValue)) {
+                color = colors['Biały'];
+            }
+            colorizeImage(element, color);
+        }
+
+        function isValidHex(hex) {
+            return /^([0-9A-F]{3}){1,2}$/i.test(hex.replace("#", ""));
+        }
+
+        function colorizeImage(element, color) {
+            const img = document.getElementById(`${element}-img`);
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            const newImg = new Image();
+            newImg.src = originalImages[element];
+            newImg.crossOrigin = 'anonymous';
+            newImg.onload = function () {
+                canvas.width = newImg.width;
+                canvas.height = newImg.height;
+                ctx.drawImage(newImg, 0, 0);
+                const rgb = hexToRgb(color);
+                if (!rgb) return;
+                ctx.globalCompositeOperation = 'multiply';
+                ctx.fillStyle = color;
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                ctx.globalCompositeOperation = 'destination-in';
+                ctx.drawImage(newImg, 0, 0);
+                img.src = canvas.toDataURL();
+            };
+        }
+
+        function hexToRgb(hex) {
+            const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+            return result ? { r: parseInt(result[1], 16), g: parseInt(result[2], 16), b: parseInt(result[3], 16) } : null;
+        }
+
+        document.getElementById('saveBtn').addEventListener('click', function() {
+            const element = document.getElementById('image-column2');
+            const loadingMessage = document.getElementById('loadingMessage');
+            loadingMessage.style.display = 'block';
+            element.classList.add('no-border-radius');
+            const selectedProduct = document.getElementById('product-select').value || 'produkt';
+            const now = new Date();
+            const timestamp = now.toISOString().replace(/[:.]/g, '-');
+            domtoimage.toJpeg(element, { quality: 0.95 })
+                .then(function(dataUrl) {
+                    const link = document.createElement('a');
+                    link.download = `${selectedProduct}_${timestamp}.jpg`;
+                    link.href = dataUrl;
+                    link.click();
+                    loadingMessage.style.display = 'none';
+                    alert('Obraz został zapisany.');
+                    element.classList.remove('no-border-radius');
+                })
+                .catch(function(error) {
+                    console.error('Błąd podczas generowania obrazu:', error);
+                    loadingMessage.style.display = 'none';
+                    alert('Wystąpił błąd podczas zapisywania obrazu.');
+                    element.classList.remove('no-border-radius');
                 });
-            });
+        });
 
-            document.getElementById('texture-uploader').addEventListener('change', (event) => {
-                const productKey = productSelect.value;
-                const product = products[productKey];
-                if (!product || !event.target.files[0]) return;
-                
-                view2D.style.display = 'none';
-                viewerCanvas.style.display = 'block';
-                window.dispatchEvent(new CustomEvent('init3D', { 
-                    detail: { 
-                        file: event.target.files[0],
-                        maskUrl: `images/${productKey}/zadruk.png`,
-                        aspectRatio: product.aspectRatio || (762 / 257)
-                    }
-                }));
-            });
-            
-            function colorizeImage(element, color) {
-                const img = document.getElementById(`${element}-img`);
-                const canvas = document.createElement('canvas');
-                const ctx = canvas.getContext('2d');
-                const originalImg = new Image();
-                originalImg.crossOrigin = "Anonymous";
-                originalImg.src = originalImages[element];
-                originalImg.onload = () => {
-                    canvas.width = originalImg.width;
-                    canvas.height = originalImg.height;
-                    ctx.drawImage(originalImg, 0, 0);
-                    const rgb = hexToRgb(color);
-                    if (!rgb) return;
-                    ctx.globalCompositeOperation = 'multiply';
-                    ctx.fillStyle = color;
-                    ctx.fillRect(0, 0, canvas.width, canvas.height);
-                    ctx.globalCompositeOperation = 'destination-in';
-                    ctx.drawImage(originalImg, 0, 0);
-                    img.src = canvas.toDataURL();
+        const baseCanvas = document.getElementById('base-canvas');
+        const overlayCanvas = document.getElementById('overlay-canvas');
+        const baseCtx = baseCanvas.getContext('2d');
+        const overlayCtx = overlayCanvas.getContext('2d');
+        const fileUpload = document.getElementById('file-upload');
+        const rotateSlider = document.getElementById('rotate-slider');
+        const verticalSlider = document.getElementById('vertical-slider');
+        const horizontalSlider = document.getElementById('horizontal-slider');
+        const sizeSlider = document.getElementById('size-slider');
+        let image = new Image();
+        let rotation = 0;
+        let verticalOffset = 0;
+        let horizontalOffset = 0;
+        let scale = 0.2;
+
+        function drawOverlayImage() {
+            overlayCtx.clearRect(0, 0, overlayCanvas.width, overlayCanvas.height);
+            const centerX = overlayCanvas.width / 2 + horizontalOffset;
+            const centerY = overlayCanvas.height / 2 + verticalOffset;
+            overlayCtx.save();
+            overlayCtx.translate(centerX, centerY);
+            overlayCtx.rotate((rotation * Math.PI) / 180);
+            overlayCtx.translate(-centerX, -centerY);
+            const maxWidth = 800 * scale;
+            const maxHeight = 800 * scale;
+            const aspectRatio = image.width / image.height;
+            let width, height;
+            if (aspectRatio > 1) {
+                width = maxWidth;
+                height = maxWidth / aspectRatio;
+                if (height > maxHeight) {
+                    height = maxHeight;
+                    width = maxHeight * aspectRatio;
+                }
+            } else {
+                height = maxHeight;
+                width = maxHeight * aspectRatio;
+                if (width > maxWidth) {
+                    width = maxWidth;
+                    height = maxWidth / aspectRatio;
+                }
+            }
+            overlayCtx.drawImage(image, centerX - width / 2, centerY - height / 2, width, height);
+            overlayCtx.restore();
+        }
+
+        fileUpload.addEventListener('change', (event) => {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    image.src = e.target.result;
+                    image.onload = () => { drawOverlayImage(); };
                 };
+                reader.readAsDataURL(file);
             }
-            
-            function hexToRgb(hex) {
-                const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-                return result ? { r: parseInt(result[1], 16), g: parseInt(result[2], 16), b: parseInt(result[3], 16) } : null;
-            }
+        });
+        rotateSlider.addEventListener('input', (event) => {
+            rotation = parseInt(event.target.value, 10);
+            drawOverlayImage();
+        });
+        horizontalSlider.addEventListener('input', (event) => {
+            horizontalOffset = parseInt(event.target.value, 10);
+            drawOverlayImage();
+        });
+        verticalSlider.addEventListener('input', (event) => {
+            verticalOffset = parseInt(event.target.value, 10);
+            drawOverlayImage();
+        });
+        sizeSlider.addEventListener('input', (event) => {
+            scale = parseInt(event.target.value, 10) / 80;
+            drawOverlayImage();
+        });
+        
+        function checkResourceExists(url) {
+            return new Promise(resolve => {
+                const img = new Image();
+                img.onload = () => resolve(true);
+                img.onerror = () => resolve(false);
+                img.src = url;
+            });
+        }
+        
+        document.querySelectorAll('input[name="personalization"]').forEach(radio => {
+            radio.addEventListener('change', function() {
+                const is3d = this.value === 'zadruk3d';
+                document.getElementById('grawer-controls').style.display = is3d ? 'none' : 'block';
+                document.getElementById('zadruk3d-controls').style.display = is3d ? 'block' : 'none';
+                document.getElementById('viewer-canvas').style.display = 'none';
+                document.getElementById('image-column').style.display = 'block';
+            });
+        });
 
-            function checkResourceExists(url) {
-                return new Promise(resolve => {
-                    const img = new Image();
-                    img.onload = () => resolve(true);
-                    img.onerror = () => resolve(false);
-                    img.src = url;
-                });
-            }
+        document.getElementById('texture-uploader').addEventListener('change', (event) => {
+            const productKey = document.getElementById('product-select').value;
+            const product = products[productKey];
+            if (!product || !event.target.files[0]) return;
+            
+            document.getElementById('image-column').style.display = 'none';
+            document.getElementById('viewer-canvas').style.display = 'block';
+            window.dispatchEvent(new CustomEvent('init3D', { 
+                detail: { 
+                    file: event.target.files[0],
+                    maskUrl: `images/${productKey}/zadruk.png`,
+                    aspectRatio: product.aspectRatio || (762 / 257)
+                }
+            }));
         });
     </script>
     
     <script type="importmap">
         { "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.164.1/build/three.module.js", "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.164.1/examples/jsm/" } }
     </script>
-
     <script type="module">
         import * as THREE from 'three';
         import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
-
         let scene, camera, renderer, controls, bottleMesh;
         
         window.addEventListener('init3D', (e) => {
@@ -393,7 +646,6 @@
             reader.onload = (event) => generateModelAndApplyTexture(event.target.result, maskUrl, aspectRatio);
             reader.readAsDataURL(file);
         });
-
         function setup3DViewer() {
             if (scene) {
                 while(scene.children.length > 0){ scene.remove(scene.children[0]); }
@@ -433,7 +685,6 @@
             }
         }
         animate();
-
         function generateModelAndApplyTexture(textureDataUrl, maskUrl, aspectRatio) {
             setup3DViewer();
             const maskImage = new Image();
@@ -498,7 +749,6 @@
             }
             return profilePoints;
         }
-
         function smoothProfile(points, windowSize) {
             if (points.length < windowSize) return points;
             const smoothed = [];
@@ -515,7 +765,6 @@
             }
             return smoothed;
         }
-
         function createGeometryFromProfile(profilePoints, aspectRatio) {
             if (profilePoints.length < 2) return null;
             const MODEL_WIDTH = 2.5;
@@ -530,7 +779,6 @@
             geometry.addGroup(0, Infinity, 0);
             return geometry;
         }
-
         function updateModel(geometry, materials) {
             if (!geometry || !materials) return;
             if (bottleMesh) {
@@ -542,7 +790,7 @@
                     bottleMesh.material.dispose();
                 }
             }
-            bottleMesh = new THREE.Mesh(geometry, materials[0]); // Użyj tylko materiału druku
+            bottleMesh = new THREE.Mesh(geometry, materials[0]);
             bottleMesh.geometry.computeBoundingBox();
             const height = bottleMesh.geometry.boundingBox.max.y - bottleMesh.geometry.boundingBox.min.y;
             bottleMesh.position.y = -height / 2;
@@ -556,7 +804,6 @@
             bottleMesh.material.alphaTest = isWhitePrint ? 0 : 0.1; 
             bottleMesh.material.needsUpdate = true;
         }
-
         function updateTextureScale() {
             if (!bottleMesh || !bottleMesh.material.map) return;
             const scale = document.getElementById('texture-scale-slider').value / 100;
@@ -564,7 +811,6 @@
             bottleMesh.material.map.offset.set((1 - scale) / 2, (1 - scale) / 2);
             bottleMesh.material.map.needsUpdate = true;
         }
-
         function updateTextureUVs() {
             if (!bottleMesh) return;
             const geometry = bottleMesh.geometry;
@@ -583,4 +829,4 @@
         }
     </script>
 </body>
-</html>
+</ht
