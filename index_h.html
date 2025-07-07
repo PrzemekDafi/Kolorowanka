@@ -376,7 +376,7 @@
             bidon_twist: { elements: ['twist-ustnik', 'twist_zakretka', 'twist_zakretka-dol', 'twist_zbiornik'] },
             bidon_klasyczny: { elements: ['bidon_zatyczka', 'bidon_zakretka', 'bidon_zbiornik'] },
             self: { 
-                elements: ['self_zakretka', 'self_zatyczka', 'self-zbiornik-wewnetrzny', 'self-zbiornik-zewnetrzny', 'zadruk'],
+                elements: ['self_zakretka', 'self_zatyczka', 'self-zbiornik-wewnetrzny', 'self-zbiornik-zewnetrzny'],
                 aspectRatio: 762 / 257
             },
             easy: { elements: ['elastometr', 'sama_gora_zakretki', 'zbiornik', 'gora_zakretki', 'guma_zakretki'] },
@@ -415,6 +415,7 @@
                 imageColumn.appendChild(productFrame);
 
                 products[product].elements.forEach((element, index) => {
+                    if (element === 'zadruk') return; // Nie wyświetlaj warstwy 'zadruk'
                     const wrapper = document.createElement('div');
                     wrapper.className = 'image-wrapper';
                     wrapper.style.zIndex = index + 1;
@@ -609,14 +610,14 @@
                 document.getElementById('zadruk3d-controls').style.display = is3d ? 'block' : 'none';
                 
                 const viewerCanvas = document.getElementById('viewer-canvas');
-                const zadrukImg = document.getElementById('zadruk-img');
+                const productFrame = document.getElementById('product-frame-2d');
                 
                 if (is3d) {
-                    if (zadrukImg) zadrukImg.style.display = 'none';
-                    viewerCanvas.style.display = 'none'; // Pokaż dopiero po wgraniu tekstury
+                    if (productFrame) productFrame.style.visibility = 'hidden';
+                    viewerCanvas.style.display = 'none';
                     viewerCanvas.classList.remove('active');
                 } else {
-                    if (zadrukImg) zadrukImg.style.display = 'block';
+                    if (productFrame) productFrame.style.visibility = 'visible';
                     viewerCanvas.style.display = 'none';
                     viewerCanvas.classList.remove('active');
                 }
@@ -631,9 +632,6 @@
             const viewerCanvas = document.getElementById('viewer-canvas');
             viewerCanvas.style.display = 'block';
             viewerCanvas.classList.add('active');
-
-            const zadrukImg = document.getElementById('zadruk-img');
-            if(zadrukImg) zadrukImg.style.display = 'none';
             
             window.dispatchEvent(new CustomEvent('init3D', { 
                 detail: { 
@@ -837,4 +835,4 @@
         }
     </script>
 </body>
-</html>
+</ht
