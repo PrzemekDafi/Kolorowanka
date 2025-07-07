@@ -271,6 +271,24 @@
         #viewer-canvas.active {
             pointer-events: auto; /* Aktywuj interakcję z canvasem 3D */
         }
+        .gemini-feature {
+            margin-top: 20px;
+            border-top: 1px solid #eee;
+            padding-top: 20px;
+        }
+        .gemini-btn {
+            background: linear-gradient(45deg, #4285F4, #9b72cb);
+            color: white;
+            border: none;
+        }
+        .gemini-btn:hover {
+            opacity: 0.9;
+        }
+        .loader {
+            text-align: center;
+            padding: 10px;
+            display: none;
+        }
     </style>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/dom-to-image/2.6.0/dom-to-image.min.js"></script>
@@ -331,6 +349,16 @@
                 <input type="range" id="horizontal-slider" min="-200" max="200" value="0"><br>
                 <label for="size-slider">Rozmiar obrazka:</label><br>
                 <input id="size-slider" type="range" min="10" max="100" value="80">
+                <div class="gemini-feature">
+                    <button class="btn gemini-btn" id="show-text-gen-btn">✨ Zasugeruj tekst grawerunku</button>
+                    <div id="text-gen-container" style="display:none; margin-top:15px;">
+                        <label for="text-prompt">Podaj temat grawerunku:</label>
+                        <input type="text" id="text-prompt" placeholder="np. motywacja, miłość, sport">
+                        <button class="btn" id="generate-text-btn">Sugeruj</button>
+                        <div class="loader" id="text-loader">Myślę...</div>
+                        <div id="text-result" style="margin-top:10px; padding:10px; background-color:#f0f0f0; border-radius:8px; display:none;"></div>
+                    </div>
+                </div>
             </div>
 
             <div id="zadruk3d-controls" class="grawer-column">
@@ -338,6 +366,15 @@
                 <div class="upload-btn-wrapper">
                     <button class="btn">Wgraj plik z nadrukiem</button>
                     <input type="file" id="texture-uploader" accept="image/*" />
+                </div>
+                 <div class="gemini-feature">
+                    <button class="btn gemini-btn" id="show-image-gen-btn">✨ Wygeneruj obrazek z opisu</button>
+                    <div id="image-gen-container" style="display:none; margin-top:15px;">
+                        <label for="image-prompt">Opisz, co ma być na obrazku:</label>
+                        <input type="text" id="image-prompt" placeholder="np. biegnący tygrys w dżungli">
+                        <button class="btn" id="generate-image-btn">Generuj</button>
+                        <div class="loader" id="image-loader">Generowanie...</div>
+                    </div>
                 </div>
                 <div class="checkbox-group">
                      <label><input type="checkbox" id="white-print-checkbox"> Biały zadruk (pełne krycie)</label>
@@ -643,6 +680,81 @@
                 }
             }));
         });
+        
+        // --- Gemini API Features ---
+        document.getElementById('show-text-gen-btn').addEventListener('click', () => {
+            document.getElementById('text-gen-container').style.display = 'block';
+        });
+
+        document.getElementById('generate-text-btn').addEventListener('click', async () => {
+            const promptText = document.getElementById('text-prompt').value;
+            if (!promptText) {
+                alert('Podaj temat grawerunku.');
+                return;
+            }
+            const textLoader = document.getElementById('text-loader');
+            const textResult = document.getElementById('text-result');
+            textLoader.style.display = 'block';
+            textResult.style.display = 'none';
+
+            const fullPrompt = `Zasugeruj krótki tekst na grawerunek na butelce. Temat: ${promptText}. Tekst powinien być krótki, maksymalnie 10 słów, w języku polskim.`;
+            const payload = { contents: [{ role: "user", parts: [{ text: fullPrompt }] }] };
+            const apiKey = "";
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+
+            try {
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                const result = await response.json();
+                if (result.candidates && result.candidates.length > 0) {
+                    const text = result.candidates[0].content.parts[0].text;
+                    textResult.innerText = text;
+                    textResult.style.display = 'block';
+                } else {
+                    textResult.innerText = 'Nie udało się wygenerować tekstu. Spróbuj ponownie.';
+                    textResult.style.display = 'block';
+                }
+            } catch (error) {
+                console.error("Błąd Gemini API:", error);
+                textResult.innerText = 'Wystąpił błąd. Spróbuj ponownie.';
+                textResult.style.display = 'block';
+            } finally {
+                textLoader.style.display = 'none';
+            }
+        });
+        
+        document.getElementById('show-image-gen-btn').addEventListener('click', () => {
+            document.getElementById('image-gen-container').style.display = 'block';
+        });
+
+        document.getElementById('generate-image-btn').addEventListener('click', () => {
+            const prompt = document.getElementById('image-prompt').value;
+            if (!prompt) {
+                alert('Opisz, co ma być na obrazku.');
+                return;
+            }
+            const productKey = document.getElementById('product-select').value;
+            const product = products[productKey];
+            if (!product) return;
+
+            document.getElementById('image-loader').style.display = 'block';
+            
+            const viewerCanvas = document.getElementById('viewer-canvas');
+            viewerCanvas.style.display = 'block';
+            viewerCanvas.classList.add('active');
+
+            window.dispatchEvent(new CustomEvent('generateImage3D', {
+                detail: {
+                    prompt: prompt,
+                    maskUrl: `images/${productKey}/zadruk.png`,
+                    aspectRatio: product.aspectRatio || (762 / 257)
+                }
+            }));
+        });
+
     </script>
     
     <script type="importmap">
@@ -658,6 +770,33 @@
             const reader = new FileReader();
             reader.onload = (event) => generateModelAndApplyTexture(event.target.result, maskUrl, aspectRatio);
             reader.readAsDataURL(file);
+        });
+        
+        window.addEventListener('generateImage3D', async (e) => {
+            const { prompt, maskUrl, aspectRatio } = e.detail;
+            const payload = { instances: [{ prompt: prompt }], parameters: { "sampleCount": 1 } };
+            const apiKey = "";
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/imagen-3.0-generate-002:predict?key=${apiKey}`;
+
+            try {
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                const result = await response.json();
+                if (result.predictions && result.predictions[0].bytesBase64Encoded) {
+                    const imageUrl = `data:image/png;base64,${result.predictions[0].bytesBase64Encoded}`;
+                    generateModelAndApplyTexture(imageUrl, maskUrl, aspectRatio);
+                } else {
+                    alert('Nie udało się wygenerować obrazka.');
+                }
+            } catch (error) {
+                console.error("Błąd Gemini API:", error);
+                alert('Wystąpił błąd podczas generowania obrazka.');
+            } finally {
+                document.getElementById('image-loader').style.display = 'none';
+            }
         });
 
         function setup3DViewer() {
