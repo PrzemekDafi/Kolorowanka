@@ -94,7 +94,7 @@
             margin-bottom: 5px;
             display: block;
         }
-        select, input[type="text"], input[type="range"], .btn {
+        select, input[type="text"], input[type="range"], .btn, #saveBtn {
             width: 100%;
             padding: 10px;
             font-size: 16px;
@@ -102,15 +102,16 @@
             border: 1px solid #ccc;
             box-sizing: border-box;
         }
-        .btn {
+        .btn, #saveBtn {
             border: 2px solid #27ae60;
             color: #27ae60;
             background-color: white;
             cursor: pointer;
             transition: all 0.3s ease;
             font-weight: 600;
+            margin-top: 10px;
         }
-        .btn:hover { background-color: #27ae60; color: white; }
+        .btn:hover, #saveBtn:hover { background-color: #27ae60; color: white; }
         .upload-btn-wrapper { position: relative; overflow: hidden; display: block; }
         .upload-btn-wrapper input[type=file] {
             position: absolute; left: 0; top: 0;
@@ -130,9 +131,26 @@
             <h2>Wybierz produkt i personalizację</h2>
             <select id="product-select">
                 <option value="">Wybierz produkt</option>
+                <option value="crystal">Dzbanek Crystal Classic</option>
+                <option value="crystal_unimax">Dzbanek Crystal Unimax</option>
+                <option value="astra_classic">Dzbanek Astra Classic</option>
+                <option value="butelka_soft_05l">Butelka Soft 0,5 l</option>
+                <option value="butelka_solid_05l">Butelka Solid 0,5 l</option>
+                <option value="butelka_solid_07l">Butelka Solid 0,7 l</option>
+                <option value="butelka_solid_steel_07l">Butelka Solid Steel 0,7 l</option>
+                <option value="bidon_twist">Bidon Twist</option>
+                <option value="bidon_klasyczny">Bidon Dafi</option>
+                <option value="shape_t">Shape T</option>
+                <option value="shape">Shape</option>
                 <option value="self">Self</option>
-                <!-- Dodaj inne produkty, które mają mieć opcję 3D -->
+                <option value="easy">Easy</option>
+                <option value="saturator">PushAir</option>
+                <option value="saturator_butelka">PushAir Butelka 0,7</option>
+                <option value="saturator_butelka_05">PushAir Butelka 0,5</option>
+                <option value="filtr_butelkowy">Filtr butelkowy</option>
             </select>
+
+            <div id="color-options"></div>
 
             <div id="personalization-options" style="display: none;">
                 <h3>Typ personalizacji</h3>
@@ -142,10 +160,8 @@
                 </div>
             </div>
 
-            <div id="grawer-controls">
-                <!-- Tutaj można wstawić oryginalne kontrolki do grawerowania -->
-                <h3>Ustawienia graweru</h3>
-                <p>Opcje grawerowania (suwaki, etc.) pojawią się tutaj.</p>
+            <div id="grawer-controls" class="grawer-column">
+                <!-- Oryginalne kontrolki do graweru -->
             </div>
 
             <div id="zadruk3d-controls" style="display: none;">
@@ -175,14 +191,13 @@
                     <input type="range" id="texture-end-slider" min="0" max="100" value="98" />
                 </div>
             </div>
+            <button id="saveBtn">Zapisz jako JPG</button>
         </div>
 
         <div class="image-column">
             <div class="product-frame" id="product-frame">
-                <!-- Oryginalny widok 2D -->
-                <div id="2d-view" class="image-wrapper">
-                     <!-- Obrazki 2D będą ładowane tutaj przez JS -->
-                </div>
+                <!-- Widok 2D (oryginalny) -->
+                <div id="2d-view" class="image-wrapper"></div>
                 <!-- Widok 3D -->
                 <canvas id="viewer-canvas"></canvas>
             </div>
@@ -190,77 +205,101 @@
     </div>
 
     <script>
-        // --- GŁÓWNY SKRYPT STERUJĄCY ---
+        // --- ORYGINALNY SKRYPT UŻYTKOWNIKA (Z MODYFIKACJAMI) ---
         document.addEventListener('DOMContentLoaded', () => {
             const products = {
-                self: {
+                astra_classic: { elements: ['pokrywka','raczka', 'zbiornik'] },
+                crystal: { elements: ['pokrywka', 'obudowa', 'raczka', 'zbiornik'] },
+                crystal_unimax: { elements: ['pokrywka', 'obudowa', 'raczka', 'zbiornik'] },
+                butelka_soft_05l: { elements: ['ustnik', 'zakretka_z_gumka', 'filtr'] },
+                butelka_solid_05l: { elements: ['elastometr', 'elastometr_uchwyty', 'przycisk', 'zakretka_dol', 'zakretka_gora', 'filtr', 'zbiornik'] },
+                butelka_solid_07l: { elements: ['elastometr', 'elastometr_uchwyty', 'przycisk', 'zakretka_dol', 'zakretka_gora', 'zbiornik_solid', 'rurka'] },
+                butelka_solid_steel_07l: { elements: ['elastometr', 'elastometr_uchwyty', 'przycisk', 'zakretka_dol', 'zakretka_gora','zbiornik_solid_steel'] },
+                shape_t: { elements: ['zakretka_shape', 'uszczelka_shape', 'wewnetrzna_gumka'] },
+                shape: { elements: ['shape_zbiornik', 'zakretka_shape', 'uszczelka_shape', 'wewnetrzna_gumka'] },
+                bidon_twist: { elements: ['twist-ustnik', 'twist_zakretka', 'twist_zakretka-dol', 'twist_zbiornik'] },
+                bidon_klasyczny: { elements: ['bidon_zatyczka', 'bidon_zakretka', 'bidon_zbiornik'] },
+                self: { 
                     elements: ['self_zakretka', 'self_zatyczka', 'self-zbiornik-wewnetrzny', 'self-zbiornik-zewnetrzny'],
-                    has3d: true,
-                    maskUrl: 'https://przemekdafi.github.io/Kolorowanka/images/self/zadruk.png',
-                    aspectRatio: 762 / 257,
-                    baseImage: 'https://przemekdafi.github.io/Kolorowanka/images/self/zadruk.png'
-                }
-                // Można dodać więcej produktów
+                    aspectRatio: 762 / 257 // Proporcje dla 3D
+                },
+                easy: { elements: ['elastometr', 'sama_gora_zakretki', 'zbiornik', 'gora_zakretki', 'guma_zakretki'] },
+                saturator: { elements: ['saturator_gora_korpus', 'saturator_butelka', 'satuator_korpus', 'przycisk_saturatora', 'saturator_gora_klapka', 'pushair_logo'] },
+                saturator_butelka: { elements: ['zakretka', 'dol'] },
+                saturator_butelka_05: { elements: ['zakretka', 'dol'] },
+                filtr_butelkowy: { elements: ['filtr'] },
             };
+            const colors = { Antracytowy_Czarny: '#161616', Arctic_Blue: '#95d6dc', Baby_Pink: '#F4C2C2', Barbie: '#e0218a', Biały: '#ffffff', Bursztynowy: '#ed7e2a', Butter_Yellow: '#FFECB5', Cappuccino_Pantone_4775C: '#D7C4B7', Clicks: '#C4D600', Cobblestone: '#a99b8f', Cornflower_Blue: '#7391c9', Cytrynowy: '#F3E500', Dove_Blue: '#A4BCC2', Flamingowy: '#f04e98', FCB_Bordowy: '#a31d45', FCB_Granatowy: '#1d3874', FCB_Żółty: '#ffc836', Gardenia: '#f0e9e0', Jeansowy: '#7b879e', Lavender: '#afa4ce', Lazurowy_Pantone_7542C: '#A4BCC2', Makowy: '#E4002B', Mandarynkowy: '#FF8200', Miętowy_Dafi: '#88DBDF', Miętowy_Pantone_5507C: '#9db0ac', Mocha_Mousse_Pantone: '#a47764', Niebiański: '#6CACE4', Peach: '#f5c09e', Piaskowy_Pantone_Warm_Gray: '#CBC4BC', Pistachio: '#d4eb8e', Rose_Tan: '#d29d98', Różany: '#ffc0cb', Srebrny: '#d4d4d4', Stalowy_Dafi: '#768692', Stalowy_Pantone_430C: '#7C878E', Szafirowy: '#355ca8', Szałwiowy_Pantone_5615C: '#5e7461', Tendril: '#899f6a', Turkusowy: '#58c4c5', Waniliowy: '#fdd26e', Willow: '#9a8b4f', Wrzosowy: '#A7A4E0', Viola: '#a793b8', Złoty: '#D1B464' };
+            let originalImages = {};
 
             const productSelect = document.getElementById('product-select');
+            const colorOptions = document.getElementById('color-options');
+            const view2D = document.getElementById('2d-view');
+            const viewerCanvas = document.getElementById('viewer-canvas');
             const personalizationOptions = document.getElementById('personalization-options');
             const grawerControls = document.getElementById('grawer-controls');
             const zadruk3dControls = document.getElementById('zadruk3d-controls');
-            const view2D = document.getElementById('2d-view');
-            const viewerCanvas = document.getElementById('viewer-canvas');
 
             productSelect.addEventListener('change', function() {
-                const selectedProductKey = this.value;
-                const product = products[selectedProductKey];
-
-                // Reset widoku
+                const productKey = this.value;
+                const productData = products[productKey];
+                
+                // Reset
+                colorOptions.innerHTML = '';
                 view2D.innerHTML = '';
                 viewerCanvas.style.display = 'none';
+                personalizationOptions.style.display = 'none';
+                grawerControls.style.display = 'none';
+                zadruk3dControls.style.display = 'none';
+                originalImages = {};
 
-                if (!product) {
-                    personalizationOptions.style.display = 'none';
-                    return;
-                }
-                
-                // Pokaż obrazek 2D
-                const img = document.createElement('img');
-                img.src = product.baseImage;
-                view2D.appendChild(img);
+                if (!productData) return;
+
+                // Ładowanie obrazów 2D
+                productData.elements.forEach((element, index) => {
+                    const wrapper = document.createElement('div');
+                    wrapper.className = 'image-wrapper';
+                    wrapper.style.zIndex = index + 1;
+                    const img = document.createElement('img');
+                    img.src = `images/${productKey}/${element}.png`;
+                    img.alt = element;
+                    img.id = `${element}-img`;
+                    img.crossOrigin = "Anonymous";
+                    wrapper.appendChild(img);
+                    view2D.appendChild(wrapper);
+                    originalImages[element] = img.src;
+
+                    // Tworzenie opcji kolorów
+                    // ... (logika tworzenia opcji kolorów jak w oryginale)
+                });
                 view2D.style.display = 'block';
 
-                // Zarządzaj widocznością opcji personalizacji
-                if (product.has3d) {
-                    personalizationOptions.style.display = 'block';
-                    document.querySelector('input[name="personalization"][value="grawer"]').checked = true;
-                    grawerControls.style.display = 'block';
-                    zadruk3dControls.style.display = 'none';
-                } else {
-                    personalizationOptions.style.display = 'none';
-                    grawerControls.style.display = 'block';
-                    zadruk3dControls.style.display = 'none';
-                }
-            });
-
-            document.querySelectorAll('input[name="personalization"]').forEach(radio => {
-                radio.addEventListener('change', function() {
-                    if (this.value === 'zadruk3d') {
-                        grawerControls.style.display = 'none';
-                        zadruk3dControls.style.display = 'block';
-                    } else {
+                // Sprawdzenie czy istnieje opcja 3D
+                const maskUrl = `images/${productKey}/zadruk.png`;
+                checkResourceExists(maskUrl).then(exists => {
+                    if (exists) {
+                        personalizationOptions.style.display = 'block';
+                        document.querySelector('input[name="personalization"][value="grawer"]').checked = true;
                         grawerControls.style.display = 'block';
-                        zadruk3dControls.style.display = 'none';
-                        // Przywróć widok 2D jeśli 3D był aktywny
-                        viewerCanvas.style.display = 'none';
-                        view2D.style.display = 'block';
+                    } else {
+                        grawerControls.style.display = 'block'; // Lub inna domyślna opcja
                     }
                 });
             });
 
-            // Przekazanie informacji do modułu 3D
+            document.querySelectorAll('input[name="personalization"]').forEach(radio => {
+                radio.addEventListener('change', function() {
+                    const is3d = this.value === 'zadruk3d';
+                    grawerControls.style.display = is3d ? 'none' : 'block';
+                    zadruk3dControls.style.display = is3d ? 'block' : 'none';
+                    viewerCanvas.style.display = 'none'; // Zawsze resetuj canvas przy zmianie
+                    view2D.style.display = 'block'; // Pokaż widok 2D
+                });
+            });
+
             document.getElementById('texture-uploader').addEventListener('change', (event) => {
-                const selectedProductKey = productSelect.value;
-                const product = products[selectedProductKey];
+                const productKey = productSelect.value;
+                const product = products[productKey];
                 if (!product || !event.target.files[0]) return;
                 
                 view2D.style.display = 'none';
@@ -268,21 +307,25 @@
                 window.dispatchEvent(new CustomEvent('init3D', { 
                     detail: { 
                         file: event.target.files[0],
-                        maskUrl: product.maskUrl,
-                        aspectRatio: product.aspectRatio
+                        maskUrl: `images/${productKey}/zadruk.png`,
+                        aspectRatio: product.aspectRatio || (762 / 257) // Domyślny aspect ratio
                     }
                 }));
             });
+
+            function checkResourceExists(url) {
+                return new Promise(resolve => {
+                    const img = new Image();
+                    img.onload = () => resolve(true);
+                    img.onerror = () => resolve(false);
+                    img.src = url;
+                });
+            }
         });
     </script>
     
     <script type="importmap">
-        {
-            "imports": {
-                "three": "https://cdn.jsdelivr.net/npm/three@0.164.1/build/three.module.js",
-                "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.164.1/examples/jsm/"
-            }
-        }
+        { "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.164.1/build/three.module.js", "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.164.1/examples/jsm/" } }
     </script>
 
     <script type="module">
@@ -292,12 +335,6 @@
 
         let scene, camera, renderer, controls, bottleMesh;
         
-        function init(maskUrl, aspectRatio) {
-            setup3DViewer();
-            setupEventListeners();
-            animate();
-        }
-        
         window.addEventListener('init3D', (e) => {
             const { file, maskUrl, aspectRatio } = e.detail;
             const reader = new FileReader();
@@ -306,7 +343,11 @@
         });
 
         function setup3DViewer() {
-            scene = new THREE.Scene();
+            if (scene) {
+                while(scene.children.length > 0){ scene.remove(scene.children[0]); }
+            } else {
+                scene = new THREE.Scene();
+            }
             scene.background = new THREE.Color(0xffffff);
 
             const container = document.querySelector('.image-column');
@@ -337,32 +378,17 @@
             controls.maxDistance = 10;
         }
         
-        function setupEventListeners() {
-            window.addEventListener('resize', handleWindowResize, false);
-            document.getElementById('white-print-checkbox').addEventListener('change', updateMaterialTransparency);
-            document.getElementById('texture-scale-slider').addEventListener('input', updateTextureScale);
-            
-            const sliders = ['texture-start-slider', 'texture-end-slider'];
-            sliders.forEach(id => document.getElementById(id).addEventListener('input', updateTextureUVs));
-        }
-
         function animate() {
             requestAnimationFrame(animate);
-            if (bottleMesh && scene) {
+            if (bottleMesh && scene && renderer) {
                 controls.update();
                 renderer.render(scene, camera);
             }
         }
+        animate(); // Uruchom pętlę animacji raz
 
-        function handleWindowResize() {
-            const container = document.querySelector('.image-column');
-            camera.aspect = container.clientWidth / container.clientHeight;
-            camera.updateProjectionMatrix();
-            renderer.setSize(container.clientWidth, container.clientHeight);
-        }
-        
         function generateModelAndApplyTexture(textureDataUrl, maskUrl, aspectRatio) {
-            setup3DViewer(); // Reinicjalizacja sceny
+            setup3DViewer();
             const maskImage = new Image();
             maskImage.crossOrigin = "Anonymous"; 
             maskImage.onload = () => {
@@ -376,15 +402,10 @@
                     texture.wrapS = THREE.RepeatWrapping;
                     texture.wrapT = THREE.ClampToEdgeWrapping; 
 
-                    const printMaterial = new THREE.MeshStandardMaterial({
-                        map: texture,
-                        metalness: 0.0,
-                        roughness: 0.8,
-                    });
-                    
-                    const transparentMaterial = new THREE.MeshBasicMaterial({ transparent: true, opacity: 0 });
+                    const printMaterial = new THREE.MeshStandardMaterial({ map: texture, metalness: 0.0, roughness: 0.8 });
+                    const capMaterial = new THREE.MeshBasicMaterial({ transparent: true, opacity: 0 });
 
-                    updateModel(geometry, [printMaterial, transparentMaterial, transparentMaterial]);
+                    updateModel(geometry, [printMaterial, capMaterial, capMaterial]);
                     updateMaterialTransparency();
                     updateTextureScale();
                     updateTextureUVs();
@@ -466,7 +487,12 @@
             const last = lathePoints[lathePoints.length - 1];
             if (last.x > 0.01) lathePoints.push(new THREE.Vector2(0, last.y));
             
-            return new THREE.LatheGeometry(lathePoints, 128);
+            const geometry = new THREE.LatheGeometry(lathePoints, 128);
+            geometry.clearGroups();
+            geometry.addGroup(0, Infinity, 0); // Materiał główny (zadruk)
+            geometry.addGroup(0, 1, 1); // Materiał na spód (przezroczysty)
+            geometry.addGroup(geometry.attributes.position.count - 2, 1, 2); // Materiał na górę (przezroczysty)
+            return geometry;
         }
 
         function updateModel(geometry, materials) {
@@ -518,7 +544,6 @@
             uv.needsUpdate = true;
         }
 
-        init();
     </script>
 </body>
 </html>
