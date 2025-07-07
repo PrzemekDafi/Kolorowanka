@@ -263,10 +263,15 @@
             left: 0;
             width: 100%;
             height: 100%;
+            pointer-events: none; /* Canvas 3D nie blokuje myszki */
+        }
+        #viewer-canvas.active {
+            pointer-events: auto; /* Aktywuj interakcję z canvasem 3D */
         }
     </style>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" defer></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/dom-to-image/2.6.0/dom-to-image.min.js"></script>
+
 </head>
 <body>
     <div class="container">
@@ -274,7 +279,7 @@
             <canvas id="base-canvas" width="900px" height="900px" style="position: absolute; z-index: 1;"></canvas>
             <canvas id="overlay-canvas" width="900px" height="900px" style="position: absolute; z-index: 1000;"></canvas>
             <div class="image-column" id="image-column"></div>
-            <canvas id="viewer-canvas"></canvas>
+            <canvas id="viewer-canvas" width="900" height="900"></canvas>
         </div>
 
         <div class="options-column">
@@ -325,7 +330,7 @@
                 <input id="size-slider" type="range" min="10" max="100" value="80">
             </div>
 
-            <div id="zadruk3d-controls">
+            <div id="zadruk3d-controls" class="grawer-column">
                 <h3>Ustawienia nadruku 3D</h3>
                 <div class="upload-btn-wrapper">
                     <button class="btn">Wgraj plik z nadrukiem</button>
@@ -355,6 +360,7 @@
         <div id="loadingMessage">Trwa zapis obrazu, proszę czekać...</div>
     </div>
     <script>
+        // Oryginalny skrypt użytkownika
         const products = {
             astra_classic: { elements: ['pokrywka','raczka', 'zbiornik'] },
             crystal: { elements: ['pokrywka', 'obudowa', 'raczka', 'zbiornik'] },
@@ -370,7 +376,7 @@
             bidon_twist: { elements: ['twist-ustnik', 'twist_zakretka', 'twist_zakretka-dol', 'twist_zbiornik'] },
             bidon_klasyczny: { elements: ['bidon_zatyczka', 'bidon_zakretka', 'bidon_zbiornik'] },
             self: { 
-                elements: ['self_zakretka', 'self_zatyczka', 'self-zbiornik-wewnetrzny', 'self-zbiornik-zewnetrzny'],
+                elements: ['self_zakretka', 'self_zatyczka', 'self-zbiornik-wewnetrzny', 'self-zbiornik-zewnetrzny', 'zadruk'],
                 aspectRatio: 762 / 257
             },
             easy: { elements: ['elastometr', 'sama_gora_zakretki', 'zbiornik', 'gora_zakretki', 'guma_zakretki'] },
@@ -398,10 +404,13 @@
             grawerControls.style.display = 'none';
             zadruk3dControls.style.display = 'none';
             viewerCanvas.style.display = 'none';
+            viewerCanvas.classList.remove('active');
+
 
             if (product && products[product]) {
                 const productFrame = document.createElement('div');
                 productFrame.className = 'product-frame';
+                productFrame.id = 'product-frame-2d';
                 productFrame.style.backgroundImage = `url('images/${product}.jpg')`;
                 imageColumn.appendChild(productFrame);
 
@@ -579,22 +588,10 @@
                 reader.readAsDataURL(file);
             }
         });
-        rotateSlider.addEventListener('input', (event) => {
-            rotation = parseInt(event.target.value, 10);
-            drawOverlayImage();
-        });
-        horizontalSlider.addEventListener('input', (event) => {
-            horizontalOffset = parseInt(event.target.value, 10);
-            drawOverlayImage();
-        });
-        verticalSlider.addEventListener('input', (event) => {
-            verticalOffset = parseInt(event.target.value, 10);
-            drawOverlayImage();
-        });
-        sizeSlider.addEventListener('input', (event) => {
-            scale = parseInt(event.target.value, 10) / 80;
-            drawOverlayImage();
-        });
+        rotateSlider.addEventListener('input', (event) => { rotation = parseInt(event.target.value, 10); drawOverlayImage(); });
+        horizontalSlider.addEventListener('input', (event) => { horizontalOffset = parseInt(event.target.value, 10); drawOverlayImage(); });
+        verticalSlider.addEventListener('input', (event) => { verticalOffset = parseInt(event.target.value, 10); drawOverlayImage(); });
+        sizeSlider.addEventListener('input', (event) => { scale = parseInt(event.target.value, 10) / 80; drawOverlayImage(); });
         
         function checkResourceExists(url) {
             return new Promise(resolve => {
@@ -610,8 +607,19 @@
                 const is3d = this.value === 'zadruk3d';
                 document.getElementById('grawer-controls').style.display = is3d ? 'none' : 'block';
                 document.getElementById('zadruk3d-controls').style.display = is3d ? 'block' : 'none';
-                document.getElementById('viewer-canvas').style.display = 'none';
-                document.getElementById('image-column').style.display = 'block';
+                
+                const viewerCanvas = document.getElementById('viewer-canvas');
+                const zadrukImg = document.getElementById('zadruk-img');
+                
+                if (is3d) {
+                    if (zadrukImg) zadrukImg.style.display = 'none';
+                    viewerCanvas.style.display = 'none'; // Pokaż dopiero po wgraniu tekstury
+                    viewerCanvas.classList.remove('active');
+                } else {
+                    if (zadrukImg) zadrukImg.style.display = 'block';
+                    viewerCanvas.style.display = 'none';
+                    viewerCanvas.classList.remove('active');
+                }
             });
         });
 
@@ -620,8 +628,13 @@
             const product = products[productKey];
             if (!product || !event.target.files[0]) return;
             
-            document.getElementById('image-column').style.display = 'none';
-            document.getElementById('viewer-canvas').style.display = 'block';
+            const viewerCanvas = document.getElementById('viewer-canvas');
+            viewerCanvas.style.display = 'block';
+            viewerCanvas.classList.add('active');
+
+            const zadrukImg = document.getElementById('zadruk-img');
+            if(zadrukImg) zadrukImg.style.display = 'none';
+            
             window.dispatchEvent(new CustomEvent('init3D', { 
                 detail: { 
                     file: event.target.files[0],
@@ -646,19 +659,21 @@
             reader.onload = (event) => generateModelAndApplyTexture(event.target.result, maskUrl, aspectRatio);
             reader.readAsDataURL(file);
         });
+
         function setup3DViewer() {
             if (scene) {
                 while(scene.children.length > 0){ scene.remove(scene.children[0]); }
             } else {
                 scene = new THREE.Scene();
             }
-            scene.background = new THREE.Color(0xffffff);
+            
             const container = document.querySelector('.image-column');
             const viewerCanvas = document.getElementById('viewer-canvas');
             camera = new THREE.PerspectiveCamera(30, container.clientWidth / container.clientHeight, 0.1, 1000);
             camera.position.set(0, 0, 8);
             if(renderer) renderer.dispose();
-            renderer = new THREE.WebGLRenderer({ canvas: viewerCanvas, antialias: true, preserveDrawingBuffer: true });
+            renderer = new THREE.WebGLRenderer({ canvas: viewerCanvas, antialias: true, alpha: true });
+            renderer.setClearColor(0x000000, 0);
             renderer.setSize(container.clientWidth, container.clientHeight);
             renderer.setPixelRatio(window.devicePixelRatio);
             renderer.outputColorSpace = THREE.SRGBColorSpace;
@@ -685,6 +700,7 @@
             }
         }
         animate();
+
         function generateModelAndApplyTexture(textureDataUrl, maskUrl, aspectRatio) {
             setup3DViewer();
             const maskImage = new Image();
@@ -699,8 +715,7 @@
                     texture.wrapS = THREE.RepeatWrapping;
                     texture.wrapT = THREE.ClampToEdgeWrapping; 
                     const printMaterial = new THREE.MeshStandardMaterial({ map: texture, metalness: 0.0, roughness: 0.8 });
-                    const capMaterial = new THREE.MeshBasicMaterial({ transparent: true, opacity: 0 });
-                    updateModel(geometry, [printMaterial, capMaterial, capMaterial]);
+                    updateModel(geometry, printMaterial);
                     updateMaterialTransparency();
                     updateTextureScale();
                     updateTextureUVs();
@@ -774,23 +789,16 @@
             const last = lathePoints[lathePoints.length - 1];
             if (last.x > 0.01) lathePoints.push(new THREE.Vector2(0, last.y));
             const geometry = new THREE.LatheGeometry(lathePoints, 128);
-            geometry.clearGroups();
-            const bodyVertices = (geometry.attributes.position.count / (lathePoints.length * 2)) * (lathePoints.length - 2) * 2;
-            geometry.addGroup(0, Infinity, 0);
             return geometry;
         }
-        function updateModel(geometry, materials) {
-            if (!geometry || !materials) return;
+        function updateModel(geometry, material) {
+            if (!geometry || !material) return;
             if (bottleMesh) {
                 scene.remove(bottleMesh);
                 bottleMesh.geometry.dispose();
-                if (Array.isArray(bottleMesh.material)) {
-                    bottleMesh.material.forEach(m => m.dispose());
-                } else {
-                    bottleMesh.material.dispose();
-                }
+                bottleMesh.material.dispose();
             }
-            bottleMesh = new THREE.Mesh(geometry, materials[0]);
+            bottleMesh = new THREE.Mesh(geometry, material);
             bottleMesh.geometry.computeBoundingBox();
             const height = bottleMesh.geometry.boundingBox.max.y - bottleMesh.geometry.boundingBox.min.y;
             bottleMesh.position.y = -height / 2;
@@ -829,4 +837,4 @@
         }
     </script>
 </body>
-</ht
+</html>
