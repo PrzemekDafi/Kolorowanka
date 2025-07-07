@@ -266,6 +266,7 @@
             width: 100%;
             height: 100%;
             pointer-events: none; /* Canvas 3D nie blokuje myszki */
+            z-index: 500; /* Pomiędzy warstwami 2D */
         }
         #viewer-canvas.active {
             pointer-events: auto; /* Aktywuj interakcję z canvasem 3D */
@@ -836,4 +837,4 @@
         }
     </script>
 </body>
-</
+</html>
