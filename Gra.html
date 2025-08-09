@@ -278,21 +278,40 @@ const level = {
     {x:12,y:4},{x:35,y:4},{x:49,y:3},{x:105,y:6},{x:138, y:2}
   ],
   school: {x:140,y:0, w:5, h:3},
-  plastic_enemies: [
-    {type:"ground",x:15,y:0,dir:1,min:14,max:19},
-    {type:"ground",x:35,y:0,dir:1,min:35,max:40},
-    {type:"ground",x:86,y:0,dir:1,min:85,max:87},
-    {type:"ground",x:105,y:0,dir:1,min:105,max:111},
-    // dynamic – ruchome plastikowe elementy na platformach
-    {type:"obstacle",x:80,y:2,dir:-1,min:78,max:82},
-    {type:"obstacle",x:116,y:6,dir:1,min:114,max:119},
-    {type:"obstacle",x:126,y:7,dir:-1,min:124,max:130},
-    // plastikowe na wyspach
-    {type:"island",island:7,pos:0,dir:1},
-    {type:"island",island:8,pos:1,dir:1},
-    {type:"island",island:9,pos:0,dir:1},
-    {type:"island",island:10,pos:1,dir:-1}
-  ]
+plastic_enemies: [
+  // --- Ground enemies ---
+
+  // PRZECIWNIK "na ziemi", z trasą tam gdzie nie ma przeszkód platformowych!
+  {type: "ground", x: 15, y: 0, dir: 1, min: 14, max: 19},
+  {type: "ground", x: 35, y: 0, dir: 1, min: 35, max: 40},
+  {type: "ground", x: 55, y: 0, dir: 1, min: 54, max: 58}, // fragment bez wyspy i obstacle
+  {type: "ground", x: 86, y: 0, dir: 1, min: 85, max: 87},
+  {type: "ground", x: 105, y: 0, dir: 1, min: 105, max: 111},
+  // Końcówka planszy (pod szkołą)
+  {type: "ground", x: 138, y: 0, dir: 1, min: 138, max: 142},
+
+  // --- Obstacle enemies ---
+
+  // PRZECIWNIK na przeszkodzie obstacle (typ obstacle_block), na wysokości y obstacle
+  // np. przeszkoda z obstacle_blocks: { type: 5, x: 116, y: 6 }
+  {type: "obstacle", x: 116, y: 6, dir: 1, min: 116, max: 118}, // chodzi po trzech przeszkodach obok siebie na y:6
+
+  // Ogranicz trasę do szerokości obstacle!
+  {type: "obstacle", x: 80, y: 2, dir: 1, min: 80, max: 82},
+  {type: "obstacle", x: 104, y: 5, dir: 1, min: 103, max: 105},
+
+  // --- Island enemies ---
+
+  // PRZECIWNIK na wyspie 7 (w tablicy islands), pozycja kafelka 1 na tej wyspie, porusza się w prawo
+  {type: "island", island: 7, pos: 1, dir: 1},
+  // PRZECIWNIK na wyspie 9, pozycja kafelka nr 0, porusza się w lewo
+  {type: "island", island: 9, pos: 0, dir: -1},
+  // PRZECIWNIK na wyspie 12, pozycja kafelka nr 2, porusza się w prawo
+  {type: "island", island: 12, pos: 2, dir: 1},
+  // PRZECIWNIK na wyspie 13, pozycja kafelka nr 1, porusza się w lewo
+  {type: "island", island: 13, pos: 1, dir: -1}
+]
+
 };
 
 
