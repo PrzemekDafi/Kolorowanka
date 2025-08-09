@@ -182,126 +182,123 @@ function fromGround(yTiles) { return GROUND_Y - GRID * yTiles; }
 const level = {
   filter_token: [{x:5,y:5}],
   ground_blocks: [],
+  // --- OBSTACLE BLOCKS ---
   obstacle_blocks: [
-    // Początek: niezmienione!
-    {type:1, x:9, y:0},
-    {type:1, x:10, y:2}, {type:2, x:11, y:2}, {type:3, x:12, y:2},
-    {type:4,x:10,y:1}, {type:5,x:11,y:1}, {type:6,x:12,y:1},
-    {type:4,x:10,y:0}, {type:5,x:11,y:0}, {type:6,x:12,y:0},
-    {type:3, x:13, y:1}, {type:6, x:13, y:0},
-    {type:1, x:35, y:0}, {type:2, x:36, y:0}, {type:3, x:37, y:0},
-    {type:1, x:40, y:0}, {type:5, x:41, y:0}, {type:5, x:42, y:0},
-    {type:2, x:43, y:0}, {type:3, x:44, y:0},
-    {type:1, x:41, y:1}, {type:2, x:42, y:1}, {type:3, x:43, y:1},
-    {type:3, x:43, y:1},
-    {type:5, x:48, y:0}, {type:5, x:49, y:0}, {type:2, x:50, y:0},
-    {type:3, x:51, y:0},
-    {type:1, x:61, y:0}, {type:3, x:64, y:2},
-    // --- Od tego miejsca: nowe przeszkody i układ średnio-trudny ---
-    // Skoki wyspowe i platformy
-    {type:1, x:66, y:3}, {type:2, x:67, y:3},
-    {type:5, x:68, y:3}, {type:3, x:70, y:2},
+    // Pierwsza "wieżyczka" klasyczna
+    {type:1, x:20, y:5}, {type:2, x:21, y:6}, {type:3, x:22, y:5},
+    {type:4, x:20, y:4}, {type:5, x:21, y:4}, {type:6, x:22, y:4},
+    // Górka na 8
+    {type:1, x:28, y:3}, {type:2, x:29, y:4}, {type:3, x:30, y:3},
+    {type:4, x:28, y:2}, {type:5, x:29, y:2}, {type:6, x:30, y:2},
 
-    // Strefa podwójnych wysp (platforming) i kolców (rytm przeskoków)
-    {type:3, x:72, y:1}, {type:4, x:73, y:1}, {type:6, x:74, y:1},
-    {type:3, x:76, y:2}, {type:6, x:77, y:2},{type:6, x:78, y:2},
-    {type:5, x:78, y:3}, {type:1, x:79, y:4}, {type:2, x:80, y:4}, // coraz wyżej
+    // Długi „mostek” na wyższym poziomie
+    {type:1, x:38, y:7}, {type:2, x:39, y:8}, {type:3, x:40, y:7},
+    {type:4, x:38, y:6}, {type:5, x:39, y:6}, {type:6, x:40, y:6},
 
-    // Wyspa z kolejną przeszkodą i dropem w dół (ryzyko)
-    {type:3, x:81, y:3}, {type:6, x:82, y:3}, {type:2, x:83, y:2},
-    {type:1, x:85, y:1}, {type:6, x:86, y:1}, {type:3, x:87, y:1},
+    // „Kopiasta” góra z symetrycznymi nogami
+    {type:1, x:50, y:7}, {type:2, x:51, y:8}, {type:3, x:52, y:7},
+    {type:4, x:50, y:6}, {type:4, x:51, y:6}, {type:5, x:51, y:6}, {type:6, x:52, y:6},
 
-    // Sekwencja wyższych platform, wymuszająca skakanie
-    {type:4, x:90, y:5}, {type:5, x:91, y:5}, {type:6, x:92, y:5},
-    {type:1, x:93, y:6}, {type:2, x:94, y:6}, {type:3, x:95, y:6},
-    {type:6, x:96, y:7},
+    // Malutkie platformy
+    {type:1, x:58, y:3}, {type:2, x:59, y:4}, {type:3, x:60, y:3},
+    {type:4, x:58, y:2}, {type:5, x:59, y:2}, {type:6, x:60, y:2},
 
-    // Sekcja "drabinkowa": kilka wysokich platform, układających się w wejście na wyspę
-    {type:1, x:102, y:2}, {type:2, x:103, y:3}, {type:4, x:104, y:4}, 
-    {type:5, x:105, y:5}, {type:6, x:106, y:6},
+    // Wieżyczka 2x wyższa 
+    {type:1, x:75, y:6}, {type:2, x:76, y:7}, {type:3, x:77, y:6},
+    {type:4, x:75, y:5}, {type:4, x:76, y:5}, {type:5, x:76, y:5}, {type:6, x:77, y:5},
+    {type:4, x:75, y:4}, {type:5, x:76, y:4}, {type:6, x:77, y:4},
 
-    // Strefa szybkiego ruchu ("dziury" dla utrudnienia)
-    {type:1, x:108, y:0}, {type:5, x:109, y:0}, {type:3, x:112, y:2},
+    // Symetryczne mini platformy „na wysokości” dla przeciwników obstacles/islands
+    {type:1, x:83, y:9}, {type:2, x:84, y:10}, {type:3, x:85, y:9},
+    {type:4, x:83, y:8}, {type:5, x:84, y:8}, {type:6, x:85, y:8},
 
-    // Wyspa "żmija" – platformy schodkowe
-    {type:2, x:115, y:2},
-    {type:4, x:116, y:3}, {type:6, x:117, y:3},
-    {type:1, x:118, y:4}, {type:3, x:120, y:4},
-
-    // Trudniejsza strefa wysokich platform pod koniec gry
-    {type:5, x:123, y:5}, {type:5, x:124, y:6}, {type:3, x:125, y:6},
-    {type:5, x:127, y:7}, {type:2, x:128, y:6}
+    // Przed końcem meta — druga góra
+    {type:1, x:135, y:5}, {type:2, x:136, y:6}, {type:3, x:137, y:5},
+    {type:4, x:135, y:4}, {type:5, x:136, y:4}, {type:6, x:137, y:4},
   ],
+
+  // --- WYSPY: Urozmaicone, większe długości i wysokości, na różnych piętrach ---
   islands: [
-    // początkowe wyspy niezmienione
-    {x:6,y:3,len:1}, {x:11,y:6,len:4}, {x:19,y:4,len:5}, {x:25,y:2,len:1},
-    {x:30,y:4,len:3}, {x:37,y:5,len:4}, {x:48,y:2,len:3}, {x:52,y:6,len:2},
-    {x:55,y:3,len:3}, {x:62,y:1,len:3}, {x:67,y:2,len:2}, {x:66,y:6,len:4},
-    {x:70,y:3,len:3}, {x:74,y:3,len:2},
+    {x:25, y:7, len:2},
+    {x:32, y:4, len:3},
+    {x:43, y:9, len:2},
+    {x:52, y:10, len:2},
+    {x:67, y:4, len:3},
+    {x:72, y:8, len:2},
+    {x:86, y:9, len:2},
+    {x:105, y:11, len:3},
+    {x:120, y:10, len:4},
+    {x:132, y:6, len:2},
+  ],
 
-    // Nowe wyspy platformowe aż do szkoły (rytm: nisko-wysoko-nisko)
-    {x:81,y:3,len:3},
-    {x:87,y:6,len:2},
-    {x:93,y:2,len:3},
-    {x:98,y:4,len:2},
-    {x:103,y:6,len:4},
-    {x:110,y:3,len:2},
-    {x:113,y:1,len:4},
-    {x:119,y:5,len:3},
-    {x:124,y:7,len:2},
-    {x:128,y:3,len:3},
-    {x:132,y:4,len:2},
-    {x:136,y:2,len:5},
-  ],
+  // --- KOLCE (SPIKES): więcej i gęściej, nie tylko na ziemi ---
   spikes: [
-    {x:6, y:0}, {x:7, y:0}, {x:8, y:0},
-    {x:24,y:0}, {x:25,y:0},{x:26,y:0},
-    // nowe nieco dalej do utrudnienia/trapów
-    {x:68, y:0}, {x:69, y:0}, {x:70, y:0},
-    {x:100, y:0}, {x:101, y:0},
-    {x:116, y:0}, {x:117, y:0},
-    {x:124, y:0}
+    // Początek planszy
+    {x:7, y:0}, {x:8, y:0}, {x:12, y:0},
+    // Między islandami, trochę pod platformami
+    {x:27, y:5}, {x:32, y:2},
+    {x:45, y:8},
+    {x:53, y:3}, {x:54, y:3}, {x:55, y:3},
+    // Pod wieżyczkami i na trasie pod obstacles
+    {x:51, y:3}, {x:60, y:0}, {x:61, y:0},
+    {x:75, y:1}, {x:76, y:1},
+    // Na wysokości - pod wyspami jako „pułapka pod platformą”
+    {x:87, y:8}, {x:89, y:8}, {x:90, y:8},
+    {x:106, y:0}, {x:108, y:0}, {x:110, y:0},
+    // Blisko mety
+    {x:134, y:2}, {x:135, y:2}, {x:136, y:2}
   ],
+
+  // --- TOKENS i ITEMY rozmieszczone możliwie rytmicznie, zachęcające do ryzyka ---
   filter_tokens: [
-    {x:1,y:2},{x:27,y:3},{x:34,y:2},{x:52,y:2},{x:67,y:4},
-    {x:88,y:5}, // środek gry
-    {x:104,y:5}, 
-    {x:113,y:2},{x:122,y:0},
-    {x:129,y:2}, // przed szkołą, nagradzasz doświadczonego gracza
-    {x:140,y:3}  // prawie przy szkole
+    {x:21, y:5}, {x:34, y:6},
+    {x:43, y:10}, {x:58, y:4}, {x:76, y:9},
+    {x:120, y:12}, {x:136, y:7}
   ],
   heart_items: [
-    {x:20,y:2},{x:34,y:3},{x:65,y:3},{x:80,y:2},{x:100,y:6},
-    {x:119,y:5},{x:130,y:4} // bardziej pod koniec, dla regeneracji
+    {x:25, y:8},
+    {x:53, y:11},
+    {x:75, y:7},
+    {x:112, y:12},
+    {x:138, y:8}
   ],
   clock_items: [
-    {x:12,y:4},{x:35,y:4},{x:49,y:3},{x:105,y:6},{x:138, y:2}
+    {x:27, y:8},
+    {x:54, y:11},
+    {x:91, y:11},
+    {x:134, y:4},
   ],
-  school: {x:140,y:0, w:5, h:3},
-plastic_enemies: [
-  // --- GROUND PRZECIWNICY --- (tylko na ziemi, w czystych odcinkach)
-  {type:"ground", x:15, y:0, dir:1, min:14, max:19},
-  {type:"ground", x:35, y:0, dir:1, min:35, max:40},
-  {type:"ground", x:55, y:0, dir:-1, min:54, max:58}, // czysty grunt pod wyspami
-  {type:"ground", x:86, y:0, dir:1, min:86, max:88},  // przed wysokimi przeszkodami
-  {type:"ground", x:107, y:0, dir:1, min:107, max:111}, // za przeszkodami
-  {type:"ground", x:138, y:0, dir:1, min:138, max:142},  // pod szkołą
 
-  // --- PRZECIWNICY NA PRZESZKODACH (OBSTACLE) ---
-  // UWAGA! Każdy z poniższych musi mieć obstacle_block na x/y oraz obok!
-  {type:"obstacle", x:80, y:2, dir:1, min:80, max:82},   // na trzech platformach obok siebie
-  {type:"obstacle", x:116, y:6, dir:1, min:116, max:118}, // szeroka przeszkoda wysoko
-  {type:"obstacle", x:104, y:5, dir:1, min:103, max:105}, // platformy schodkowe
+  // --- PLASTIC ENEMIES: dynamicznie i różnorodnie, zawsze na/górze platform, nie w środku ---
+  plastic_enemies: [
+    // Ground enemies – tylko na „gołych” odcinkach
+    {type:"ground", x:17, y:0, dir:1, min:14, max:19},
+    {type:"ground", x:36, y:0, dir:-1, min:34, max:38},
+    {type:"ground", x:65, y:0, dir:1, min:62, max:68},
+    {type:"ground", x:115, y:0, dir:1, min:114, max:120},
 
-  // --- PRZECIWNICY NA WYSPACH ---
-  // ["island", nr_w_tablicy_islands, start_kafelek, kierunek] 
-  {type:"island", island:7, pos:0, dir:1},  // wyspa index 7 (liczenie od 0), na jej pierwszym kafelku
-  {type:"island", island:9, pos:1, dir:-1}, // wyspa index 9, drugi kafelek, rusza w lewo
-  {type:"island", island:12, pos:2, dir:1}, // index 12 ("schody"), na trzecim kafelku
-  {type:"island", island:13, pos:1, dir:-1} // index 13, na drugim kafelku, w lewo
-]
+    // Obstacle enemies – tylko na logicznych platformach (grupach obstacles z tym samym Y)
+    {type:"obstacle", x:38, y:7, dir:1, min:38, max:40},     // mostek level 7–7–7
+    {type:"obstacle", x:50, y:7, dir:-1, min:50, max:52},    // kopiec
+    {type:"obstacle", x:75, y:6, dir:1, min:75, max:77},     // wysoka wieża
+    {type:"obstacle", x:135, y:5, dir:-1, min:135, max:137}, // meta wieża
 
+    // Enemies na wyspach – platformy wysoko!
+    {type:"island", island:2, pos:1, dir:1},
+    {type:"island", island:5, pos:0, dir:1},
+    {type:"island", island:6, pos:1, dir:-1},
+    {type:"island", island:8, pos:2, dir:1},
 
+    // Enemy „jumping” na wysepce – łączony patrol wysp i obstacles:
+    {type:"island", island:1, pos:1, dir:1},
+    {type:"island", island:3, pos:1, dir:-1},
+
+    // Nowość: Platform enemies na wysokościach (obok wysp)
+    {type:"obstacle", x:84, y:10, dir:1, min:83, max:85}, // wieża w chmurach!
+    {type:"obstacle", x:120, y:10, dir:-1, min:120, max:123},
+  ],
+
+  school: {x:140, y:0, w:5, h:3},
 };
 
 
