@@ -295,7 +295,7 @@ const level = {
   ]
 };
 
-};
+
 for(let i=0;i<LEVEL_WIDTH/(GRID*3);i++)
   if (!level.spikes.some(function(s){ return i*3===s.x && s.y===0; }))
     level.ground_blocks.push({x:i*3, y:0});
