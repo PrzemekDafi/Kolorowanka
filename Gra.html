@@ -345,7 +345,7 @@ function spawnParallax(){
 let filterkid, camX, timer, filters_collected, lives, filterkid_solid, gameWon, gameOver, dying, dyingTy, dyingVy,
     levelEnemies, levelSpikes, levelTokens, levelBlocks, levelObstacles, levelHearts, levelClocks, levelIslands, levelSchool;
 let islandTiles = [];
-let keys = {}, startingX = 3500, startingY = fromGround(0) - PLAYER_H;
+let keys = {}, startingX = 100, startingY = fromGround(0) - PLAYER_H;
 let wantJump=false, jumpPressed=false, jumpTime=0, JUMP_MAX=12;
 function resetGame(){
   filterkid = { x:startingX, y:startingY, vx:0, vy:0, w:PLAYER_W, h:PLAYER_H, onGround:false, facing:1, dead:false};
