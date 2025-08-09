@@ -180,9 +180,10 @@ function preloadImages(sources, whenDone) {
 const SCREEN_W = 800, SCREEN_H = 450, GRID = 40, PLAYER_W = 28, PLAYER_H = 68, GROUND_Y = SCREEN_H - GRID, LEVEL_WIDTH = 7000;
 function fromGround(yTiles) { return GROUND_Y - GRID * yTiles; }
 const level = {
-  filter_token: [ {x:5,y:5}, ],
+  filter_token: [{x:5,y:5}],
   ground_blocks: [],
   obstacle_blocks: [
+    // Początek: niezmienione!
     {type:1, x:9, y:0},
     {type:1, x:10, y:2}, {type:2, x:11, y:2}, {type:3, x:12, y:2},
     {type:4,x:10,y:1}, {type:5,x:11,y:1}, {type:6,x:12,y:1},
@@ -196,72 +197,104 @@ const level = {
     {type:5, x:48, y:0}, {type:5, x:49, y:0}, {type:2, x:50, y:0},
     {type:3, x:51, y:0},
     {type:1, x:61, y:0}, {type:3, x:64, y:2},
-    {type:5, x:64, y:6}, {type:3, x:65, y:0},
-    {type:2, x:75, y:1}, {type:2, x:76, y:1},
-    {type:5, x:75, y:0}, {type:5, x:76, y:0}, {type:3, x:76, y:2}, 
-	  
-	 {type:1, x:78, y:3}, {type:2, x:79, y:3}, {type:2, x:80, y:3},{type:1, x:80, y:4},{type:2, x:81, y:4}, {type:2, x:81, y:4}, {type:3, x:82, y:4},
-	 {type:1, x:78, y:2}, {type:2, x:79, y:2}, {type:2, x:80, y:2},{type:1, x:81, y:2},{type:2, x:81, y:3}, {type:2, x:82, y:3},
-	{type:5, x:79, y:1}, {type:6, x:79, y:0},
-	  
-	  
-     {type:1, x:89, y:2}, {type:2, x:90, y:2}, {type:3, x:91, y:2},
-	 {type:4, x:89, y:1}, {type:5, x:90, y:1}, {type:6, x:91, y:1},
-	 {type:4, x:89, y:0}, {type:5, x:90, y:0}, {type:6, x:91, y:0},
-	 {type:1, x:89, y:7}, {type:2, x:90, y:7}, {type:3, x:91, y:7},
-	 {type:4, x:89, y:6}, {type:5, x:90, y:6}, {type:6, x:91, y:6},
-	 {type:4, x:89, y:5}, {type:5, x:90, y:5}, {type:6, x:91, y:5},
-	  
-	 {type:2, x:92, y:4}, {type:4, x:94, y:5}, {type:4, x:96, y:6},
-	 {type:4, x:95, y:6}, {type:2, x:94, y:4}, {type:4, x:97, y:5},
-	 {type:4, x:95, y:5}, {type:4, x:94, y:5}, {type:4, x:96, y:5},
-	  
-	                      {type:1, x:100, y:2}, {type:2, x:101, y:2}, {type:3, x:102, y:2},
-	                      {type:5, x:100, y:1}, {type:5, x:101, y:1}, {type:5, x:102, y:1},{type:6, x:103, y:1},
-	 {type:1, x:99, y:0}, {type:5, x:100, y:0}, {type:5, x:101, y:0}, {type:5, x:102, y:0},{type:5, x:103, y:0},{type:6, x:104, y:0},
-	  
-	  {type:1, x:100, y:6},{type:5, x:101, y:5},{type:5, x:102, y:4},
-	  
-	  
-	  	                      {type:1, x:107, y:4}, {type:2, x:108, y:4}, {type:3, x:109, y:4},
-	                      {type:5, x:107, y:3}, {type:5, x:108, y:3}, {type:5, x:109, y:3},{type:6, x:110, y:3},
-	 {type:1, x:106, y:2}, {type:5, x:107, y:2}, {type:5, x:108, y:2}, {type:5, x:109, y:2},{type:5, x:110, y:2},{type:3, x:111, y:2},
-	 {type:5, x:106, y:1}, {type:5, x:107, y:1}, {type:5, x:108, y:1}, {type:5, x:109, y:1},{type:5, x:110, y:1},{type:6, x:111, y:1},
-	 {type:5, x:106, y:0}, {type:5, x:107, y:0}, {type:5, x:108, y:0}, {type:5, x:109, y:0},{type:5, x:110, y:0},{type:5, x:111, y:0},{type:3, x:112, y:0},
-	  
-	  
-	  	 {type:1, x:114, y:2}, {type:5, x:115, y:2}, {type:5, x:110, y:2}, {type:5, x:116, y:2},{type:5, x:117, y:2},{type:3, x:118, y:2},
+    // --- Od tego miejsca: nowe przeszkody i układ średnio-trudny ---
+    // Skoki wyspowe i platformy
+    {type:1, x:66, y:3}, {type:2, x:67, y:3},
+    {type:5, x:68, y:3}, {type:3, x:70, y:2},
 
-{type:1, x:120, y:5},{type:1, x:121, y:6},{type:1, x:122, y:7},
-	  {type:1, x:120, y:1},{type:1, x:120, y:0}
+    // Strefa podwójnych wysp (platforming) i kolców (rytm przeskoków)
+    {type:3, x:72, y:1}, {type:4, x:73, y:1}, {type:6, x:74, y:1},
+    {type:3, x:76, y:2}, {type:6, x:77, y:2},{type:6, x:78, y:2},
+    {type:5, x:78, y:3}, {type:1, x:79, y:4}, {type:2, x:80, y:4}, // coraz wyżej
 
+    // Wyspa z kolejną przeszkodą i dropem w dół (ryzyko)
+    {type:3, x:81, y:3}, {type:6, x:82, y:3}, {type:2, x:83, y:2},
+    {type:1, x:85, y:1}, {type:6, x:86, y:1}, {type:3, x:87, y:1},
 
+    // Sekwencja wyższych platform, wymuszająca skakanie
+    {type:4, x:90, y:5}, {type:5, x:91, y:5}, {type:6, x:92, y:5},
+    {type:1, x:93, y:6}, {type:2, x:94, y:6}, {type:3, x:95, y:6},
+    {type:6, x:96, y:7},
 
-	  
+    // Sekcja "drabinkowa": kilka wysokich platform, układających się w wejście na wyspę
+    {type:1, x:102, y:2}, {type:2, x:103, y:3}, {type:4, x:104, y:4}, 
+    {type:5, x:105, y:5}, {type:6, x:106, y:6},
 
+    // Strefa szybkiego ruchu ("dziury" dla utrudnienia)
+    {type:1, x:108, y:0}, {type:5, x:109, y:0}, {type:3, x:112, y:2},
 
+    // Wyspa "żmija" – platformy schodkowe
+    {type:2, x:115, y:2},
+    {type:4, x:116, y:3}, {type:6, x:117, y:3},
+    {type:1, x:118, y:4}, {type:3, x:120, y:4},
+
+    // Trudniejsza strefa wysokich platform pod koniec gry
+    {type:5, x:123, y:5}, {type:5, x:124, y:6}, {type:3, x:125, y:6},
+    {type:5, x:127, y:7}, {type:2, x:128, y:6}
   ],
   islands: [
+    // początkowe wyspy niezmienione
     {x:6,y:3,len:1}, {x:11,y:6,len:4}, {x:19,y:4,len:5}, {x:25,y:2,len:1},
     {x:30,y:4,len:3}, {x:37,y:5,len:4}, {x:48,y:2,len:3}, {x:52,y:6,len:2},
     {x:55,y:3,len:3}, {x:62,y:1,len:3}, {x:67,y:2,len:2}, {x:66,y:6,len:4},
-    {x:70,y:3,len:3}, {x:74,y:3,len:2},     {x:120,y:3,len:4}, {x:122,y:5,len:3},
-  {x:121,y:6,len:6}, {x:126,y:3,len:3}, {x:129,y:3,len:3},
+    {x:70,y:3,len:3}, {x:74,y:3,len:2},
+
+    // Nowe wyspy platformowe aż do szkoły (rytm: nisko-wysoko-nisko)
+    {x:81,y:3,len:3},
+    {x:87,y:6,len:2},
+    {x:93,y:2,len:3},
+    {x:98,y:4,len:2},
+    {x:103,y:6,len:4},
+    {x:110,y:3,len:2},
+    {x:113,y:1,len:4},
+    {x:119,y:5,len:3},
+    {x:124,y:7,len:2},
+    {x:128,y:3,len:3},
+    {x:132,y:4,len:2},
+    {x:136,y:2,len:5},
   ],
-  spikes: [ {x:6, y:0}, {x:7, y:0}, {x:8, y:0},{x:24,y:0}, {x:25,y:0}, {x:26,y:0}, ],
-  filter_tokens: [{x:1,y:2},{x:27,y:3},{x:34,y:2},{x:52,y:2},{x:67,y:4},{x:122,y:0},{x:175,y:3},{x:300,y:5},{x:400,y:2}],
-  heart_items: [{x:20,y:2},{x:34,y:3},{x:65,y:3},{x:80,y:2},{x:120,y:5}],
-  clock_items: [{x:12,y:4},{x:35,y:4},{x:49,y:3},{x:190,y:3}],
+  spikes: [
+    {x:6, y:0}, {x:7, y:0}, {x:8, y:0},
+    {x:24,y:0}, {x:25,y:0},{x:26,y:0},
+    // nowe nieco dalej do utrudnienia/trapów
+    {x:68, y:0}, {x:69, y:0}, {x:70, y:0},
+    {x:100, y:0}, {x:101, y:0},
+    {x:116, y:0}, {x:117, y:0},
+    {x:124, y:0}
+  ],
+  filter_tokens: [
+    {x:1,y:2},{x:27,y:3},{x:34,y:2},{x:52,y:2},{x:67,y:4},
+    {x:88,y:5}, // środek gry
+    {x:104,y:5}, 
+    {x:113,y:2},{x:122,y:0},
+    {x:129,y:2}, // przed szkołą, nagradzasz doświadczonego gracza
+    {x:140,y:3}  // prawie przy szkole
+  ],
+  heart_items: [
+    {x:20,y:2},{x:34,y:3},{x:65,y:3},{x:80,y:2},{x:100,y:6},
+    {x:119,y:5},{x:130,y:4} // bardziej pod koniec, dla regeneracji
+  ],
+  clock_items: [
+    {x:12,y:4},{x:35,y:4},{x:49,y:3},{x:105,y:6},{x:138, y:2}
+  ],
   school: {x:140,y:0, w:5, h:3},
   plastic_enemies: [
-    {type:"ground",x:15,y:0,dir:1,min:14,max:19}, {type:"ground",x:35,y:0,dir:1,min:35,max:40},
-    {type:"ground",x:105,y:0,dir:1,min:105,max:115},
-
-    {type:"obstacle",x:20,y:0,dir:1,min:20,max:22},
-    {type:"island",island:1,pos:0,dir:1},{type:"island",island:2,pos:0,dir:1},{type:"island",island:4,pos:0,dir:-1},
-	      {type:"island",island:5,pos:0,dir:1},{type:"island",island:6,pos:0,dir:1},{type:"island",island:7,pos:0,dir:-1}
-
+    {type:"ground",x:15,y:0,dir:1,min:14,max:19},
+    {type:"ground",x:35,y:0,dir:1,min:35,max:40},
+    {type:"ground",x:86,y:0,dir:1,min:85,max:87},
+    {type:"ground",x:105,y:0,dir:1,min:105,max:111},
+    // dynamic – ruchome plastikowe elementy na platformach
+    {type:"obstacle",x:80,y:2,dir:-1,min:78,max:82},
+    {type:"obstacle",x:116,y:6,dir:1,min:114,max:119},
+    {type:"obstacle",x:126,y:7,dir:-1,min:124,max:130},
+    // plastikowe na wyspach
+    {type:"island",island:7,pos:0,dir:1},
+    {type:"island",island:8,pos:1,dir:1},
+    {type:"island",island:9,pos:0,dir:1},
+    {type:"island",island:10,pos:1,dir:-1}
   ]
+};
+
 };
 for(let i=0;i<LEVEL_WIDTH/(GRID*3);i++)
   if (!level.spikes.some(function(s){ return i*3===s.x && s.y===0; }))
