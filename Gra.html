@@ -182,129 +182,79 @@ function fromGround(yTiles) { return GROUND_Y - GRID * yTiles; }
 const level = {
   filter_token: [{x:5,y:5}],
   ground_blocks: [],
-  // --- OBSTACLE BLOCKS ---
-  obstacle_blocks: [
-    // Pierwsza "wieżyczka" klasyczna
-    {type:1, x:20, y:5}, {type:2, x:21, y:6}, {type:3, x:22, y:5},
-    {type:4, x:20, y:4}, {type:5, x:21, y:4}, {type:6, x:22, y:4},
-    // Górka na 8
-    {type:1, x:28, y:3}, {type:2, x:29, y:4}, {type:3, x:30, y:3},
-    {type:4, x:28, y:2}, {type:5, x:29, y:2}, {type:6, x:30, y:2},
+  const newLevelPlan = {
+    // Bloki ziemi są generowane automatycznie na całej szerokości planszy,
+    // z uwzględnieniem miejsc, gdzie znajdują się kolce, tworząc naturalne luki.
+    ground_blocks: [], // Ta tablica zostanie wypełniona przez logikę gry poniżej
 
-    // Długi „mostek” na wyższym poziomie
-    {type:1, x:38, y:7}, {type:2, x:39, y:8}, {type:3, x:40, y:7},
-    {type:4, x:38, y:6}, {type:5, x:39, y:6}, {type:6, x:40, y:6},
+    // Bloki przeszkód (obstacles)
+    obstacle_blocks: [
+        // Mała ściana na początku
+        { type: 1, x: 10, y: 0 }, { type: 2, x: 11, y: 0 }, { type: 3, x: 12, y: 0 },
+        { type: 4, x: 11, y: 1 }, { type: 5, x: 12, y: 1 },
+        { type: 6, x: 12, y: 2 }, // Szczyt ściany
+        // Pojedyncze przeszkody
+        { type: 1, x: 30, y: 0 },
+        { type: 5, x: 55, y: 0 }, { type: 6, x: 56, y: 0 }
+    ],
 
-    // „Kopiasta” góra z symetrycznymi nogami
-    {type:1, x:50, y:7}, {type:2, x:51, y:8}, {type:3, x:52, y:7},
-    {type:4, x:50, y:6}, {type:4, x:51, y:6}, {type:5, x:51, y:6}, {type:6, x:52, y:6},
+    // Wyspy (islands) - pływające platformy
+    islands: [
+        { x: 15, y: 3, len: 2 }, // Wyspa 0: Dwa bloki, 3 jednostki GRID nad ziemią
+        { x: 20, y: 4, len: 3 }, // Wyspa 1: Trzy bloki, 4 jednostki GRID nad ziemią
+        { x: 40, y: 2, len: 1 }, // Wyspa 2: Pojedynczy blok, 2 jednostki GRID nad ziemią
+        { x: 45, y: 5, len: 4 }  // Wyspa 3: Dłuższa wyspa, 5 jednostek GRID nad ziemią
+    ],
 
-    // Malutkie platformy
-    {type:1, x:58, y:3}, {type:2, x:59, y:4}, {type:3, x:60, y:3},
-    {type:4, x:58, y:2}, {type:5, x:59, y:2}, {type:6, x:60, y:2},
+    // Kolce (spikes) - pułapki
+    spikes: [
+        { x: 5, y: 0 }, { x: 6, y: 0 }, // Dół z kolcami
+        { x: 35, y: 0 } // Pojedynczy kolec na ziemi
+    ],
 
-    // Wieżyczka 2x wyższa 
-    {type:1, x:75, y:6}, {type:2, x:76, y:7}, {type:3, x:77, y:6},
-    {type:4, x:75, y:5}, {type:4, x:76, y:5}, {type:5, x:76, y:5}, {type:6, x:77, y:5},
-    {type:4, x:75, y:4}, {type:5, x:76, y:4}, {type:6, x:77, y:4},
+    // Żetony filtrów (filter_tokens) - do zebrania
+    filter_tokens: [
+        { x: 16, y: 4 }, // Na Wyspie 0
+        { x: 21, y: 5 }, // Na Wyspie 1
+        { x: 40, y: 3 }, // Na Wyspie 2
+        { x: 50, y: 2 }  // Na ziemi
+    ],
 
-    // Symetryczne mini platformy „na wysokości” dla przeciwników obstacles/islands
-    {type:1, x:83, y:9}, {type:2, x:84, y:10}, {type:3, x:85, y:9},
-    {type:4, x:83, y:8}, {type:5, x:84, y:8}, {type:6, x:85, y:8},
+    // Przedmioty serca (heart_items) - dodatkowe życia
+    heart_items: [
+        { x: 10, y: 3 }, // Nad ścianą przeszkód
+        { x: 46, y: 6 }  // Na Wyspie 3
+    ],
 
-    // Przed końcem meta — druga góra
-    {type:1, x:135, y:5}, {type:2, x:136, y:6}, {type:3, x:137, y:5},
-    {type:4, x:135, y:4}, {type:5, x:136, y:4}, {type:6, x:137, y:4},
-  ],
+    // Przedmioty zegara (clock_items) - dodatkowy czas
+    clock_items: [
+        { x: 25, y: 1 }, // Na ziemi, lekko podniesiony
+        { x: 60, y: 2 } // Na ziemi
+    ],
 
-  // --- WYSPY: Urozmaicone, większe długości i wysokości, na różnych piętrach ---
-  islands: [
-    {x:25, y:7, len:2},
-    {x:32, y:4, len:3},
-    {x:43, y:9, len:2},
-    {x:52, y:10, len:2},
-    {x:67, y:4, len:3},
-    {x:72, y:8, len:2},
-    {x:86, y:9, len:2},
-    {x:105, y:11, len:3},
-    {x:120, y:10, len:4},
-    {x:132, y:6, len:2},
-  ],
+    // Szkoła (school) - cel gry
+    school: { x: 95, y: 0, w: 5, h: 3 }, // Szkoła na końcu tego segmentu planszy
 
-  // --- KOLCE (SPIKES): więcej i gęściej, nie tylko na ziemi ---
-  spikes: [
-    // Początek planszy
-    {x:7, y:0}, {x:8, y:0}, {x:9, y:0},
-    // Między islandami, trochę pod platformami
-    {x:27, y:5}, {x:32, y:2},
-    {x:45, y:8},
-    {x:53, y:3}, {x:54, y:3}, {x:55, y:3},
-    // Pod wieżyczkami i na trasie pod obstacles
-    {x:51, y:3}, {x:60, y:0}, {x:61, y:0},
-    {x:75, y:1}, {x:76, y:1},
-    // Na wysokości - pod wyspami jako „pułapka pod platformą”
-    {x:87, y:8}, {x:89, y:8}, {x:90, y:8},
-    {x:106, y:0}, {x:108, y:0}, {x:110, y:0},
-    // Blisko mety
-    {x:134, y:2}, {x:135, y:2}, {x:136, y:2}
-  ],
-
-  // --- TOKENS i ITEMY rozmieszczone możliwie rytmicznie, zachęcające do ryzyka ---
-  filter_tokens: [
-    {x:21, y:5}, {x:34, y:6},
-    {x:43, y:10}, {x:58, y:4}, {x:76, y:9},
-    {x:120, y:12}, {x:136, y:7}
-  ],
-  heart_items: [
-    {x:25, y:8},
-    {x:53, y:11},
-    {x:75, y:7},
-    {x:112, y:12},
-    {x:138, y:8}
-  ],
-  clock_items: [
-    {x:27, y:8},
-    {x:54, y:11},
-    {x:91, y:11},
-    {x:134, y:4},
-  ],
-
-  // --- PLASTIC ENEMIES: dynamicznie i różnorodnie, zawsze na/górze platform, nie w środku ---
-  plastic_enemies: [
-    // Ground enemies – tylko na „gołych” odcinkach
-    {type:"ground", x:17, y:0, dir:1, min:14, max:19},
-    {type:"ground", x:36, y:0, dir:-1, min:34, max:38},
-    {type:"ground", x:65, y:0, dir:1, min:62, max:68},
-    {type:"ground", x:115, y:0, dir:1, min:114, max:120},
-
-    // Obstacle enemies – tylko na logicznych platformach (grupach obstacles z tym samym Y)
-    {type:"obstacle", x:38, y:7, dir:1, min:38, max:40},     // mostek level 7–7–7
-    {type:"obstacle", x:50, y:7, dir:-1, min:50, max:52},    // kopiec
-    {type:"obstacle", x:75, y:6, dir:1, min:75, max:77},     // wysoka wieża
-    {type:"obstacle", x:135, y:5, dir:-1, min:135, max:137}, // meta wieża
-
-    // Enemies na wyspach – platformy wysoko!
-    {type:"island", island:2, pos:1, dir:1},
-    {type:"island", island:5, pos:0, dir:1},
-    {type:"island", island:6, pos:1, dir:-1},
-    {type:"island", island:8, pos:2, dir:1},
-
-    // Enemy „jumping” na wysepce – łączony patrol wysp i obstacles:
-    {type:"island", island:1, pos:1, dir:1},
-    {type:"island", island:3, pos:1, dir:-1},
-
-    // Nowość: Platform enemies na wysokościach (obok wysp)
-    {type:"obstacle", x:84, y:10, dir:1, min:83, max:85}, // wieża w chmurach!
-    {type:"obstacle", x:120, y:10, dir:-1, min:120, max:123},
-  ],
-
-  school: {x:140, y:0, w:5, h:3},
+    // Wrogowie plastikowi (plastic_enemies)
+    plastic_enemies: [
+        { type: "ground", x: 8, y: 0, dir: 1, min: 7, max: 13 }, // Wróg 0: Patroluje w pobliżu ściany przeszkód
+        { type: "island", island: 1, pos: 1, dir: -1 }, // Wróg 1: Patroluje na drugiej wyspie (indeks 1)
+        { type: "ground", x: 50, y: 0, dir: 1, min: 48, max: 53 } // Wróg 2: Patroluje w środku planszy
+    ]
 };
 
+// Logika wypełniania bloków ziemi (ground_blocks) na podstawie wzorca z oryginalnej gry:
+// Bloki ziemi są umieszczane co 3 jednostki GRID, chyba że w danym miejscu znajdują się kolce.
+const NEW_LEVEL_WIDTH_IN_GRIDS = 100; // Szerokość nowej planszy w jednostkach GRID
+for(let i=0; i < NEW_LEVEL_WIDTH_IN_GRIDS; i+=3) {
+    // Sprawdź, czy w tej pozycji znajduje się kolec
+    const hasSpike = newLevelPlan.spikes.some(s => s.x === i && s.y === 0);
+    if (!hasSpike) {
+        newLevelPlan.ground_blocks.push({x:i, y:0});
+    }
+}
 
-for(let i=0;i<LEVEL_WIDTH/(GRID*3);i++)
-  if (!level.spikes.some(function(s){ return i*3===s.x && s.y===0; }))
-    level.ground_blocks.push({x:i*3, y:0});
+
 
 // ---- RESZTA LOGIKI I KOD GRY (NIEZMIENIONY) ----
 function spawnParallax(){
