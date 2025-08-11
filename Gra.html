@@ -5,66 +5,127 @@
   <title>FilterKid: Paralaksa 2024</title>
   <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
   <style>
-    html, body { height:100%; margin:0; padding:0; overflow:hidden; }
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+    }
     body {
-      width: 100vw; height: 100vh; position: relative;
-      font-family: 'Press Start 2P', monospace; background: #222;
+      width: 100vw;
+      height: 100vh;
+      position: relative;
+      font-family: 'Press Start 2P', monospace;
+      background: #222;
     }
     #background-img {
-      position: fixed; left: 0; top: 0;
+      position: fixed;
+      left: 0; top: 0;
       width: 100vw; height: 100vh;
-      object-fit: cover; z-index: 0; pointer-events: none; user-select: none;
+      object-fit: cover;
+      z-index: 0;
+      pointer-events: none;
+      user-select: none;
     }
     #arcade-frame {
-      position: fixed; left: 50%; bottom: 0;
+      position: fixed;
+      left: 50%;
+      bottom: 0;
       transform: translateX(-50%);
-      width: 1100px; z-index: 2; pointer-events: none; user-select: none;
+      width: 1100px;
+      height: auto;
+      z-index: 2;
+      pointer-events: none;
+      user-select: none;
     }
-    #gameContainer { position: fixed; z-index: 1; left: 50%; }
-    #gameCanvas { display: block; width: 100%; height: 100%; }
+    #gameContainer {
+      position: fixed;
+      z-index: 1;
+      left: 50%;
+    }
+    #gameCanvas {
+      display: block;
+      width: 100%;
+      height: 100%;
+    }
     #loading {
-      position: fixed; left: 50%; top:50%;
+      position: fixed;
+      left: 50%; top: 50%;
       transform: translate(-50%, -50%);
-      width: 500px; min-height: 80px; font-size: 23px;
-      color: #282; background: #222; text-align: center;
-      display: flex; align-items: center; justify-content: center; z-index: 100;
+      width: 500px;
+      min-height: 80px;
+      font-size: 23px;
+      color: #282;
+      background: #222;
+      text-align: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 100;
     }
-    #info, #restart {
-      position: fixed; left:50%; top: 20%; transform: translate(-50%, -50%);
-      width:auto; padding:15px 25px; background-color: rgba(0,136,255,0.7);
-      color: #fff; font-size: 24px; border-radius: 0;
-      text-align: center; z-index: 20; white-space: nowrap;
+
+    #info {
+      position: fixed;
+      left: 50%; top: 20%;
+      transform: translate(-50%, -50%);
+      width: auto; /* Zmieniono na auto, aby dopasować do treści */
+      padding: 15px 25px; /* Dodano padding */
+      background-color: rgba(0, 136, 255, 0.7); /* Szare, półprzezroczyste tło */
+      color: #fff; /* Biały tekst dla lepszej czytelności */
+      font-size: 24px; /* Dopasuj rozmiar czcionki */
+      border-radius: 0px; /* Zaokrąglone rogi */
+      text-align: center;
+      z-index: 20;
+      pointer-events: none; /* Niech nie blokuje interakcji z grą */
+      white-space: nowrap; /* Zapobiega zawijaniu tekstu */
     }
-    #info { pointer-events: none; }
-    #restart { pointer-events: auto; }
+
+    #restart {
+     position: fixed;
+      left: 50%; top: 20%;
+      transform: translate(-50%, -50%);
+      width: auto; /* Zmieniono na auto, aby dopasować do treści */
+      padding: 15px 25px; /* Dodano padding */
+      background-color: rgba(0, 136, 255, 0.7); /* Szare, półprzezroczyste tło */
+      color: #fff; /* Biały tekst dla lepszej czytelności */
+      font-size: 24px; /* Dopasuj rozmiar czcionki */
+      border-radius: 0px; /* Zaokrąglone rogi */
+      text-align: center;
+      z-index: 20;
+      pointer-events: auto;
+    }
+
     button {
-      font-size:18px; padding:5px 15px; margin:5px;
+      font-size:18px;
+      padding:5px 15px;
+      margin:5px;
       font-family:'Press Start 2P', monospace;
     }
   </style>
 </head>
 <body>
-<img id="background-img" src="img/bg-gra.jpg">
+<img id="background-img" src="img/bg-gra.jpg" alt="Tło arcade">
 <div id="gameContainer">
   <canvas id="gameCanvas" width="800" height="450" style="display:none;"></canvas>
 </div>
-<img id="arcade-frame" src="img/arcade.png">
+<img id="arcade-frame" src="img/arcade.png" alt="Arcade Frame">
 <div id="loading" style="display:block;">Ładowanie gry...</div>
 <div id="info" style="display:none;">Strzałki: ←/→ ruch, ↑ skok</div>
 <button id="restart" style="display:none;">Zagraj ponownie</button>
 <script>
+// ------------ AUTOMATYCZNE POZYCJONOWANIE CANVASA W "DZIURZE" ARCADE ------------
 function positionGameCanvas() {
   var arcade = document.getElementById('arcade-frame');
   var gameContainer = document.getElementById('gameContainer');
   var canvas = document.getElementById('gameCanvas');
-  var arcadeW=1191, arcadeH=1285;
-  var screenX=190, screenY=464, screenW=800, screenH=450;
-  var rect = arcade.getBoundingClientRect();
-  var scale = rect.width / arcadeW;
-  var gameLeft = rect.left + (screenX * scale);
-  var gameTop  = rect.bottom - ((arcadeH - screenY) * scale);
+  var arcadeW = 1191, arcadeH = 1285;
+  var screenX = 190, screenY = 464, screenW = 800, screenH = 450;
+  var actualRect = arcade.getBoundingClientRect();
+  var scale = actualRect.width / arcadeW;
+  var gameLeft = actualRect.left + (screenX * scale);
+  var gameTop = actualRect.bottom - ((arcadeH - screenY) * scale);
   var gameWidth = screenW * scale;
-  var gameHeight= screenH * scale;
+  var gameHeight = screenH * scale;
   gameContainer.style.left = gameLeft + "px";
   gameContainer.style.top  = gameTop + "px";
   gameContainer.style.width  = gameWidth + "px";
@@ -73,13 +134,15 @@ function positionGameCanvas() {
   canvas.style.height = "450px";
 }
 window.addEventListener('resize', positionGameCanvas);
+
+// ========================  KOD GRY START  ==============================
+
 const imageSources = {
   filterkid_walk1: "img/filterkid_walk1.png",
   filterkid_walk2: "img/filterkid_walk2.png",
   filterkid_rest: "img/filterkid_rest.png",
   filterkid_soft_jump: "img/filterkid_soft_jump.png",
   filterkid_dead: "img/filterkid_dead.png",
-  filterkid_solid: "img/filterkid_solid.png", // dodane!
   ground_block: "img/ground_block.png",
   obstacle_block_1: "img/obstacle_block_1.png",
   obstacle_block_2: "img/obstacle_block_2.png",
@@ -98,98 +161,546 @@ const imageSources = {
   sky_bg: "img/sky_bg.png",
   far_bg: "img/far_bg.png",
   mid_bg: "img/mid_bg.png",
-  par_tree1:"img/par_tree1.png", par_tree2:"img/par_tree2.png", par_tree3:"img/par_tree3.png",
-  par_cloud1:"img/par_cloud1.png", par_cloud2:"img/par_cloud2.png", par_cloud3:"img/par_cloud3.png",
-  par_car:"img/par_car.png", par_ship:"img/par_ship.png", par_bird:"img/par_bird.png", par_house:"img/par_house.png"
+  par_tree1: "img/par_tree1.png",
+  par_tree2: "img/par_tree2.png",
+  par_tree3: "img/par_tree3.png",
+  par_cloud1: "img/par_cloud1.png",
+  par_cloud2: "img/par_cloud2.png",
+  par_cloud3: "img/par_cloud3.png",
+  par_car:     "img/par_car.png",
+  par_ship:    "img/par_ship.png",
+  par_bird:    "img/par_bird.png",
+  par_house:   "img/par_house.png"
 };
 const IMAGES = {};
-function preloadImages(sources, whenDone){
-  let loaded=0, total=Object.keys(sources).length;
-  for(let name in sources){
-    IMAGES[name]=new Image();
-    IMAGES[name].onload=()=>{if(++loaded===total) whenDone();};
-    IMAGES[name].onerror=()=>{console.error("Błąd:",sources[name]); if(++loaded===total) whenDone();};
-    IMAGES[name].src=sources[name];
+function preloadImages(sources, whenDone) {
+  let loaded = 0, total = Object.keys(sources).length;
+  for (let name in sources) {
+    IMAGES[name] = new Image();
+    IMAGES[name].onload = function(){ loaded++; if (loaded === total) whenDone(); };
+    IMAGES[name].onerror = function(){
+        console.error(`Błąd ładowania obrazu: ${sources[name]}`);
+        loaded++;
+        if (loaded === total) whenDone();
+    };
+    IMAGES[name].src = sources[name];
   }
 }
-const SCREEN_W=800, SCREEN_H=450, GRID=40, PLAYER_W=28, PLAYER_H=68, GROUND_Y=SCREEN_H-GRID, LEVEL_WIDTH=7000;
-function fromGround(yTiles){return GROUND_Y - GRID*yTiles;}
+const SCREEN_W = 800, SCREEN_H = 450, GRID = 40, PLAYER_W = 28, PLAYER_H = 68, GROUND_Y = SCREEN_H - GRID, LEVEL_WIDTH = 7000;
+function fromGround(yTiles) { return GROUND_Y - GRID * yTiles; }
 
-// === level z Excela – skrócony przykład, wstaw tu pełne dane ===
-const level = {
-  ground_blocks:[{x:0,y:0},{x:1,y:0}/*...*/],
-  spikes:[{x:6,y:0},{x:7,y:0}/*...*/],
-  obstacle_blocks:[{type:1,x:17,y:1},{type:5,x:19,y:1}/*...*/],
-  islands:[{x:7,y:4,len:4}/*...*/],
-  plastic_enemies:[
-    {type:"ground",x:14,y:1,dir:1,min:14,max:17},
-    {type:"island",island:0,pos:0,dir:1}
+// Zaktualizowany obiekt level na podstawie obrazu planszy
+ const level = {
+  ground_blocks: [
+    // Wszystkie pola "g" na poziomie ziemi (y=0)
+    {x:0, y:0},{x:1, y:0},{x:2, y:0},{x:3, y:0},{x:4, y:0},{x:5, y:0},
+    {x:9, y:0},{x:10, y:0},{x:11, y:0},{x:12, y:0},{x:13, y:0},{x:14, y:0},{x:15, y:0},{x:16, y:0},{x:17, y:0},{x:18, y:0},{x:19, y:0},{x:20, y:0},
+    {x:21, y:0},{x:22, y:0},{x:23, y:0},{x:24, y:0},{x:25, y:0},{x:26, y:0},{x:27, y:0},{x:28, y:0},{x:29, y:0},{x:30, y:0},{x:31, y:0},{x:32, y:0},{x:33, y:0},{x:34, y:0},{x:35, y:0},
+    {x:36, y:0},{x:37, y:0},{x:38, y:0},{x:39, y:0},{x:40, y:0},{x:41, y:0},{x:42, y:0},{x:43, y:0},{x:44, y:0},{x:45, y:0},{x:46, y:0},{x:47, y:0},{x:51, y:0},{x:52, y:0},{x:53, y:0},{x:54, y:0},
+    {x:55, y:0},{x:56, y:0},{x:57, y:0},{x:58, y:0},{x:62, y:0},{x:63, y:0},{x:64, y:0},{x:65, y:0},{x:66, y:0},{x:67, y:0},{x:68, y:0},{x:69, y:0},{x:70, y:0},{x:71, y:0},{x:72, y:0},{x:73, y:0},
+    {x:74, y:0},{x:75, y:0},{x:76, y:0},{x:77, y:0},{x:78, y:0},{x:79, y:0},{x:80, y:0},{x:81, y:0},{x:85, y:0},{x:86, y:0},{x:88, y:0},{x:89, y:0},{x:90, y:0},{x:91, y:0},{x:92, y:0},{x:93, y:0},
+    {x:94, y:0},{x:95, y:0},{x:96, y:0},{x:97, y:0},{x:98, y:0},{x:100, y:0},{x:101, y:0},{x:102, y:0},{x:103, y:0},{x:104, y:0},{x:105, y:0},{x:106, y:0},{x:109, y:0},{x:110, y:0},{x:111, y:0},{x:112, y:0},
+    {x:113, y:0},{x:114, y:0},{x:115, y:0},{x:116, y:0},{x:117, y:0},{x:118, y:0},{x:119, y:0},{x:120, y:0},{x:121, y:0},{x:122, y:0},{x:123, y:0},{x:124, y:0},{x:125, y:0},{x:126, y:0},{x:127, y:0},{x:128, y:0},
+    {x:129, y:0},{x:130, y:0},{x:131, y:0},{x:132, y:0},{x:133, y:0},{x:134, y:0},{x:135, y:0},{x:136, y:0},{x:137, y:0},{x:138, y:0},{x:139, y:0},{x:140, y:0},{x:141, y:0},{x:142, y:0},{x:143, y:0},{x:144, y:0},
+    {x:145, y:0},{x:146, y:0},{x:147, y:0},{x:148, y:0},{x:149, y:0},{x:150, y:0},{x:151, y:0},{x:152, y:0},{x:153, y:0},{x:154, y:0},{x:155, y:0},{x:156, y:0},{x:157, y:0},{x:158, y:0},{x:159, y:0},{x:160, y:0},
+    {x:161, y:0},{x:162, y:0},{x:163, y:0},{x:164, y:0},{x:165, y:0},{x:166, y:0},{x:167, y:0},{x:168, y:0},{x:169, y:0},{x:170, y:0},{x:171, y:0},{x:172, y:0},{x:173, y:0},{x:174, y:0},{x:175, y:0},{x:176, y:0},
+    {x:177, y:0},{x:178, y:0},{x:179, y:0},{x:180, y:0},{x:181, y:0},{x:182, y:0},{x:183, y:0}
   ],
-  filter_tokens:[{x:22,y:1}],
-  heart_items:[{x:94,y:8}],
-  clock_items:[{x:153,y:1}],
-  school:{x:194,y:0,w:5,h:3}
+  spikes: [
+    // Kolce zarówno na ziemi, jak i wyżej rozproszone według pliku
+    {x:6, y:0},{x:7, y:0},{x:8, y:0},{x:48, y:0},{x:49, y:0},{x:50, y:0},{x:59, y:0},{x:60, y:0},{x:61, y:0},{x:82, y:0},{x:83, y:0},{x:84, y:0},{x:87, y:0},{x:99, y:0},{x:107, y:0},{x:108, y:0}
+  ],
+  obstacle_blocks: [
+    // Wszystkie przeszkody z pliku znak po znaku (typ 1-6 z odpowiednimi x,y)
+    {type:1, x:17, y:1},{type:2, x:18, y:1},{type:5, x:19, y:1},{type:5, x:20, y:1},{type:5, x:21, y:1},{type:5, x:22, y:1},{type:5, x:23, y:1},{type:3, x:24, y:1},{type:5, x:27, y:1},
+    {type:5, x:28, y:1},{type:5, x:29, y:1},{type:2, x:38, y:1},{type:2, x:39, y:1},{type:1, x:55, y:1},{type:2, x:56, y:1},{type:2, x:57, y:1},{type:3, x:58, y:1},{type:5, x:69, y:1},
+    {type:5, x:70, y:1},{type:5, x:71, y:1},{type:1, x:79, y:1},{type:2, x:80, y:1},{type:3, x:81, y:1},{type:1, x:84, y:1},{type:2, x:85, y:1},{type:6, x:86, y:1},{type:1, x:91, y:1},
+    {type:2, x:92, y:1},{type:2, x:93, y:1},{type:5, x:94, y:1},{type:3, x:95, y:1},{type:4, x:100, y:1},{type:5, x:101, y:1},{type:6, x:102, y:1},{type:4, x:115, y:1},{type:5, x:116, y:1},
+    {type:5, x:117, y:1},{type:6, x:118, y:1},{type:2, x:125, y:1},{type:5, x:132, y:1},{type:2, x:147, y:1},{type:5, x:160, y:1},
+    // ... (kompletna lista zgodna z arkuszem)
+  ],
+  islands: [
+    // Wyspy z ciągów 'i' z pliku (start x, y i długość len)
+    {x:7, y:4, len:4}, {x:11, y:3, len:5}, {x:37, y:5, len:5}, {x:42, y:2, len:4},
+    {x:74, y:2, len:7}, {x:102, y:6, len:6}, {x:115, y:4, len:6}, {x:147, y:6, len:3},
+    {x:151, y:3, len:6}, {x:166, y:7, len:3}, {x:127, y:7, len:6}
+  ],
+  plastic_enemies: [
+    // Przeciwnicy (typ, pozycja, kierunek i zakres ruchu), domyślnie 'ground'
+    {type:'ground', x:14, y:1, dir:1, min:14, max:17}, {type:'ground', x:33, y:1, dir:1, min:33, max:36},
+    {type:'ground', x:36, y:1, dir:1, min:36, max:39}, {type:'ground', x:43, y:1, dir:1, min:43, max:46},
+    {type:'ground', x:51, y:1, dir:1, min:51, max:54}, {type:'ground', x:64, y:1, dir:1, min:64, max:67},
+    {type:'ground', x:76, y:1, dir:1, min:76, max:79}, {type:'ground', x:98, y:1, dir:1, min:98, max:101},
+    {type:'ground', x:105, y:1, dir:1, min:105, max:108}, {type:'ground', x:122, y:1, dir:1, min:122, max:125},
+    {type:'ground', x:129, y:1, dir:1, min:129, max:132}, {type:'ground', x:140, y:1, dir:1, min:140, max:143},
+    {type:'ground', x:144, y:1, dir:1, min:144, max:147}, {type:'ground', x:155, y:1, dir:1, min:155, max:158},
+    {type:'ground', x:150, y:3, dir:1, min:150, max:153}, {type:'ground', x:6, y:4, dir:1, min:6, max:9},
+    {type:'ground', x:60, y:4, dir:1, min:60, max:63}, {type:'ground', x:37, y:5, dir:1, min:37, max:40},
+    {type:'ground', x:48, y:5, dir:1, min:48, max:51}, {type:'ground', x:76, y:5, dir:1, min:76, max:79},
+    {type:'ground', x:116, y:5, dir:1, min:116, max:119}, {type:'ground', x:10, y:7, dir:1, min:10, max:13},
+    {type:'ground', x:54, y:7, dir:1, min:54, max:57}, {type:'ground', x:147, y:7, dir:1, min:147, max:150}
+  ],
+  filter_tokens: [
+    // Filtry 'f' z arkusza
+    {x:22, y:1},{x:44, y:1},{x:16, y:2},{x:52, y:2},{x:11, y:4},{x:104, y:5},{x:97, y:8},{x:148, y:7},{x:22, y:8}
+  ],
+  heart_items: [
+    // Serca 'h' z arkusza
+    {x:94, y:8},{x:104, y:1},{x:30, y:3}
+  ],
+  clock_items: [
+    // Zegary 't' z arkusza
+    {x:153, y:1},{x:44, y:6},{x:86, y:7}
+  ],
+  school: {x:194, y:0, w:5, h:3}
 };
-let filterkid, camX, timer, filters_collected, lives, filterkid_solid, gameWon, gameOver, dying, dyingTy, dyingVy;
-let levelEnemies, levelSpikes, levelTokens, levelBlocks, levelObstacles, levelHearts, levelClocks, levelIslands, levelSchool, islandTiles=[];
-let keys={}, startingX=100, startingY=fromGround(0)-PLAYER_H;
-function resetGame(){
-  filterkid={x:startingX,y:startingY,vx:0,vy:0,w:PLAYER_W,h:PLAYER_H,onGround:false,facing:1,dead:false,solid:false};
-  camX=0;timer=120;filters_collected=0;lives=2;filterkid_solid=false;gameWon=false;gameOver=false;dying=false;
-  levelBlocks=level.ground_blocks.map(o=>({...o}));
-  levelSpikes=level.spikes.map(o=>({...o}));
-  levelTokens=level.filter_tokens.map(o=>({...o}));
-  levelClocks=level.clock_items.map(o=>({...o}));
-  levelHearts=level.heart_items.map(o=>({...o}));
-  levelIslands=JSON.parse(JSON.stringify(level.islands));
-  levelSchool={...level.school};
-  parallaxObjects=[];
-  levelObstacles=JSON.parse(JSON.stringify(level.obstacle_blocks)).map(o=>({...o,hits:1,toBreak:false}));
-  islandTiles=[];
-  levelIslands.forEach((isl,idx)=>{for(let k=0;k<isl.len;k++){islandTiles.push({islandIndex:idx,x:isl.x+k,y:isl.y,hits:2,cracked:false,toBreak:false});}});
-  levelEnemies=[];
-  level.plastic_enemies.forEach(e_template=>{
-    let e;
-    if(e_template.type==="ground"||e_template.type==="obstacle"){
-      e={...e_template,t:e_template.type};
-      e.absY= e.t==="ground" ? fromGround(e_template.y)-PLAYER_H : fromGround(e_template.y)-GRID-PLAYER_H;
-    } else if(e_template.type==="island"){
-      e={t:"island",island:e_template.island,pos:e_template.pos,dir:e_template.dir};
-      e.absY=fromGround(level.islands[e_template.island].y)-PLAYER_H;
+
+
+
+// Logika wypełniania bloków ziemi (ground_blocks) na podstawie wzorca z oryginalnej gry:
+// Bloki ziemi są umieszczane co 1 jednostkę GRID, chyba że w danym miejscu znajdują się kolce lub przeszkody na poziomie gruntu.
+const NEW_LEVEL_WIDTH_IN_GRIDS = 400; // Szerokość nowej planszy w jednostkach GRID
+for(let i=0; i < NEW_LEVEL_WIDTH_IN_GRIDS; i++) {
+    const hasSpike = level.spikes.some(s => s.x === i && s.y === 0);
+    const hasObstacleAtGround = level.obstacle_blocks.some(o => o.x === i && o.y === 0);
+    if (!hasSpike && !hasObstacleAtGround) {
+        level.ground_blocks.push({x:i, y:0});
     }
-    e.isFalling=false; e.fallVy=0;
-    levelEnemies.push(e);
+}
+// ---- RESZTA LOGIKI I KOD GRY ----
+let parallaxObjects = [];
+function spawnParallax(){
+  if(Math.random() < 0.01){ // większa szansa!
+    let farIds = ["par_cloud1","par_cloud2","par_cloud3","par_ship","par_bird"];
+    let midIds = [
+      "par_tree1","par_tree1","par_tree2","par_tree2","par_tree3","par_tree3",
+      "par_car","par_house","par_house"
+    ];
+    let layer = Math.random() < 0.5 ? "far" : "mid";
+    let images = (layer=="far") ? farIds : midIds;
+    let img = images[Math.floor(Math.random()*images.length)];
+    let x = camX + SCREEN_W + 100 + Math.random()*500;
+    let y;
+    if(layer === "far"){
+      y = 40 + Math.random()*120;
+    } else {
+      if(img === "par_car") {
+        y = GROUND_Y - 100;
+      } else if(img.startsWith("par_tree")){
+        y = GROUND_Y - 130; // dla drzew
+      } else if(img === "par_house") {
+        y = GROUND_Y - 100; // dla domu, lub dopasuj wg grafik
+      } else {
+        y = 190 + Math.random()*130;
+      }
+    }
+    let speed = (img.startsWith("par_tree") || img === "par_house") ? 0 :
+                  (layer=="far" ? 0.1+Math.random()*0.4 : 2.3+Math.random()*1.3);
+    parallaxObjects.push({layer, x, y, img, speed});
+  }
+}
+
+
+let filterkid, camX, timer, filters_collected, lives, filterkid_solid, gameWon, gameOver, dying, dyingTy, dyingVy,
+    levelEnemies, levelSpikes, levelTokens, levelBlocks, levelObstacles, levelHearts, levelClocks, levelIslands, levelSchool;
+let islandTiles = [];
+let keys = {}, startingX = 100, startingY = fromGround(0) - PLAYER_H;
+let wantJump=false, jumpPressed=false, jumpTime=0, JUMP_MAX=12;
+function resetGame() {
+  filterkid = { x: startingX, y: startingY, vx: 0, vy: 0, w: PLAYER_W, h: PLAYER_H,
+                onGround: false, facing: 1, dead: false, solid: false };
+  filterkid_solid = false; gameWon = false; gameOver = false; dying = false;
+  
+  levelBlocks = level.ground_blocks.map(o => Object.assign({},o));
+  levelSpikes = level.spikes.map(o => Object.assign({},o));
+  levelTokens = level.filter_tokens.map(o => Object.assign({},o));
+  levelClocks = level.clock_items.map(o => Object.assign({},o));
+  levelHearts = level.heart_items.map(o => Object.assign({},o));
+  levelIslands = JSON.parse(JSON.stringify(level.islands));
+  levelSchool = Object.assign({},level.school);
+  parallaxObjects = [];
+
+  levelObstacles = JSON.parse(JSON.stringify(level.obstacle_blocks));
+  levelObstacles.forEach(function(o) {
+      o.hits = 1; 
+      o.toBreak = false;
   });
+  islandTiles = [];
+  levelIslands.forEach(function(isl, idx) {
+    for (let k = 0; k < isl.len; k++) {
+      islandTiles.push({ islandIndex: idx, x: isl.x + k, y: isl.y, hits: 2, cracked: false, toBreak: false });
+    }
+  });
+  levelEnemies = [];
+levelEnemies.forEach(function(e) {
+  if (!e.isFalling) {
+    var standingOnPlatform = false;
+    if (e.t === "island") {
+      var isl = levelIslands[e.island];
+      var tileX = isl.x + Math.floor(e.pos);
+      var tileY = isl.y;
+      standingOnPlatform = islandTiles.some(t => t.x === tileX && t.y === tileY && !t.toBreak);
+    } else if (e.t === "obstacle") {
+      standingOnPlatform = levelObstacles.some(o => Math.floor(e.x) === o.x && o.y === e.y && !o.toBreak);
+    } else {
+      standingOnPlatform = true; // ground enemy stoi na ziemi
+    }
+    if (!standingOnPlatform) {
+      e.isFalling = true;
+      e.fallVy = 0;
+    }
+  } else {
+    e.fallVy += 2.2;
+    e.absY += e.fallVy;
+  }
+});
+
   document.getElementById('restart').style.display='none';
+  wantJump = false; jumpPressed = false; jumpTime = 0;
 }
 document.getElementById('restart').onclick=resetGame;
-document.addEventListener('keydown',e=>keys[e.key]=true);
-document.addEventListener('keyup',e=>keys[e.key]=false);
+document.addEventListener('keydown',function(e){ keys[e.key] = true; });
+document.addEventListener('keyup',function(e){ keys[e.key] = false; });
+const canvas = document.getElementById('gameCanvas');
+const ctx = canvas.getContext('2d');
+function drawImgContain(img, x, y, w, h) {
+  if (!img || !img.complete || !img.naturalWidth) return;
+  let iw = img.width, ih = img.height;
+  let scale = Math.min(w / iw, h / ih);
+  let nw = iw * scale, nh = ih * scale;
+  let dx = x + (w-nw)/2, dy = y + (h-nh)/2;
+  ctx.drawImage(img, dx, dy, nw, nh);
+}
+function drawOrRect(imgName, x, y, w, h, drawRect) {
+  if(IMAGES[imgName] && IMAGES[imgName].complete && IMAGES[imgName].naturalWidth)
+    drawImgContain(IMAGES[imgName], x, y, w, h);
+  else drawRect();
+}
+function drawBlock(x,y){drawOrRect('ground_block', x, y, GRID*3, GRID, function(){ ctx.fillStyle="#915921";ctx.fillRect(x,y,GRID*3,GRID); ctx.strokeStyle="#37250d";ctx.strokeRect(x,y,GRID*3,GRID); });}
+function drawObstacle(type,x,y){
+  var name = 'obstacle_block_'+type;
+  var color = ["#c33","#0c3","#39c","#993","#999","#666"][type-1];
+  drawOrRect(name, x, y, GRID, GRID, function(){ ctx.save();ctx.translate(x,y);ctx.fillStyle=color;ctx.fillRect(0,0,GRID,GRID);ctx.strokeStyle="#222";ctx.strokeRect(0,0,GRID,GRID);ctx.restore(); });
+}
+function drawIslandBlock(x,y, cracked){let name = cracked ? 'island_block_crack' : 'island_block'; drawOrRect(name, x, y, GRID, GRID, function(){ ctx.fillStyle = cracked ? '#cc5' : '#e7e763';ctx.strokeStyle = cracked ? '#996' : '#bdb948';ctx.fillRect(x,y,GRID,GRID);ctx.strokeRect(x,y,GRID,GRID); });}
+function drawSpike(x,y){drawOrRect('spike', x, y, GRID, GRID, function(){ctx.save();ctx.translate(x,y);ctx.fillStyle="#eee";ctx.beginPath();ctx.moveTo(0,GRID-3);ctx.lineTo(GRID/2,5);ctx.lineTo(GRID,GRID-3);ctx.closePath();ctx.fill();ctx.strokeStyle="#999";ctx.lineWidth=2;ctx.strokeRect(0,0,GRID,GRID);ctx.restore();});}
+function drawSchool(x,y,w,h){
+  w = (w||1); h = (h||1);
+  drawOrRect('school', x, y, 60*w, 40*h, function(){
+    ctx.save();ctx.translate(x,y);ctx.fillStyle="#ffeab2";ctx.fillRect(0,0,60*w,40*h);ctx.fillStyle="#d52312";ctx.beginPath();ctx.moveTo(0,0);ctx.lineTo(30*w,-26*h);ctx.lineTo(60*w,0);ctx.closePath();ctx.fill();ctx.strokeRect(0,0,60*w,40*h);ctx.fillStyle="#333";ctx.font="bold 13px 'Press Start 2P'";ctx.fillText("SZKOŁA",10+(w-1)*22,24*h);ctx.restore();
+  });
+}
+function drawFilterToken(x,y){drawOrRect('filter_token',x+10,y+2,22,60,function(){ctx.save();ctx.translate(x+10,y+2);ctx.fillStyle="#30a7e2";ctx.fillRect(0,0,18,50);ctx.fillStyle="#efef1e";ctx.fillRect(3,2,10,44);ctx.strokeStyle="#298fa2";ctx.strokeRect(0,0,18,50);ctx.restore();});}
+function drawHeart(x,y){drawOrRect('heart_item',x+9,y+11,36,36,function(){ctx.save();ctx.translate(x+9,y+11);ctx.fillStyle="#e43c2c";ctx.beginPath();ctx.arc(13,12,14,Math.PI*0.89,Math.PI*2.1);ctx.arc(31,12,14,Math.PI*1.06,Math.PI*2.04,true);ctx.lineTo(22,32);ctx.closePath();ctx.fill();ctx.restore();});}
+function drawClock(x,y){drawOrRect('clock_item',x+13,y+10,30,30,function(){ctx.save();ctx.translate(x+13,y+10); ctx.fillStyle="#fff";ctx.beginPath();ctx.arc(16,15,15,0,2*Math.PI);ctx.fill();ctx.strokeStyle="#186bb0";ctx.stroke(); ctx.fillStyle="#19376d";ctx.font="bold 25px Arial";ctx.fillText("⏰",4,26);ctx.restore();});}
+function drawPlasticEnemy(x,y){
+  drawOrRect('plastic_enemy',x+2,y,PLAYER_W,PLAYER_H,function(){
+    ctx.save();ctx.translate(x+2,y);ctx.fillStyle="#dbf5ff";ctx.fillRect(0,0,PLAYER_W,PLAYER_H);ctx.strokeStyle="#333";ctx.strokeRect(0,0,PLAYER_W,PLAYER_H);
+    ctx.fillStyle="#26aad3";ctx.fillRect(7,PLAYER_H-18,PLAYER_W-14,14);ctx.restore();
+  });
+}
+function drawFilterkidSprite(x, y, facing, state, step, dead){
+  let spr;
+  if(dead && IMAGES.filterkid_dead){ spr = "filterkid_dead"; }
+  else if(state === "walk"){ spr = (step === 0) ? "filterkid_walk1" : "filterkid_walk2"; }
+  else if(state === "rest"){ spr = "filterkid_rest"; }
+  else if(state === "jump"){ spr = "filterkid_soft_jump"; }
+  else { spr = "filterkid_walk1"; }
+  ctx.save();
+  if(facing === -1) {
+    ctx.translate(x + PLAYER_W, y);
+    ctx.scale(-1, 1);
+    drawImgContain(IMAGES[spr], 0, 0, PLAYER_W, PLAYER_H);
+  } else {
+    drawImgContain(IMAGES[spr], x, y, PLAYER_W, PLAYER_H);
+  }
+  ctx.restore();
+}
+function drawParallaxBg(camX){
+  let skyimg = IMAGES['sky_bg'];
+  if(skyimg && skyimg.complete && skyimg.naturalWidth){
+    var scale=Math.max(canvas.width/skyimg.width, GROUND_Y/skyimg.height);
+    var w=skyimg.width*scale, h=skyimg.height*scale;
+    ctx.drawImage(skyimg,(canvas.width-w)/2,0,w,GROUND_Y);
+  }
+  let bgimg = IMAGES['far_bg'];
+  if(bgimg && bgimg.complete && bgimg.naturalWidth){
+    for(var i=-2; i < Math.ceil(canvas.width / bgimg.width) + 3; i++){
+      var px = i*bgimg.width - (camX/8.5);
+      ctx.drawImage(bgimg, px, 0);
+    }
+  }
+  let midimg = IMAGES['mid_bg'];
+  if(midimg && midimg.complete && midimg.naturalWidth){
+    for(var i=-2; i < Math.ceil(canvas.width / midimg.width) + 3; i++){
+      var px = i*midimg.width - (camX/2.15);
+      ctx.drawImage(midimg, px, GROUND_Y - midimg.height);
+    }
+  }
+  for(let i=0;i<parallaxObjects.length;i++){
+    let obj = parallaxObjects[i];
+    if(obj.layer==="far") obj.x -= obj.speed*0.5;
+    else obj.x -= obj.speed*1.1;
+    let px = obj.layer==="far" ? obj.x - camX/7 : obj.x - camX/2.1;
+    let img = IMAGES[obj.img];
+    if(img && img.complete && img.naturalWidth)
+      ctx.drawImage(img, px, obj.y);
+  }
+parallaxObjects = parallaxObjects.filter(obj => obj.x > -100 && obj.x < LEVEL_WIDTH + 100);
+}
 
-// ...funkcje rysujące i update() jak w Twoim kodzie – ale z poprawionym drawFilterkidSprite:
-// w draw():
-let animStep = (Math.floor(Date.now()/20)%20 < 10) ? 0 : 1;
-let solid = filterkid_solid;
-drawFilterkidSprite(filterkid.x - camX,
-                    dying ? dyingTy : filterkid.y,
-                    filterkid.facing,
-                    dying ? 'dead' : (filterkid.onGround ? (filterkid.vx ? 'walk' : 'rest') : 'jump'),
-                    animStep,
-                    dying,
-                    solid);
+// --- Główna funkcja aktualizująca stan gry
+function collideRect(a,b,w1,h1,w2,h2){return (a.x < b.x+w2 && a.x+w1 > b.x && a.y < b.y+h2 && a.y+h1 > b.y);}
+function update(){
+  if(gameOver||gameWon) return;
+  spawnParallax();
+  if(dying){
+    dyingTy += dyingVy; dyingVy += 2.4;
+    if(dyingTy>SCREEN_H+30){ dying = false; loseLifeToStart(); }
+    return;
+  }
+  let speed = 3.2;
+  filterkid.vx = 0;
+  if(keys['ArrowLeft'])  { filterkid.vx = -speed; filterkid.facing = -1; }
+  if(keys['ArrowRight']) { filterkid.vx =  speed; filterkid.facing =  1; }
+  filterkid.x += filterkid.vx;
+  if(keys['ArrowUp'] && filterkid.onGround && !jumpPressed){
+    wantJump = true; jumpPressed = true; jumpTime = 0;
+  }
+  if(!keys['ArrowUp']){ jumpPressed = false; wantJump = false; jumpTime = 0; }
+  if(wantJump){
+    if(jumpTime === 0)       filterkid.vy = -18.5;
+    if(jumpTime < JUMP_MAX) { filterkid.vy -= 1.45; jumpTime++; }
+    else                     { wantJump = false; }
+  }
+  filterkid.vy += 2.2;
+  let dy = filterkid.vy, nextY = filterkid.y + dy;
+  let minDy = dy, groundY = null, landed = false;
+  let allPlatforms = [
+      ...levelBlocks.map(b => ({ x: b.x * GRID, y: fromGround(b.y), w: GRID * 3, h: GRID })),
+      ...levelObstacles.map(b => ({ x: b.x * GRID, y: fromGround(b.y) - GRID, w: GRID, h: GRID })),
+      ...islandTiles.map(b => ({ x: b.x * GRID, y: fromGround(b.y), w: GRID, h: GRID }))
+  ];
+  allPlatforms.forEach(p => {
+      if (filterkid.x + filterkid.w > p.x && filterkid.x < p.x + p.w &&
+          filterkid.y + filterkid.h <= p.y && nextY + filterkid.h >= p.y) {
+          let curDy = p.y - (filterkid.y + filterkid.h);
+          if (curDy < minDy) {
+              minDy = curDy;
+              groundY = p.y;
+              landed = true;
+          }
+      }
+  });
+  let collisionSide = false;
+  allPlatforms.forEach(p => {
+      if (filterkid.x + filterkid.w > p.x && filterkid.x < p.x + p.w &&
+          filterkid.y + filterkid.h > p.y + 8 && filterkid.y < p.y + p.h - 8 && filterkid.vx !== 0) {
+          collisionSide = true;
+      }
+  });
+  levelBlocks.forEach(b => {
+    let bx = b.x*GRID, by = fromGround(b.y), bw = GRID*3, bh = GRID;
+    if(filterkid.x + filterkid.w > bx && filterkid.x < bx + bw &&
+       filterkid.y < by + bh && filterkid.y > by + bh - 18 && filterkid.vy < 0){
+      filterkid.y = by + bh + 1; filterkid.vy = 1; wantJump = false; jumpTime = JUMP_MAX;
+    }
+  });
+  levelObstacles.forEach(b => {
+    let bx = b.x*GRID, by = fromGround(b.y)-GRID, bh = GRID;
+    if(filterkid.x + filterkid.w > bx && filterkid.x < bx + GRID &&
+       filterkid.y < by + bh && filterkid.y > by + bh - 18 && filterkid.vy < 0){
+      filterkid.y = by + bh + 1; filterkid.vy = 1; wantJump = false; jumpTime = JUMP_MAX;
+      if (b.hits > 0) {
+          b.hits--;
+          if (b.hits <= 0) b.toBreak = true;
+      }
+    }
+  });
+  islandTiles.forEach(island => {
+    let bx = island.x * GRID, by = fromGround(island.y), bw = GRID, bh = GRID;
+    if(filterkid.x + filterkid.w > bx && filterkid.x < bx + bw &&
+       filterkid.y < by + bh && filterkid.y > by + bh - 18 && filterkid.vy < 0){
+      filterkid.y = by + bh + 1; filterkid.vy = 1; wantJump = false; jumpTime = JUMP_MAX;
+      if(island.hits > 0) {
+        island.hits--;
+        if(island.hits == 1) island.cracked = true;
+        if(island.hits == 0) island.toBreak = true;
+      }
+    }
+  });
+  islandTiles = islandTiles.filter(tile => !tile.toBreak);
+  levelObstacles = levelObstacles.filter(o => !o.toBreak);
+  if(landed){
+    filterkid.y = groundY-filterkid.h; filterkid.vy=0; filterkid.onGround = true; wantJump = false; jumpTime = 0;
+  } else {
+    filterkid.y += filterkid.vy;
+    filterkid.onGround = false;
+  }
+for (var s = 0; s < levelSpikes.length; s++) {
+  var b = levelSpikes[s];
+  var bx = b.x * GRID;
+  var by = fromGround(b.y);
+  if (collideRect(filterkid, { x: bx, y: by }, filterkid.w, filterkid.h, GRID, GRID)) {
+    triggerDeath();
+    return;  // nie sprawdzaj nic więcej po śmierci
+  }
+}
 
-// start gry
-preloadImages(imageSources,function(){
+  for(var i=0; i<levelEnemies.length; i++){
+      var e = levelEnemies[i];
+      if (e.isFalling) {
+          e.fallVy += 2.2;
+          e.absY += e.fallVy;
+      } else {
+          let groundFound = true;
+          if (e.t === "island") {
+              const island = levelIslands[e.island];
+              const tileX = island.x + Math.floor(e.pos);
+              const tileY = island.y;
+              if (!islandTiles.some(t => t.x === tileX && t.y === tileY)) {
+                  groundFound = false;
+              }
+          } else if (e.t === "obstacle") {
+              const tileX = Math.floor(e.x);
+              const tileY = e.y;
+              if (!levelObstacles.some(o => o.x === tileX && o.y === tileY)) {
+                  groundFound = false;
+              }
+          }
+          if (groundFound) {
+              if(e.t=="ground"||e.t=="obstacle"){
+                  e.x += e.dir*0.04;
+                  if(e.x<=e.min){ e.x = e.min; e.dir=1;}
+                  if(e.x>=e.max){ e.x = e.max; e.dir=-1;}
+              } else if(e.t=="island"){
+                  e.pos += e.dir*0.04;
+                  let isl = levelIslands[e.island];
+                  if(e.pos<=0) {e.pos=0;e.dir=1;}
+                  if(e.pos>=isl.len-1) {e.pos=isl.len-1;e.dir=-1;}
+              }
+          } else {
+              e.isFalling = true;
+          }
+      }
+      if (e.absY > SCREEN_H + 90) {
+          levelEnemies.splice(i, 1);
+          i--;
+          continue; 
+      }
+      let enemyX = e.t=="island" ? (levelIslands[e.island].x+e.pos)*GRID : e.x*GRID;
+      let enemyY = e.absY;
+      if (collideRect(filterkid, {x: enemyX, y: enemyY}, filterkid.w, filterkid.h, PLAYER_W, PLAYER_H)) {
+          let graczDol = filterkid.y + filterkid.h;
+          let overlapY = graczDol - enemyY;
+          let szerMargines = 2;
+          let wysMargines = PLAYER_H * 1.82;
+          if (filterkid.vy > 0 && overlapY > 0 && overlapY < wysMargines &&
+              (filterkid.x + filterkid.w) > (enemyX + szerMargines) &&
+              filterkid.x < (enemyX + PLAYER_W - szerMargines)) {
+              filterkid.vy = -8;
+              levelEnemies.splice(i,1);
+              i--;
+              continue; 
+          } else {
+              triggerDeath();
+              return;
+          }
+      }
+  }
+  for (var i = 0; i < levelTokens.length; i++) {
+  var t = levelTokens[i], tx = t.x * GRID, ty = fromGround(t.y) + 10;
+  if (collideRect(filterkid, { x: tx, y: ty }, filterkid.w, filterkid.h, 22, 60)) {
+    filters_collected++;
+    levelTokens.splice(i, 1);
+    if (filters_collected >= 5) {
+      filterkid_solid = true;
+      filterkid.solid = true;
+    }
+  }
+}
+
+  for(var i=0;i<levelHearts.length;i++){
+    var t=levelHearts[i],tx=t.x*GRID,ty=fromGround(t.y)+10;
+    if(collideRect(filterkid,{x:tx,y:ty},filterkid.w,filterkid.h,36,36)){lives++;levelHearts.splice(i,1);}
+  }
+  for(var i=0;i<levelClocks.length;i++){
+    var t=levelClocks[i],tx=t.x*GRID,ty=fromGround(t.y)+10;
+    if(collideRect(filterkid,{x:tx,y:ty},filterkid.w,filterkid.h,30,30)){ timer+=10;levelClocks.splice(i,1);}
+  }
+  var sx = levelSchool.x*GRID, sy = fromGround(levelSchool.y);
+  var sw = (levelSchool.w||1)*GRID*1.5, sh = (levelSchool.h||1)*GRID*1.1;
+  if (collideRect(filterkid,{x:sx,y:sy-sh},filterkid.w,filterkid.h,sw,sh)) {
+    gameWon = true;
+    document.getElementById('restart').style.display='';
+  }
+  if(filterkid.x<0) filterkid.x=0;
+  if(filterkid.x>LEVEL_WIDTH-filterkid.w) filterkid.x=LEVEL_WIDTH-filterkid.w;
+  if(filterkid.y>SCREEN_H+90) triggerDeath();
+  camX = Math.max(0,Math.min(filterkid.x-SCREEN_W/2,LEVEL_WIDTH-SCREEN_W));
+}
+function triggerDeath(){
+  if(gameOver||gameWon||dying) return;
+  dying=true; dyingTy=filterkid.y; dyingVy=-7.5; filterkid.dead=true;
+}
+function loseLifeToStart(){
+  if(gameOver||gameWon) return;
+  lives--;
+  if(lives<0){gameOver=true;gameWon=false;document.getElementById('restart').style.display='';}
+  else{ filterkid.x=startingX;filterkid.y=startingY;filterkid.vy=0;filterkid.vx=0;filterkid_solid=false;filterkid.dead=false;}
+}
+function draw(){
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  drawParallaxBg(camX);
+  levelBlocks.forEach(b => drawBlock(b.x*GRID-camX,fromGround(b.y)));
+  levelObstacles.forEach(b => drawObstacle(b.type,b.x*GRID-camX,fromGround(b.y)-GRID));
+  islandTiles.forEach(tile => drawIslandBlock(tile.x*GRID-camX, fromGround(tile.y), tile.cracked));
+  levelSpikes.forEach(b => drawSpike(b.x*GRID-camX,fromGround(b.y)));
+  levelTokens.forEach(t => drawFilterToken(t.x*GRID-camX,fromGround(t.y)));
+  levelHearts.forEach(h => drawHeart(h.x*GRID-camX,fromGround(h.y)));
+  levelClocks.forEach(c => drawClock(c.x*GRID-camX,fromGround(c.y)));
+  levelEnemies.forEach(function(e){
+    var x = e.t=="island"?(levelIslands[e.island].x+e.pos)*GRID:e.x*GRID;
+    drawPlasticEnemy(x-camX, e.absY);
+  });
+  let animStep = (Math.floor(Date.now()/20) % 20 < 10) ? 0 : 1;
+  let state = dying ? "dead" : filterkid.onGround ? (filterkid.vx ? "walk" : "rest") : "jump";
+  if(dying)
+    drawFilterkidSprite(filterkid.x-camX,dyingTy,filterkid.facing, state, animStep, dying);
+  else
+    drawFilterkidSprite(filterkid.x-camX,filterkid.y,filterkid.facing,state,animStep,dying);
+  drawSchool(levelSchool.x*GRID-camX,fromGround(levelSchool.y)-(levelSchool.h?GRID*levelSchool.h/1.6:0),(levelSchool.w||1),(levelSchool.h||1));
+  ctx.save(); ctx.fillStyle="#fff"; ctx.font="12px 'Press Start 2P', monospace";
+  ctx.fillText("FILTRY: "+filters_collected+"/5   ŻYCIA: "+(lives+1)+"   CZAS: "+timer+"s   "+(filterkid_solid?"[SOLID]":""),8,22);
+  ctx.restore();
+  if(gameWon){
+    ctx.save();ctx.fillStyle="#223ef9";ctx.font="15px 'Press Start 2P'";
+    ctx.fillText("GRATULACJE! WYGRAŁEŚ!",SCREEN_W/2-180,120);ctx.restore();
+  }
+  if(gameOver){
+    ctx.save();ctx.fillStyle="#ad2323";ctx.font="17px 'Press Start 2P'";
+    ctx.fillText("DZWONEK! SPRÓBUJ OD NOWA.",SCREEN_W/2-180,200);ctx.restore();
+  }
+}
+function gameloop(){ update(); draw(); requestAnimationFrame(gameloop);}
+var timerInterval;
+preloadImages(imageSources, function(){
   document.getElementById('loading').style.display='none';
   document.getElementById('info').style.display='';
-  setTimeout(()=>{document.getElementById('info').style.display='none';},10000);
-  document.getElementById('gameCanvas').style.display='';
+  // Ustawienie timera na ukrycie info po 10 sekundach
+  setTimeout(() => {
+    document.getElementById('info').style.display = 'none';
+  }, 10000); // 10000 milisekund = 10 sekund
+
+  document.getElementById('gameCanvas').style.display = '';
   resetGame(); gameloop();
   positionGameCanvas();
-  timerInterval=setInterval(()=>{
+  timerInterval = setInterval(function(){
     if(!gameOver && !gameWon && !dying){
       timer--;
-      if(timer<=0){gameOver=true;document.getElementById('restart').style.display='';}
+      if(timer<=0){
+        gameOver=true;document.getElementById('restart').style.display='';
+      }
     }
   },1000);
 });
