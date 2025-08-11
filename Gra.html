@@ -1,8 +1,7 @@
 <!DOCTYPE html>
-<html lang="pl">
-<head>
+<html lang="pl"><head>
   <meta charset="utf-8">
-  <title>FilterKid: Paralaksa 2024</title>
+  <title>Power of Lovable</title>
   <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
   <style>
     html, body {
@@ -192,57 +191,107 @@ function fromGround(yTiles) { return GROUND_Y - GRID * yTiles; }
 // Zaktualizowany obiekt level na podstawie obrazu planszy
  const level = {
   ground_blocks: [
-    // Wszystkie pola "g" na poziomie ziemi (y=0)
-    {x:0, y:0},{x:1, y:0},{x:2, y:0},{x:3, y:0},{x:4, y:0},{x:5, y:0},
-    {x:9, y:0},{x:10, y:0},{x:11, y:0},{x:12, y:0},{x:13, y:0},{x:14, y:0},{x:15, y:0},{x:16, y:0},{x:17, y:0},{x:18, y:0},{x:19, y:0},{x:20, y:0},
-    {x:21, y:0},{x:22, y:0},{x:23, y:0},{x:24, y:0},{x:25, y:0},{x:26, y:0},{x:27, y:0},{x:28, y:0},{x:29, y:0},{x:30, y:0},{x:31, y:0},{x:32, y:0},{x:33, y:0},{x:34, y:0},{x:35, y:0},
-    {x:36, y:0},{x:37, y:0},{x:38, y:0},{x:39, y:0},{x:40, y:0},{x:41, y:0},{x:42, y:0},{x:43, y:0},{x:44, y:0},{x:45, y:0},{x:46, y:0},{x:47, y:0},{x:51, y:0},{x:52, y:0},{x:53, y:0},{x:54, y:0},
-    {x:55, y:0},{x:56, y:0},{x:57, y:0},{x:58, y:0},{x:62, y:0},{x:63, y:0},{x:64, y:0},{x:65, y:0},{x:66, y:0},{x:67, y:0},{x:68, y:0},{x:69, y:0},{x:70, y:0},{x:71, y:0},{x:72, y:0},{x:73, y:0},
-    {x:74, y:0},{x:75, y:0},{x:76, y:0},{x:77, y:0},{x:78, y:0},{x:79, y:0},{x:80, y:0},{x:81, y:0},{x:85, y:0},{x:86, y:0},{x:88, y:0},{x:89, y:0},{x:90, y:0},{x:91, y:0},{x:92, y:0},{x:93, y:0},
-    {x:94, y:0},{x:95, y:0},{x:96, y:0},{x:97, y:0},{x:98, y:0},{x:100, y:0},{x:101, y:0},{x:102, y:0},{x:103, y:0},{x:104, y:0},{x:105, y:0},{x:106, y:0},{x:109, y:0},{x:110, y:0},{x:111, y:0},{x:112, y:0},
-    {x:113, y:0},{x:114, y:0},{x:115, y:0},{x:116, y:0},{x:117, y:0},{x:118, y:0},{x:119, y:0},{x:120, y:0},{x:121, y:0},{x:122, y:0},{x:123, y:0},{x:124, y:0},{x:125, y:0},{x:126, y:0},{x:127, y:0},{x:128, y:0},
-    {x:129, y:0},{x:130, y:0},{x:131, y:0},{x:132, y:0},{x:133, y:0},{x:134, y:0},{x:135, y:0},{x:136, y:0},{x:137, y:0},{x:138, y:0},{x:139, y:0},{x:140, y:0},{x:141, y:0},{x:142, y:0},{x:143, y:0},{x:144, y:0},
-    {x:145, y:0},{x:146, y:0},{x:147, y:0},{x:148, y:0},{x:149, y:0},{x:150, y:0},{x:151, y:0},{x:152, y:0},{x:153, y:0},{x:154, y:0},{x:155, y:0},{x:156, y:0},{x:157, y:0},{x:158, y:0},{x:159, y:0},{x:160, y:0},
-    {x:161, y:0},{x:162, y:0},{x:163, y:0},{x:164, y:0},{x:165, y:0},{x:166, y:0},{x:167, y:0},{x:168, y:0},{x:169, y:0},{x:170, y:0},{x:171, y:0},{x:172, y:0},{x:173, y:0},{x:174, y:0},{x:175, y:0},{x:176, y:0},
-    {x:177, y:0},{x:178, y:0},{x:179, y:0},{x:180, y:0},{x:181, y:0},{x:182, y:0},{x:183, y:0}
   ],
   spikes: [
-    // Kolce zarówno na ziemi, jak i wyżej rozproszone według pliku
-    {x:6, y:0},{x:7, y:0},{x:8, y:0},{x:48, y:0},{x:49, y:0},{x:50, y:0},{x:59, y:0},{x:60, y:0},{x:61, y:0},{x:82, y:0},{x:83, y:0},{x:84, y:0},{x:87, y:0},{x:99, y:0},{x:107, y:0},{x:108, y:0}
+    {x:3,y:0},{x:4,y:0},{x:5,y:0},{x:48,y:0},{x:49,y:0},{x:50,y:0},
+    {x:59,y:0},{x:60,y:0},{x:61,y:0},{x:82,y:0},{x:83,y:0},{x:84,y:0},
+    {x:87,y:0},{x:99,y:0},{x:107,y:0},{x:108,y:0}
   ],
   obstacle_blocks: [
-    // Wszystkie przeszkody z pliku znak po znaku (typ 1-6 z odpowiednimi x,y)
-    {type:1, x:17, y:1},{type:2, x:18, y:1},{type:5, x:19, y:1},{type:5, x:20, y:1},{type:5, x:21, y:1},{type:5, x:22, y:1},{type:5, x:23, y:1},{type:3, x:24, y:1},{type:5, x:27, y:1},
-    {type:5, x:28, y:1},{type:5, x:29, y:1},{type:2, x:38, y:1},{type:2, x:39, y:1},{type:1, x:55, y:1},{type:2, x:56, y:1},{type:2, x:57, y:1},{type:3, x:58, y:1},{type:5, x:69, y:1},
-    {type:5, x:70, y:1},{type:5, x:71, y:1},{type:1, x:79, y:1},{type:2, x:80, y:1},{type:3, x:81, y:1},{type:1, x:84, y:1},{type:2, x:85, y:1},{type:6, x:86, y:1},{type:1, x:91, y:1},
-    {type:2, x:92, y:1},{type:2, x:93, y:1},{type:5, x:94, y:1},{type:3, x:95, y:1},{type:4, x:100, y:1},{type:5, x:101, y:1},{type:6, x:102, y:1},{type:4, x:115, y:1},{type:5, x:116, y:1},
-    {type:5, x:117, y:1},{type:6, x:118, y:1},{type:2, x:125, y:1},{type:5, x:132, y:1},{type:2, x:147, y:1},{type:5, x:160, y:1},
-    // ... (kompletna lista zgodna z arkuszem)
+  {type:2,x:0,y:7},{type:3,x:1,y:7},
+  {type:1,x:21,y:7},{type:2,x:22,y:7},{type:3,x:23,y:7},
+  {type:1,x:28,y:7},{type:2,x:29,y:7},{type:3,x:30,y:7},
+  {type:1,x:150,y:7},{type:2,x:151,y:7},{type:3,x:152,y:7},
+  {type:1,x:154,y:7},{type:2,x:155,y:7},{type:3,x:156,y:7},
+  {type:1,x:181,y:7},
+
+  {type:1,x:10,y:6},{type:2,x:11,y:6},{type:3,x:12,y:6},
+  {type:1,x:36,y:6},{type:2,x:37,y:6},{type:3,x:38,y:6},
+  {type:1,x:56,y:6},{type:2,x:57,y:6},{type:3,x:58,y:6},
+  {type:1,x:87,y:6},{type:2,x:88,y:6},{type:3,x:89,y:6},
+  {type:1,x:118,y:6},{type:2,x:119,y:6},{type:3,x:120,y:6},
+
+  {type:1,x:97,y:5},{type:2,x:98,y:5},{type:3,x:99,y:5},
+  {type:4,x:100,y:5},{type:5,x:101,y:5},{type:6,x:102,y:5},
+  {type:5,x:145,y:5},{type:6,x:146,y:5},
+
+  {type:1,x:20,y:4},
+  {type:1,x:25,y:4},{type:5,x:26,y:4},{type:5,x:27,y:4},{type:5,x:28,y:4},{type:5,x:29,y:4},{type:5,x:30,y:4},{type:3,x:31,y:4},
+
+  {type:2,x:40,y:4},{type:6,x:45,y:4},
+  {type:4,x:53,y:4},{type:5,x:54,y:4},{type:5,x:55,y:4},{type:6,x:56,y:4},
+
+  {type:5,x:61,y:4},{type:5,x:69,y:4},{type:5,x:70,y:4},
+
+  {type:1,x:99,y:4},{type:2,x:100,y:4},{type:3,x:101,y:4},{type:5,x:105,y:4},
+
+  {type:1,x:5,y:3},{type:3,x:10,y:3},
+  {type:1,x:18,y:3},{type:5,x:19,y:3},{type:5,x:20,y:3},{type:5,x:21,y:3},{type:3,x:22,y:3},
+
+  {type:5,x:26,y:3},{type:5,x:27,y:3},
+
+  {type:4,x:37,y:3},{type:5,x:46,y:3},{type:5,x:47,y:3},{type:5,x:48,y:3},{type:5,x:49,y:3},{type:5,x:50,y:3},{type:5,x:51,y:3},
+
+  {type:1,x:54,y:3},{type:2,x:55,y:3},{type:3,x:56,y:3},
+
+  {type:1,x:62,y:3},{type:5,x:63,y:3},{type:5,x:64,y:3},{type:5,x:65,y:3},{type:5,x:66,y:3},
+  {type:5,x:68,y:3},{type:5,x:69,y:3},{type:5,x:70,y:3},
+  {type:2,x:84,y:3},{type:3,x:85,y:3},
+
+  {type:1,x:92,y:3},{type:2,x:93,y:3},
+  {type:4,x:99,y:3},{type:5,x:100,y:3},{type:6,x:101,y:3},
+  {type:5,x:102,y:3},{type:5,x:103,y:3},{type:5,x:104,y:3},{type:5,x:105,y:3},
+
+  {type:1,x:17,y:2},{type:2,x:18,y:2},{type:5,x:19,y:2},{type:5,x:20,y:2},{type:5,x:21,y:2},{type:5,x:22,y:2},{type:5,x:23,y:2},{type:3,x:24,y:2},
+  {type:5,x:27,y:2},{type:5,x:28,y:2},{type:5,x:29,y:2},
+
+  {type:2,x:38,y:2},
+  {type:4,x:53,y:2},
+
+  {type:1,x:61,y:2},{type:2,x:62,y:2},{type:2,x:63,y:2},{type:2,x:64,y:2},{type:3,x:65,y:2},
+
+  {type:5,x:77,y:2},
+  {type:1,x:91,y:2},{type:2,x:92,y:2},{type:3,x:93,y:2}
   ],
-  islands: [
-    // Wyspy z ciągów 'i' z pliku (start x, y i długość len)
-    {x:7, y:4, len:4}, {x:11, y:3, len:5}, {x:37, y:5, len:5}, {x:42, y:2, len:4},
-    {x:74, y:2, len:7}, {x:102, y:6, len:6}, {x:115, y:4, len:6}, {x:147, y:6, len:3},
-    {x:151, y:3, len:6}, {x:166, y:7, len:3}, {x:127, y:7, len:6}
-  ],
+ islands: [
+  {x:20,y:10,len:1},{x:26,y:10,len:4},
+  {x:75,y:10,len:2},
+  {x:141,y:10,len:1},
+
+  {x:6,y:4,len:4},
+  {x:150,y:9,len:6},
+
+  {x:25,y:8,len:5},
+  {x:73,y:8,len:2},
+  {x:120,y:8,len:4},
+  {x:146,y:8,len:2},
+  {x:176,y:8,len:3},
+
+  {x:6,y:7,len:6},
+  {x:146,y:7,len:6},
+
+  {x:42,y:6,len:4},
+  {x:73,y:6,len:7},
+],
+
   plastic_enemies: [
     // Przeciwnicy (typ, pozycja, kierunek i zakres ruchu), domyślnie 'ground'
-    {type:'ground', x:14, y:1, dir:1, min:14, max:17}, {type:'ground', x:33, y:1, dir:1, min:33, max:36},
-    {type:'ground', x:36, y:1, dir:1, min:36, max:39}, {type:'ground', x:43, y:1, dir:1, min:43, max:46},
-    {type:'ground', x:51, y:1, dir:1, min:51, max:54}, {type:'ground', x:64, y:1, dir:1, min:64, max:67},
-    {type:'ground', x:76, y:1, dir:1, min:76, max:79}, {type:'ground', x:98, y:1, dir:1, min:98, max:101},
-    {type:'ground', x:105, y:1, dir:1, min:105, max:108}, {type:'ground', x:122, y:1, dir:1, min:122, max:125},
-    {type:'ground', x:129, y:1, dir:1, min:129, max:132}, {type:'ground', x:140, y:1, dir:1, min:140, max:143},
-    {type:'ground', x:144, y:1, dir:1, min:144, max:147}, {type:'ground', x:155, y:1, dir:1, min:155, max:158},
+    {type:'ground', x:14, y:0, dir:1, min:14, max:17}, {type:'ground', x:33, y:0, dir:1, min:33, max:36},
+    {type:'ground', x:36, y:0, dir:1, min:36, max:39}, {type:'ground', x:43, y:0, dir:1, min:43, max:46},
+    {type:'ground', x:51, y:0, dir:1, min:51, max:54}, {type:'ground', x:64, y:0, dir:1, min:64, max:67},
+    {type:'ground', x:76, y:0, dir:1, min:76, max:79}, {type:'ground', x:98, y:0, dir:1, min:98, max:101},
+    {type:'ground', x:105, y:0, dir:1, min:105, max:108}, {type:'ground', x:122, y:0, dir:1, min:122, max:125},
+    {type:'ground', x:129, y:0, dir:1, min:129, max:132}, {type:'ground', x:140, y:0, dir:1, min:140, max:143},
+    {type:'ground', x:144, y:0, dir:1, min:144, max:147}, {type:'ground', x:155, y:0, dir:1, min:155, max:158},
     {type:'ground', x:150, y:3, dir:1, min:150, max:153}, {type:'ground', x:6, y:4, dir:1, min:6, max:9},
     {type:'ground', x:60, y:4, dir:1, min:60, max:63}, {type:'ground', x:37, y:5, dir:1, min:37, max:40},
     {type:'ground', x:48, y:5, dir:1, min:48, max:51}, {type:'ground', x:76, y:5, dir:1, min:76, max:79},
-    {type:'ground', x:116, y:5, dir:1, min:116, max:119}, {type:'ground', x:10, y:7, dir:1, min:10, max:13},
+    {type:'ground', x:116, y:5, dir:1, min:116, max:119}, {type:'ground', x:8, y:7, dir:1, min:6, max:9},
     {type:'ground', x:54, y:7, dir:1, min:54, max:57}, {type:'ground', x:147, y:7, dir:1, min:147, max:150}
   ],
   filter_tokens: [
     // Filtry 'f' z arkusza
-    {x:22, y:1},{x:44, y:1},{x:16, y:2},{x:52, y:2},{x:11, y:4},{x:104, y:5},{x:97, y:8},{x:148, y:7},{x:22, y:8}
+    {x:42, y:1},{x:44, y:1},{x:22, y:4},{x:52, y:2},{x:8, y:6},{x:104, y:5},{x:97, y:8},{x:148, y:7},{x:22, y:8}
   ],
   heart_items: [
     // Serca 'h' z arkusza
@@ -260,13 +309,9 @@ function fromGround(yTiles) { return GROUND_Y - GRID * yTiles; }
 // Logika wypełniania bloków ziemi (ground_blocks) na podstawie wzorca z oryginalnej gry:
 // Bloki ziemi są umieszczane co 1 jednostkę GRID, chyba że w danym miejscu znajdują się kolce lub przeszkody na poziomie gruntu.
 const NEW_LEVEL_WIDTH_IN_GRIDS = 400; // Szerokość nowej planszy w jednostkach GRID
-for(let i=0; i < NEW_LEVEL_WIDTH_IN_GRIDS; i++) {
-    const hasSpike = level.spikes.some(s => s.x === i && s.y === 0);
-    const hasObstacleAtGround = level.obstacle_blocks.some(o => o.x === i && o.y === 0);
-    if (!hasSpike && !hasObstacleAtGround) {
-        level.ground_blocks.push({x:i, y:0});
-    }
-}
+for(let i=0;i<LEVEL_WIDTH/(GRID*3);i++)
+  if (!level.spikes.some(function(s){ return i*3===s.x && s.y===0; }))
+    level.ground_blocks.push({x:i*3, y:0});
 // ---- RESZTA LOGIKI I KOD GRY ----
 let parallaxObjects = [];
 function spawnParallax(){
@@ -306,9 +351,9 @@ let filterkid, camX, timer, filters_collected, lives, filterkid_solid, gameWon, 
 let islandTiles = [];
 let keys = {}, startingX = 100, startingY = fromGround(0) - PLAYER_H;
 let wantJump=false, jumpPressed=false, jumpTime=0, JUMP_MAX=12;
-function resetGame() {
-  filterkid = { x: startingX, y: startingY, vx: 0, vy: 0, w: PLAYER_W, h: PLAYER_H,
-                onGround: false, facing: 1, dead: false, solid: false };
+function resetGame(){
+  filterkid = { x:startingX, y:startingY, vx:0, vy:0, w:PLAYER_W, h:PLAYER_H, onGround:false, facing:1, dead:false};
+  camX = 0; timer = 120; filters_collected = 0; lives = 2;
   filterkid_solid = false; gameWon = false; gameOver = false; dying = false;
   
   levelBlocks = level.ground_blocks.map(o => Object.assign({},o));
@@ -332,29 +377,20 @@ function resetGame() {
     }
   });
   levelEnemies = [];
-levelEnemies.forEach(function(e) {
-  if (!e.isFalling) {
-    var standingOnPlatform = false;
-    if (e.t === "island") {
-      var isl = levelIslands[e.island];
-      var tileX = isl.x + Math.floor(e.pos);
-      var tileY = isl.y;
-      standingOnPlatform = islandTiles.some(t => t.x === tileX && t.y === tileY && !t.toBreak);
-    } else if (e.t === "obstacle") {
-      standingOnPlatform = levelObstacles.some(o => Math.floor(e.x) === o.x && o.y === e.y && !o.toBreak);
-    } else {
-      standingOnPlatform = true; // ground enemy stoi na ziemi
-    }
-    if (!standingOnPlatform) {
-      e.isFalling = true;
+  level.plastic_enemies.forEach(function(e_template){
+      let e;
+      if(e_template.type==="ground"||e_template.type==="obstacle") 
+          e = Object.assign({}, e_template, {t: e_template.type});
+      else if(e_template.type==="island") 
+          e = {t:"island", island:e_template.island, pos:e_template.pos, dir:e_template.dir};
+      e.isFalling = false;
       e.fallVy = 0;
-    }
-  } else {
-    e.fallVy += 2.2;
-    e.absY += e.fallVy;
-  }
-});
-
+      let baseY = e.t=="ground" ? fromGround(e.y)
+          : e.t=="obstacle" ? fromGround(e.y)-GRID 
+          : fromGround(levelIslands[e.island].y);
+      e.absY = baseY - PLAYER_H;
+      levelEnemies.push(e);
+  });
   document.getElementById('restart').style.display='none';
   wantJump = false; jumpPressed = false; jumpTime = 0;
 }
@@ -499,13 +535,20 @@ function update(){
           collisionSide = true;
       }
   });
-  levelBlocks.forEach(b => {
-    let bx = b.x*GRID, by = fromGround(b.y), bw = GRID*3, bh = GRID;
-    if(filterkid.x + filterkid.w > bx && filterkid.x < bx + bw &&
-       filterkid.y < by + bh && filterkid.y > by + bh - 18 && filterkid.vy < 0){
-      filterkid.y = by + bh + 1; filterkid.vy = 1; wantJump = false; jumpTime = JUMP_MAX;
-    }
-  });
+levelBlocks.forEach(b => {
+  let bx = b.x * GRID;
+  let by = fromGround(b.y);
+  let bw = GRID * 3; // szerokość 3 kratki
+  let bh = GRID;
+  if (filterkid.x + filterkid.w > bx && filterkid.x < bx + bw &&
+      filterkid.y < by + bh && filterkid.y > by + bh - 18 && filterkid.vy < 0) {
+    filterkid.y = by + bh + 1;
+    filterkid.vy = 1;
+    wantJump = false;
+    jumpTime = JUMP_MAX;
+  }
+});
+
   levelObstacles.forEach(b => {
     let bx = b.x*GRID, by = fromGround(b.y)-GRID, bh = GRID;
     if(filterkid.x + filterkid.w > bx && filterkid.x < bx + GRID &&
@@ -537,13 +580,14 @@ function update(){
     filterkid.y += filterkid.vy;
     filterkid.onGround = false;
   }
-for (var s = 0; s < levelSpikes.length; s++) {
-  var b = levelSpikes[s];
-  var bx = b.x * GRID;
-  var by = fromGround(b.y);
-  if (collideRect(filterkid, { x: bx, y: by }, filterkid.w, filterkid.h, GRID, GRID)) {
+// Sprawdzenie kolizji z kolcami
+for (let s = 0; s < levelSpikes.length; s++) {
+  const spike = levelSpikes[s];
+  const spikeX = spike.x * GRID;
+  const spikeY = fromGround(spike.y);
+  if (collideRect(filterkid, { x: spikeX, y: spikeY }, filterkid.w, filterkid.h, GRID, GRID)) {
     triggerDeath();
-    return;  // nie sprawdzaj nic więcej po śmierci
+    return; // zatrzymaj dalsze działanie update po śmierci
   }
 }
 
@@ -608,18 +652,13 @@ for (var s = 0; s < levelSpikes.length; s++) {
           }
       }
   }
-  for (var i = 0; i < levelTokens.length; i++) {
-  var t = levelTokens[i], tx = t.x * GRID, ty = fromGround(t.y) + 10;
-  if (collideRect(filterkid, { x: tx, y: ty }, filterkid.w, filterkid.h, 22, 60)) {
-    filters_collected++;
-    levelTokens.splice(i, 1);
-    if (filters_collected >= 5) {
-      filterkid_solid = true;
-      filterkid.solid = true;
+  for(var i=0;i<levelTokens.length;i++){
+    var t=levelTokens[i],tx=t.x*GRID,ty=fromGround(t.y)+10;
+    if(collideRect(filterkid,{x:tx,y:ty},filterkid.w,filterkid.h,22,60)){
+      filters_collected++; levelTokens.splice(i,1);
+      if(filters_collected>=5) filterkid_solid = true;
     }
   }
-}
-
   for(var i=0;i<levelHearts.length;i++){
     var t=levelHearts[i],tx=t.x*GRID,ty=fromGround(t.y)+10;
     if(collideRect(filterkid,{x:tx,y:ty},filterkid.w,filterkid.h,36,36)){lives++;levelHearts.splice(i,1);}
