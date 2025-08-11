@@ -52,13 +52,14 @@
       position: fixed;
       left: 50%; top: 50%;
       transform: translate(-50%, -50%);
-      width: 500px;
-      min-height: 80px;
-      font-size: 23px;
-      color: #282;
-      background: #222;
+     width: auto; /* Zmieniono na auto, aby dopasować do treści */
+      padding: 25px 25px; /* Dodano padding */
+      background-color: rgba(0, 136, 255, 0.8); /* Szare, półprzezroczyste tło */
+      color: #fff; /* Biały tekst dla lepszej czytelności */
+      font-size: 24px; /* Dopasuj rozmiar czcionki */
+      border-radius: 0px; /* Zaokrąglone rogi */
       text-align: center;
-      display: flex;
+       display: flex;
       align-items: center;
       justify-content: center;
       z-index: 100;
@@ -66,27 +67,28 @@
 
     #info {
       position: fixed;
-      left: 50%; top: 20%;
+      left: 50%; top: 30%;
       transform: translate(-50%, -50%);
       width: auto; /* Zmieniono na auto, aby dopasować do treści */
-      padding: 15px 25px; /* Dodano padding */
-      background-color: rgba(0, 136, 255, 0.7); /* Szare, półprzezroczyste tło */
+      padding: 25px 25px; /* Dodano padding */
+      background-color: rgba(0, 136, 255, 0.8); /* Szare, półprzezroczyste tło */
       color: #fff; /* Biały tekst dla lepszej czytelności */
       font-size: 24px; /* Dopasuj rozmiar czcionki */
       border-radius: 0px; /* Zaokrąglone rogi */
       text-align: center;
       z-index: 20;
       pointer-events: none; /* Niech nie blokuje interakcji z grą */
-      white-space: nowrap; /* Zapobiega zawijaniu tekstu */
+      white-space: wrap; /* Zapobiega zawijaniu tekstu */
     }
 
-	  #restart {}
+    #restart {
      position: fixed;
-      left: 50%; top: 20%;
+      left: 50%; top: 50%;
+		text-transform: uppercase;
       transform: translate(-50%, -50%);
       width: auto; /* Zmieniono na auto, aby dopasować do treści */
-      padding: 15px 25px; /* Dodano padding */
-      background-color: rgba(0, 136, 255, 0.7); /* Szare, półprzezroczyste tło */
+      padding: 25px 25px; /* Dodano padding */
+      background-color: rgba(0, 136, 255, 0.9); /* Szare, półprzezroczyste tło */
       color: #fff; /* Biały tekst dla lepszej czytelności */
       font-size: 24px; /* Dopasuj rozmiar czcionki */
       border-radius: 0px; /* Zaokrąglone rogi */
@@ -110,7 +112,7 @@
 </div>
 <img id="arcade-frame" src="img/arcade.png" alt="Arcade Frame">
 <div id="loading" style="display:block;">Ładowanie gry...</div>
-<div id="info" style="display:none;">Strzałki: ←/→ ruch, ↑ skok (trzymaj dłużej = wyżej)</div>
+<div id="info" style="display:none;">Strzałki: ← / → ruch, ↑ skok</div>
 <button id="restart" style="display:none;">Zagraj ponownie</button>
 <script>
 // ------------ AUTOMATYCZNE POZYCJONOWANIE CANVASA W "DZIURZE" ARCADE ------------
@@ -189,45 +191,34 @@ function preloadImages(sources, whenDone) {
 const SCREEN_W = 800, SCREEN_H = 450, GRID = 40, PLAYER_W = 28, PLAYER_H = 68, GROUND_Y = SCREEN_H - GRID, LEVEL_WIDTH = 7000;
 function fromGround(yTiles) { return GROUND_Y - GRID * yTiles; }
 const level = {
-  filter_token: [ {x:5,y:5}, ],
+  filter_token: [ {x:25,y:5}, ],
   ground_blocks: [],
   obstacle_blocks: [
-  {type:2,x:0,y:7},{type:3,x:1,y:7},
+  {type:1,x:0,y:6},{type:2,x:0,y:7},{type:3,x:1,y:7}, {type:5,x:15,y:4},
   {type:1,x:21,y:7},{type:2,x:22,y:7},{type:3,x:23,y:7},
   {type:1,x:28,y:7},{type:2,x:29,y:7},{type:3,x:30,y:7},
   {type:1,x:150,y:7},{type:2,x:151,y:7},{type:3,x:152,y:7},
   {type:1,x:154,y:7},{type:2,x:155,y:7},{type:3,x:156,y:7},
   {type:1,x:181,y:7},
-
   {type:1,x:10,y:6},{type:2,x:11,y:6},{type:3,x:12,y:6},
   {type:1,x:36,y:6},{type:2,x:37,y:6},{type:3,x:38,y:6},
   {type:1,x:56,y:6},{type:2,x:57,y:6},{type:3,x:58,y:6},
   {type:1,x:87,y:6},{type:2,x:88,y:6},{type:3,x:89,y:6},
   {type:1,x:118,y:6},{type:2,x:119,y:6},{type:3,x:120,y:6},
-
   {type:1,x:97,y:5},{type:2,x:98,y:5},{type:3,x:99,y:5},
   {type:4,x:100,y:5},{type:5,x:101,y:5},{type:6,x:102,y:5},
   {type:5,x:145,y:5},{type:6,x:146,y:5},
-
   {type:1,x:20,y:4},
   {type:1,x:25,y:4},{type:5,x:26,y:4},{type:5,x:27,y:4},{type:5,x:28,y:4},{type:5,x:29,y:4},{type:5,x:30,y:4},{type:3,x:31,y:4},
-
   {type:2,x:40,y:4},{type:6,x:45,y:4},
   {type:4,x:53,y:4},{type:5,x:54,y:4},{type:5,x:55,y:4},{type:6,x:56,y:4},
-
   {type:5,x:61,y:4},{type:5,x:69,y:4},{type:5,x:70,y:4},
-
   {type:1,x:99,y:4},{type:2,x:100,y:4},{type:3,x:101,y:4},{type:5,x:105,y:4},
-
-  {type:1,x:5,y:3},{type:3,x:10,y:3},
+  {type:1,x:4,y:3},{type:3,x:9,y:3},
   {type:1,x:18,y:3},{type:5,x:19,y:3},{type:5,x:20,y:3},{type:5,x:21,y:3},{type:3,x:22,y:3},
-
   {type:5,x:26,y:3},{type:5,x:27,y:3},
-
   {type:4,x:37,y:3},{type:5,x:46,y:3},{type:5,x:47,y:3},{type:5,x:48,y:3},{type:5,x:49,y:3},{type:5,x:50,y:3},{type:5,x:51,y:3},
-
   {type:1,x:54,y:3},{type:2,x:55,y:3},{type:3,x:56,y:3},
-
   {type:1,x:62,y:3},{type:5,x:63,y:3},{type:5,x:64,y:3},{type:5,x:65,y:3},{type:5,x:66,y:3},
   {type:5,x:68,y:3},{type:5,x:69,y:3},{type:5,x:70,y:3},
   {type:2,x:84,y:3},{type:3,x:85,y:3},
@@ -248,51 +239,45 @@ const level = {
   {type:1,x:91,y:2},{type:2,x:92,y:2},{type:3,x:93,y:2}
   ],
  islands: [
-  {x:20,y:10,len:1},{x:26,y:10,len:4},
-  {x:75,y:10,len:2},
-  {x:141,y:10,len:1},
-
-  {x:6,y:4,len:4},
-  {x:150,y:9,len:6},
-
-  {x:25,y:8,len:5},
-  {x:73,y:8,len:2},
-  {x:120,y:8,len:4},
-  {x:146,y:8,len:2},
-  {x:176,y:8,len:3},
-
-  {x:6,y:7,len:6},
-  {x:146,y:7,len:6},
-
-  {x:42,y:6,len:4},
+   {x:5,y:4,len:4},{x:7,y:7,len:5},
+  {x:20,y:7,len:1},{x:26,y:7,len:4},{x:75,y:7,len:2},{x:141,y:7,len:1},
+  {x:150,y:7,len:6},{x:25,y:7,len:5},{x:73,y:7,len:2},{x:120,y:7,len:4},
+  {x:146,y:7,len:2},{x:176,y:7,len:3},{x:146,y:7,len:6},{x:42,y:6,len:4},
   {x:73,y:6,len:7},
 ],
   spikes: [
-    {x:3,y:0},{x:4,y:0},{x:5,y:0},{x:48,y:0},{x:49,y:0},{x:50,y:0},
+    {x:7,y:0},{x:4,y:0},{x:5,y:0},{x:48,y:0},{x:49,y:0},{x:50,y:0},
     {x:59,y:0},{x:60,y:0},{x:61,y:0},{x:82,y:0},{x:83,y:0},{x:84,y:0},
     {x:87,y:0},{x:99,y:0},{x:107,y:0},{x:108,y:0}
   ],
 	
-	filter_tokens: [{x:1,y:2},{x:27,y:3},{x:34,y:2},{x:52,y:2},{x:67,y:4},{x:120,y:2},{x:175,y:3},{x:300,y:5},{x:400,y:2}],
-  heart_items: [{x:20,y:2},{x:34,y:3},{x:65,y:3},{x:80,y:2},{x:120,y:3}],
-  clock_items: [{x:12,y:4},{x:35,y:4},{x:49,y:3},{x:190,y:3}],
-  school: {x:170,y:0, w:5, h:3},
+filter_tokens: [{x:15,y:2},{x:27,y:3},{x:34,y:2},{x:52,y:2},{x:67,y:4},{x:120,y:2},{x:175,y:3},{x:300,y:5},{x:400,y:2}],
+  heart_items: [{x:0,y:10},{x:34,y:3},{x:65,y:3},{x:80,y:2},{x:120,y:3}],
+  clock_items: [{x:200,y:4},{x:135,y:4},],
+  school: {x:170,y:2, w:8, h:6},
   plastic_enemies: [
-    {type:"ground",x:15,y:0,dir:1,min:14,max:19},
-    {type:"obstacle",x:20,y:0,dir:1,min:20,max:22},
-    {type:"island",island:1,pos:0,dir:1},{type:"island",island:2,pos:0,dir:1},{type:"island",island:4,pos:0,dir:-1},
-    {type:"ground", x:14, y:0, dir:1, min:14, max:17},     {type:"ground", x:33, y:0, dir:1, min:33, max:36},
-    {type:"ground", x:36, y:0, dir:1, min:36, max:39},     {type:"ground", x:43, y:0, dir:1, min:43, max:46},
-    {type:"ground", x:51, y:0, dir:1, min:51, max:54},     {type:"ground", x:64, y:0, dir:1, min:64, max:67},
-    {type:"ground", x:76, y:0, dir:1, min:76, max:79},    {type:"ground", x:98, y:0, dir:1, min:98, max:101},
-    {type:"ground", x:105, y:0, dir:1, min:105, max:108},     {type:"ground", x:122, y:0, dir:1, min:122, max:125},
-    {type:"ground", x:129, y:0, dir:1, min:129, max:132},     {type:"ground", x:140, y:0, dir:1, min:140, max:143},
+    {type:"ground",x:7,y:0,dir:1,min:7,max:19},	{type:"ground", x:14, y:0, dir:1, min:14, max:17},
+	{type:"ground", x:33, y:0, dir:1, min:33, max:36},	{type:"ground", x:36, y:0, dir:1, min:36, max:39},
+	{type:"ground", x:43, y:0, dir:1, min:43, max:46},    {type:"ground", x:51, y:0, dir:1, min:51, max:54},
+	{type:"ground", x:64, y:0, dir:1, min:64, max:67},    {type:"ground", x:76, y:0, dir:1, min:76, max:79},
+	{type:"ground", x:98, y:0, dir:1, min:98, max:101},    {type:"ground", x:105, y:0, dir:1, min:105, max:108},     
+	{type:"ground", x:122, y:0, dir:1, min:122, max:125},    {type:"ground", x:129, y:0, dir:1, min:129, max:132},     
+	{type:"ground", x:140, y:0, dir:1, min:140, max:143},
     {type:"ground", x:144, y:0, dir:1, min:144, max:147},     {type:"ground", x:155, y:0, dir:1, min:155, max:158},
-    {type:"ground", x:150, y:3, dir:1, min:150, max:153},     {type:"ground", x:6, y:4, dir:1, min:6, max:9},
-    {type:"ground", x:60, y:4, dir:1, min:60, max:63},     {type:"ground", x:37, y:5, dir:1, min:37, max:40},
-    {type:"ground", x:48, y:5, dir:1, min:48, max:51},     {type:"ground", x:76, y:5, dir:1, min:76, max:79},
-    {type:"ground", x:116, y:5, dir:1, min:116, max:119},     {type:"ground", x:8, y:7, dir:1, min:6, max:9},
-    {type:"ground", x:54, y:7, dir:1, min:54, max:57},     {type:"ground", x:147, y:7, dir:1, min:147, max:150}
+    {type:"obstacle", x:150, y:3, dir:1, min:150, max:153},     
+    {type:"obstacle", x:60, y:4, dir:1, min:60, max:63},     {type:"obstacle", x:37, y:5, dir:1, min:37, max:40},
+    {type:"obstacle", x:48, y:5, dir:1, min:48, max:51},     {type:"obstacle", x:76, y:5, dir:1, min:76, max:79},
+    {type:"obstacle", x:116, y:5, dir:1, min:116, max:119},
+    {type:"obstacle", x:54, y:7, dir:1, min:54, max:57},     {type:"obstacle", x:147, y:5, dir:1, min:147, max:150},
+    {type:"ground",x:20,y:0,dir:1,min:20,max:22},
+	   {type:"island",island:0,pos:1,dir:1},
+    {type:"island",island:1,pos:1,dir:1},{type:"island",island:2,pos:1,dir:1},{type:"island",island:3,pos:0,dir:-1},
+    {type:"island",island:4,pos:1,dir:1},{type:"island",island:5,pos:1,dir:1},{type:"island",island:6,pos:0,dir:-1},
+ {type:"island",island:7,pos:1,dir:1},{type:"island",island:8,pos:1,dir:1},{type:"island",island:9,pos:0,dir:-1},
+    {type:"island",island:11,pos:1,dir:1},{type:"island",island:12,pos:1,dir:1},{type:"island",island:14,pos:0,dir:-1},
+
+	  
+   
   ]
 };
 for(let i=0;i<LEVEL_WIDTH/(GRID*3);i++)
@@ -694,7 +679,7 @@ function draw(){
   }
   if(gameOver){
     ctx.save();ctx.fillStyle="#ad2323";ctx.font="17px 'Press Start 2P'";
-    ctx.fillText("DZWONEK! SPRÓBUJ OD NOWA.",SCREEN_W/2-180,200);ctx.restore();
+    ctx.fillText("GAME OVER",SCREEN_W/2-180,200);ctx.restore();
   }
 }
 function gameloop(){ update(); draw(); requestAnimationFrame(gameloop);}
@@ -702,6 +687,11 @@ var timerInterval;
 preloadImages(imageSources, function(){
   document.getElementById('loading').style.display='none';
   document.getElementById('info').style.display='';
+  // Ustawienie timera na ukrycie info po 10 sekundach
+  setTimeout(() => {
+    document.getElementById('info').style.display = 'none';
+  }, 10000); // 10000 milisekund = 10 sekund
+
   document.getElementById('gameCanvas').style.display = '';
   resetGame(); gameloop();
   positionGameCanvas();
