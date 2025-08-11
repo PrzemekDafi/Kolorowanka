@@ -66,14 +66,14 @@
 
     #info {
       position: fixed;
-      left: 50%; top: 50%;
+      left: 50%; top: 20%;
       transform: translate(-50%, -50%);
       width: auto; /* Zmieniono na auto, aby dopasować do treści */
       padding: 15px 25px; /* Dodano padding */
-      background-color: rgba(0, 0, 0, 0.7); /* Szare, półprzezroczyste tło */
+      background-color: rgba(0, 136, 255, 0.7); /* Szare, półprzezroczyste tło */
       color: #fff; /* Biały tekst dla lepszej czytelności */
-      font-size: 14px; /* Dopasuj rozmiar czcionki */
-      border-radius: 8px; /* Zaokrąglone rogi */
+      font-size: 24px; /* Dopasuj rozmiar czcionki */
+      border-radius: 0px; /* Zaokrąglone rogi */
       text-align: center;
       z-index: 20;
       pointer-events: none; /* Niech nie blokuje interakcji z grą */
@@ -81,9 +81,17 @@
     }
 
     #restart {
-      margin-bottom: 10px;
+     position: fixed;
+      left: 50%; top: 20%;
+      transform: translate(-50%, -50%);
+      width: auto; /* Zmieniono na auto, aby dopasować do treści */
+      padding: 15px 25px; /* Dodano padding */
+      background-color: rgba(0, 136, 255, 0.7); /* Szare, półprzezroczyste tło */
+      color: #fff; /* Biały tekst dla lepszej czytelności */
+      font-size: 24px; /* Dopasuj rozmiar czcionki */
+      border-radius: 0px; /* Zaokrąglone rogi */
+      text-align: center;
       z-index: 20;
-      position: relative;
       pointer-events: auto;
     }
 
@@ -102,7 +110,7 @@
 </div>
 <img id="arcade-frame" src="img/arcade.png" alt="Arcade Frame">
 <div id="loading" style="display:block;">Ładowanie gry...</div>
-<div id="info" style="display:none;">Strzałki: ←/→ ruch, ↑ skok (trzymaj dłużej = wyżej)</div>
+<div id="info" style="display:none;">Strzałki: ←/→ ruch, ↑ skok</div>
 <button id="restart" style="display:none;">Zagraj ponownie</button>
 <script>
 // ------------ AUTOMATYCZNE POZYCJONOWANIE CANVASA W "DZIURZE" ARCADE ------------
@@ -225,7 +233,7 @@ const level = {
 
 // Logika wypełniania bloków ziemi (ground_blocks) na podstawie wzorca z oryginalnej gry:
 // Bloki ziemi są umieszczane co 1 jednostkę GRID, chyba że w danym miejscu znajdują się kolce lub przeszkody na poziomie gruntu.
-const NEW_LEVEL_WIDTH_IN_GRIDS = 100; // Szerokość nowej planszy w jednostkach GRID
+const NEW_LEVEL_WIDTH_IN_GRIDS = 400; // Szerokość nowej planszy w jednostkach GRID
 for(let i=0; i < NEW_LEVEL_WIDTH_IN_GRIDS; i++) {
     const hasSpike = level.spikes.some(s => s.x === i && s.y === 0);
     const hasObstacleAtGround = level.obstacle_blocks.some(o => o.x === i && o.y === 0);
@@ -233,8 +241,6 @@ for(let i=0; i < NEW_LEVEL_WIDTH_IN_GRIDS; i++) {
         level.ground_blocks.push({x:i, y:0});
     }
 }
-
-
 // ---- RESZTA LOGIKI I KOD GRY ----
 let parallaxObjects = [];
 function spawnParallax(){
