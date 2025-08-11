@@ -168,10 +168,15 @@ document.addEventListener('keyup',e=>keys[e.key]=false);
 
 // ...funkcje rysujące i update() jak w Twoim kodzie – ale z poprawionym drawFilterkidSprite:
 // w draw():
-let animStep=(Math.floor(Date.now()/20)%20<10)?0:1;
-let solid=filterkid_solid;
-drawFilterkidSprite(filterkid.x-camX,dying?dyingTy:filterkid.y,filterkid.facing,
-  dying?'dead':(filterkid.onGround?(filterkid.vx?'walk':'rest'):'jump'),animStep,dying,solid);
+let animStep = (Math.floor(Date.now()/20)%20 < 10) ? 0 : 1;
+let solid = filterkid_solid;
+drawFilterkidSprite(filterkid.x - camX,
+                    dying ? dyingTy : filterkid.y,
+                    filterkid.facing,
+                    dying ? 'dead' : (filterkid.onGround ? (filterkid.vx ? 'walk' : 'rest') : 'jump'),
+                    animStep,
+                    dying,
+                    solid);
 
 // start gry
 preloadImages(imageSources,function(){
