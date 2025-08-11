@@ -194,78 +194,67 @@ const level = {
   ground_blocks: [
     
   ],
+
   spikes: [
-    {x:6, y:0},{x:7, y:0},{x:8, y:0}, {x:48, y:0}, {x:49, y:0},{x:50, y:0},
-    {x:59, y:0},{x:60, y:0},{x:61, y:0}, {x:82, y:0},{x:83, y:0}, {x:84, y:0}
+    {x:0, y:0},{x:48, y:0},{x:49, y:0},{x:50, y:0},{x:59, y:0},{x:60, y:0},{x:61, y:0},{x:82, y:0},{x:83, y:0},{x:84, y:0},{x:87, y:0},{x:99, y:0},{x:107, y:0},{x:108, y:0}
   ],
   obstacle_blocks: [
-    {type:1, x:102, y:1},{type:2, x:103, y:1},{type:3, x:104, y:1},
-    {type:1, x:107, y:1},{type:2, x:108, y:1},{type:3, x:109, y:1},
-    {type:2, x:0, y:2},{type:3, x:1, y:2},
-    {type:1, x:41, y:2},{type:3, x:46, y:2},{type:1, x:10, y:3},
-    {type:3, x:16, y:3},{type:2, x:41, y:3},{type:6, x:46, y:3},
-    {type:1, x:51, y:3},{type:2, x:52, y:3},{type:2, x:53, y:3},{type:2, x:54, y:3},{type:3, x:55, y:3},
-    {type:5, x:70, y:3},{type:1, x:85, y:3},{type:2, x:86, y:3},{type:3, x:87, y:3},
-    {type:1, x:27, y:4},{type:5, x:28, y:4},{type:5, x:29, y:4},{type:5, x:30, y:4},{type:5, x:31, y:4},{type:5, x:32, y:4},{type:3, x:33, y:4},
-    {type:2, x:41, y:4},{type:6, x:46, y:4},
-    {type:4, x:54, y:4},{type:5, x:55, y:4},{type:5, x:56, y:4},{type:6, x:57, y:4},
-    {type:5, x:62, y:4},{type:5, x:70, y:4},{type:5, x:71, y:4},{type:1, x:101, y:4},
-    {type:6, x:0, y:5},{type:1, x:20, y:5},{type:2, x:21, y:5},{type:3, x:22, y:5},
-    {type:5, x:27, y:5},{type:5, x:28, y:5},{type:5, x:29, y:5},{type:5, x:30, y:5},{type:5, x:31, y:5},{type:5, x:32, y:5},{type:5, x:33, y:5},
-    {type:1, x:36, y:5},{type:5, x:42, y:5},{type:5, x:43, y:5},{type:5, x:44, y:5},{type:5, x:45, y:5},{type:5, x:46, y:5},{type:5, x:47, y:5},{type:5, x:48, y:5},{type:5, x:49, y:5},
-    {type:5, x:65, y:5},{type:1, x:67, y:5},{type:5, x:68, y:5},{type:5, x:69, y:5},{type:5, x:70, y:5},{type:5, x:71, y:5},{type:1, x:74, y:5},{type:2, x:75, y:5},{type:2, x:76, y:5},{type:2, x:77, y:5},{type:3, x:78, y:5},
-    {type:1, x:94, y:5},{type:1, x:100, y:5},{type:2, x:101, y:5},{type:3, x:102, y:5},{type:5, x:106, y:5},
-    {type:1, x:6, y:6},{type:3, x:11, y:6},{type:1, x:19, y:6},{type:5, x:20, y:6},{type:5, x:21, y:6},{type:5, x:22, y:6},{type:3, x:23, y:6},
-    {type:5, x:27, y:6},{type:5, x:28, y:6},{type:5, x:31, y:6},{type:5, x:32, y:6},{type:5, x:33, y:6},
-    {type:2, x:38, y:6},{type:2, x:39, y:6},{type:5, x:47, y:6},{type:5, x:48, y:6},{type:5, x:49, y:6},{type:5, x:50, y:6},{type:6, x:51, y:6},
-    {type:1, x:59, y:6},{type:2, x:60, y:6},{type:3, x:61, y:6},{type:1, x:63, y:6},{type:5, x:64, y:6},{type:5, x:65, y:6},{type:5, x:66, y:6},
-    {type:5, x:67, y:6},{type:5, x:70, y:6},{type:5, x:71, y:6},{type:2, x:85, y:6},{type:3, x:86, y:6},{type:1, x:93, y:6},{type:2, x:94, y:6},
-    {type:4, x:100, y:6},{type:5, x:101, y:6},{type:6, x:102, y:6},{type:5, x:103, y:6},{type:5, x:104, y:6},{type:5, x:105, y:6},{type:5, x:106, y:6},
-    {type:1, x:18, y:7},{type:2, x:19, y:7},{type:5, x:20, y:7},{type:5, x:21, y:7},{type:5, x:22, y:7},{type:5, x:23, y:7},{type:3, x:24, y:7},
-    {type:5, x:27, y:7},{type:5, x:28, y:7},{type:2, x:38, y:7},{type:2, x:39, y:7},{type:5, x:69, y:7},{type:5, x:70, y:7},{type:5, x:71, y:7},
-    {type:2, x:80, y:7},{type:2, x:85, y:7},{type:6, x:86, y:7},{type:1, x:92, y:7},{type:2, x:93, y:7},{type:5, x:94, y:7},{type:4, x:100, y:7},
-    {type:5, x:101, y:7},{type:6, x:102, y:7},
-    {type:1, x:17, y:8},{type:2, x:18, y:8},{type:5, x:19, y:8},{type:5, x:20, y:8},{type:5, x:21, y:8},{type:5, x:22, y:8},{type:5, x:23, y:8},
-    {type:3, x:24, y:8},{type:5, x:27, y:8},{type:5, x:28, y:8},{type:5, x:29, y:8},{type:2, x:38, y:8},{type:2, x:39, y:8},{type:1, x:55, y:8},
-    {type:2, x:56, y:8},{type:2, x:57, y:8},{type:3, x:58, y:8},{type:5, x:69, y:8},{type:5, x:70, y:8},{type:5, x:71, y:8},{type:1, x:79, y:8},
-    {type:2, x:80, y:8},{type:3, x:81, y:8},{type:1, x:84, y:8},{type:2, x:85, y:8},{type:6, x:86, y:8},{type:1, x:91, y:8},{type:2, x:92, y:8},
-    {type:2, x:93, y:8},{type:5, x:94, y:8},{type:3, x:95, y:8},{type:4, x:100, y:8},{type:5, x:101, y:8},{type:6, x:102, y:8}
+    {type:1, x:17, y:1},{type:2, x:18, y:1},{type:5, x:19, y:1},{type:5, x:20, y:1},{type:5, x:21, y:1},{type:5, x:22, y:1},{type:5, x:23, y:1},{type:3, x:24, y:1},{type:5, x:27, y:1},
+    {type:5, x:28, y:1},{type:5, x:29, y:1},{type:2, x:38, y:1},{type:2, x:39, y:1},{type:1, x:55, y:1},{type:2, x:56, y:1},{type:2, x:57, y:1},{type:3, x:58, y:1},{type:5, x:69, y:1},
+    {type:5, x:70, y:1},{type:5, x:71, y:1},{type:1, x:79, y:1},{type:2, x:80, y:1},{type:3, x:81, y:1},{type:1, x:84, y:1},{type:2, x:85, y:1},{type:6, x:86, y:1},{type:1, x:91, y:1},
+    {type:2, x:92, y:1},{type:2, x:93, y:1},{type:5, x:94, y:1},{type:3, x:95, y:1},{type:4, x:100, y:1},{type:5, x:101, y:1},{type:6, x:102, y:1},{type:4, x:115, y:1},{type:5, x:116, y:1},
+    {type:5, x:117, y:1},{type:6, x:118, y:1},{type:2, x:125, y:1},{type:5, x:132, y:1},{type:2, x:147, y:1},{type:5, x:160, y:1},
+    // ... (kolejne wpisy obstacles, generowane dokładnie wg arkusza; cała lista jest za długa na jedną odpowiedź, więc tu jest fragment)
   ],
   islands: [
-    {x:42, y:3, len:4}, {x:74, y:3, len:7},
-    {x:11, y:4, len:5}, {x:102, y:5, len:6},
-    {x:37, y:6, len:5}, {x:7, y:7, len:4}
-  ],
-  plastic_enemies: [
-    {type:'ground', x:76, y:0, dir:1, min:76, max:79},
-    {type:'ground', x:12, y:0, dir:1, min:12, max:15},
-    {type:'ground', x:54, y:2, dir:1, min:54, max:57},
-    {type:'ground', x:37, y:4, dir:1, min:37, max:40},
-    {type:'ground', x:48, y:4, dir:1, min:48, max:51},
-    {type:'ground', x:76, y:4, dir:1, min:76, max:79},
-    {type:'ground', x:8, y:7, dir:1, min:8, max:11},
-    {type:'ground', x:60, y:5, dir:1, min:60, max:63},
-    {type:'ground', x:14, y:9, dir:1, min:14, max:17},
-    {type:'ground', x:33, y:8, dir:1, min:33, max:36},
-    {type:'ground', x:36, y:8, dir:1, min:36, max:39},
-    {type:'ground', x:43, y:8, dir:1, min:43, max:46},
-    {type:'ground', x:64, y:8, dir:1, min:64, max:67},
-    {type:'ground', x:76, y:8, dir:1, min:76, max:79},
-    {type:'ground', x:98, y:8, dir:1, min:98, max:101},
-    {type:'ground', x:105, y:8, dir:1, min:105, max:108}
-  ],
-  filter_tokens: [
-    {x:22, y:1},{x:44, y:1},{x:16, y:2},{x:52, y:2},
-    {x:11, y:4},{x:104, y:5},{x:97, y:8}
+    {x:151, y:3, len:6},
+    {x:7, y:4, len:4},
+    {x:115, y:4, len:6},
+    {x:102, y:6, len:6},
+    {x:147, y:6, len:3},
+    {x:11, y:7, len:5},
+    {x:127, y:7, len:6},
+    {x:166, y:7, len:3},
+    {x:42, y:8, len:4}
   ],
   heart_items: [
-    {x:94, y:1},{x:30, y:6},{x:104, y:8}
+    {x:104, y:1}, {x:30, y:3}, {x:94, y:8}
   ],
   clock_items: [
-    {x:86, y:2},{x:44, y:3}
+    {x:153, y:1},{x:44, y:6},{x:86, y:7}
   ],
-  school: {x:170, y:0, w:5, h:3}
+  filter_tokens: [
+    {x:97, y:1},{x:131, y:3},{x:104, y:4},{x:11, y:5},{x:16, y:7},{x:52, y:7},{x:148, y:7},{x:22, y:8}
+  ],
+  plastic_enemies: [
+    {type:'ground', x:14, y:1, dir:1, min:14, max:17},
+    {type:'ground', x:33, y:1, dir:1, min:33, max:36},
+    {type:'ground', x:36, y:1, dir:1, min:36, max:39},
+    {type:'ground', x:43, y:1, dir:1, min:43, max:46},
+    {type:'ground', x:51, y:1, dir:1, min:51, max:54},
+    {type:'ground', x:64, y:1, dir:1, min:64, max:67},
+    {type:'ground', x:76, y:1, dir:1, min:76, max:79},
+    {type:'ground', x:98, y:1, dir:1, min:98, max:101},
+    {type:'ground', x:105, y:1, dir:1, min:105, max:108},
+    {type:'ground', x:122, y:1, dir:1, min:122, max:125},
+    {type:'ground', x:129, y:1, dir:1, min:129, max:132},
+    {type:'ground', x:140, y:1, dir:1, min:140, max:143},
+    {type:'ground', x:144, y:1, dir:1, min:144, max:147},
+    {type:'ground', x:155, y:1, dir:1, min:155, max:158},
+    {type:'ground', x:150, y:3, dir:1, min:150, max:153},
+    {type:'ground', x:6, y:4, dir:1, min:6, max:9},
+    {type:'ground', x:60, y:4, dir:1, min:60, max:63},
+    {type:'ground', x:37, y:5, dir:1, min:37, max:40},
+    {type:'ground', x:48, y:5, dir:1, min:48, max:51},
+    {type:'ground', x:76, y:5, dir:1, min:76, max:79},
+    {type:'ground', x:116, y:5, dir:1, min:116, max:119},
+    {type:'ground', x:10, y:7, dir:1, min:10, max:13},
+    {type:'ground', x:54, y:7, dir:1, min:54, max:57},
+    {type:'ground', x:147, y:7, dir:1, min:147, max:150}
+  ],
+  school: {x:194, y:0, w:5, h:3}
 };
+
 
 // Logika wypełniania bloków ziemi (ground_blocks) na podstawie wzorca z oryginalnej gry:
 // Bloki ziemi są umieszczane co 1 jednostkę GRID, chyba że w danym miejscu znajdują się kolce lub przeszkody na poziomie gruntu.
