@@ -1,7 +1,8 @@
 <!DOCTYPE html>
-<html lang="pl"><head>
+<html lang="pl">
+<head>
   <meta charset="utf-8">
-  <title>Power of Lovable</title>
+  <title>Power of Lovable - Dafi</title>
   <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
   <style>
     html, body {
@@ -79,7 +80,7 @@
       white-space: nowrap; /* Zapobiega zawijaniu tekstu */
     }
 
-    #restart {
+	  #restart {}
      position: fixed;
       left: 50%; top: 20%;
       transform: translate(-50%, -50%);
@@ -109,7 +110,7 @@
 </div>
 <img id="arcade-frame" src="img/arcade.png" alt="Arcade Frame">
 <div id="loading" style="display:block;">Ładowanie gry...</div>
-<div id="info" style="display:none;">Strzałki: ←/→ ruch, ↑ skok</div>
+<div id="info" style="display:none;">Strzałki: ←/→ ruch, ↑ skok (trzymaj dłużej = wyżej)</div>
 <button id="restart" style="display:none;">Zagraj ponownie</button>
 <script>
 // ------------ AUTOMATYCZNE POZYCJONOWANIE CANVASA W "DZIURZE" ARCADE ------------
@@ -133,6 +134,7 @@ function positionGameCanvas() {
   canvas.style.height = "450px";
 }
 window.addEventListener('resize', positionGameCanvas);
+window.addEventListener('DOMContentLoaded', positionGameCanvas);
 
 // ========================  KOD GRY START  ==============================
 
@@ -177,26 +179,18 @@ function preloadImages(sources, whenDone) {
   for (let name in sources) {
     IMAGES[name] = new Image();
     IMAGES[name].onload = function(){ loaded++; if (loaded === total) whenDone(); };
-    IMAGES[name].onerror = function(){
-        console.error(`Błąd ładowania obrazu: ${sources[name]}`);
-        loaded++;
-        if (loaded === total) whenDone();
+    IMAGES[name].onerror = function(){ 
+        loaded++; 
+        if (loaded === total) whenDone(); 
     };
     IMAGES[name].src = sources[name];
   }
 }
 const SCREEN_W = 800, SCREEN_H = 450, GRID = 40, PLAYER_W = 28, PLAYER_H = 68, GROUND_Y = SCREEN_H - GRID, LEVEL_WIDTH = 7000;
 function fromGround(yTiles) { return GROUND_Y - GRID * yTiles; }
-
-// Zaktualizowany obiekt level na podstawie obrazu planszy
- const level = {
-  ground_blocks: [
-  ],
-  spikes: [
-    {x:3,y:0},{x:4,y:0},{x:5,y:0},{x:48,y:0},{x:49,y:0},{x:50,y:0},
-    {x:59,y:0},{x:60,y:0},{x:61,y:0},{x:82,y:0},{x:83,y:0},{x:84,y:0},
-    {x:87,y:0},{x:99,y:0},{x:107,y:0},{x:108,y:0}
-  ],
+const level = {
+  filter_token: [ {x:5,y:5}, ],
+  ground_blocks: [],
   obstacle_blocks: [
   {type:2,x:0,y:7},{type:3,x:1,y:7},
   {type:1,x:21,y:7},{type:2,x:22,y:7},{type:3,x:23,y:7},
@@ -273,47 +267,27 @@ function fromGround(yTiles) { return GROUND_Y - GRID * yTiles; }
   {x:42,y:6,len:4},
   {x:73,y:6,len:7},
 ],
-
+  spikes: [
+    {x:3,y:0},{x:4,y:0},{x:5,y:0},{x:48,y:0},{x:49,y:0},{x:50,y:0},
+    {x:59,y:0},{x:60,y:0},{x:61,y:0},{x:82,y:0},{x:83,y:0},{x:84,y:0},
+    {x:87,y:0},{x:99,y:0},{x:107,y:0},{x:108,y:0}
+  ],
+	
+	filter_tokens: [{x:1,y:2},{x:27,y:3},{x:34,y:2},{x:52,y:2},{x:67,y:4},{x:120,y:2},{x:175,y:3},{x:300,y:5},{x:400,y:2}],
+  heart_items: [{x:20,y:2},{x:34,y:3},{x:65,y:3},{x:80,y:2},{x:120,y:3}],
+  clock_items: [{x:12,y:4},{x:35,y:4},{x:49,y:3},{x:190,y:3}],
+  school: {x:170,y:0, w:5, h:3},
   plastic_enemies: [
-    // Przeciwnicy (typ, pozycja, kierunek i zakres ruchu), domyślnie 'ground'
-    {type:'ground', x:14, y:0, dir:1, min:14, max:17}, {type:'ground', x:33, y:0, dir:1, min:33, max:36},
-    {type:'ground', x:36, y:0, dir:1, min:36, max:39}, {type:'ground', x:43, y:0, dir:1, min:43, max:46},
-    {type:'ground', x:51, y:0, dir:1, min:51, max:54}, {type:'ground', x:64, y:0, dir:1, min:64, max:67},
-    {type:'ground', x:76, y:0, dir:1, min:76, max:79}, {type:'ground', x:98, y:0, dir:1, min:98, max:101},
-    {type:'ground', x:105, y:0, dir:1, min:105, max:108}, {type:'ground', x:122, y:0, dir:1, min:122, max:125},
-    {type:'ground', x:129, y:0, dir:1, min:129, max:132}, {type:'ground', x:140, y:0, dir:1, min:140, max:143},
-    {type:'ground', x:144, y:0, dir:1, min:144, max:147}, {type:'ground', x:155, y:0, dir:1, min:155, max:158},
-    {type:'ground', x:150, y:3, dir:1, min:150, max:153}, {type:'ground', x:6, y:4, dir:1, min:6, max:9},
-    {type:'ground', x:60, y:4, dir:1, min:60, max:63}, {type:'ground', x:37, y:5, dir:1, min:37, max:40},
-    {type:'ground', x:48, y:5, dir:1, min:48, max:51}, {type:'ground', x:76, y:5, dir:1, min:76, max:79},
-    {type:'ground', x:116, y:5, dir:1, min:116, max:119}, {type:'ground', x:8, y:7, dir:1, min:6, max:9},
-    {type:'ground', x:54, y:7, dir:1, min:54, max:57}, {type:'ground', x:147, y:7, dir:1, min:147, max:150}
-  ],
-  filter_tokens: [
-    // Filtry 'f' z arkusza
-    {x:42, y:1},{x:44, y:1},{x:22, y:4},{x:52, y:2},{x:8, y:6},{x:104, y:5},{x:97, y:8},{x:148, y:7},{x:22, y:8}
-  ],
-  heart_items: [
-    // Serca 'h' z arkusza
-    {x:94, y:8},{x:104, y:1},{x:30, y:3}
-  ],
-  clock_items: [
-    // Zegary 't' z arkusza
-    {x:153, y:1},{x:44, y:6},{x:86, y:7}
-  ],
-  school: {x:194, y:0, w:5, h:3}
+    {type:"ground",x:15,y:0,dir:1,min:14,max:19},
+    {type:"obstacle",x:20,y:0,dir:1,min:20,max:22},
+    {type:"island",island:1,pos:0,dir:1},{type:"island",island:2,pos:0,dir:1},{type:"island",island:4,pos:0,dir:-1}
+  ]
 };
-
-
-
-// Logika wypełniania bloków ziemi (ground_blocks) na podstawie wzorca z oryginalnej gry:
-// Bloki ziemi są umieszczane co 1 jednostkę GRID, chyba że w danym miejscu znajdują się kolce lub przeszkody na poziomie gruntu.
-const NEW_LEVEL_WIDTH_IN_GRIDS = 400; // Szerokość nowej planszy w jednostkach GRID
 for(let i=0;i<LEVEL_WIDTH/(GRID*3);i++)
   if (!level.spikes.some(function(s){ return i*3===s.x && s.y===0; }))
     level.ground_blocks.push({x:i*3, y:0});
-// ---- RESZTA LOGIKI I KOD GRY ----
-let parallaxObjects = [];
+
+// ---- RESZTA LOGIKI I KOD GRY (NIEZMIENIONY) ----
 function spawnParallax(){
   if(Math.random() < 0.01){ // większa szansa!
     let farIds = ["par_cloud1","par_cloud2","par_cloud3","par_ship","par_bird"];
@@ -340,7 +314,7 @@ function spawnParallax(){
       }
     }
     let speed = (img.startsWith("par_tree") || img === "par_house") ? 0 :
-                  (layer=="far" ? 0.1+Math.random()*0.4 : 2.3+Math.random()*1.3);
+                (layer=="far" ? 0.1+Math.random()*0.4 : 2.3+Math.random()*1.3);
     parallaxObjects.push({layer, x, y, img, speed});
   }
 }
@@ -535,20 +509,13 @@ function update(){
           collisionSide = true;
       }
   });
-levelBlocks.forEach(b => {
-  let bx = b.x * GRID;
-  let by = fromGround(b.y);
-  let bw = GRID * 3; // szerokość 3 kratki
-  let bh = GRID;
-  if (filterkid.x + filterkid.w > bx && filterkid.x < bx + bw &&
-      filterkid.y < by + bh && filterkid.y > by + bh - 18 && filterkid.vy < 0) {
-    filterkid.y = by + bh + 1;
-    filterkid.vy = 1;
-    wantJump = false;
-    jumpTime = JUMP_MAX;
-  }
-});
-
+  levelBlocks.forEach(b => {
+    let bx = b.x*GRID, by = fromGround(b.y), bw = GRID*3, bh = GRID;
+    if(filterkid.x + filterkid.w > bx && filterkid.x < bx + bw &&
+       filterkid.y < by + bh && filterkid.y > by + bh - 18 && filterkid.vy < 0){
+      filterkid.y = by + bh + 1; filterkid.vy = 1; wantJump = false; jumpTime = JUMP_MAX;
+    }
+  });
   levelObstacles.forEach(b => {
     let bx = b.x*GRID, by = fromGround(b.y)-GRID, bh = GRID;
     if(filterkid.x + filterkid.w > bx && filterkid.x < bx + GRID &&
@@ -580,17 +547,14 @@ levelBlocks.forEach(b => {
     filterkid.y += filterkid.vy;
     filterkid.onGround = false;
   }
-// Sprawdzenie kolizji z kolcami
-for (let s = 0; s < levelSpikes.length; s++) {
-  const spike = levelSpikes[s];
-  const spikeX = spike.x * GRID;
-  const spikeY = fromGround(spike.y);
-  if (collideRect(filterkid, { x: spikeX, y: spikeY }, filterkid.w, filterkid.h, GRID, GRID)) {
-    triggerDeath();
-    return; // zatrzymaj dalsze działanie update po śmierci
+  if(collisionSide) filterkid.x -= filterkid.vx;
+  for(var s=0;s<levelSpikes.length;s++){
+    var b = levelSpikes[s];
+    var bx = b.x * GRID, by = fromGround(b.y);
+    if(collideRect(filterkid,{x:bx,y:by},filterkid.w,filterkid.h,GRID,GRID)){
+      triggerDeath();return;
+    }
   }
-}
-
   for(var i=0; i<levelEnemies.length; i++){
       var e = levelEnemies[i];
       if (e.isFalling) {
@@ -630,7 +594,7 @@ for (let s = 0; s < levelSpikes.length; s++) {
       if (e.absY > SCREEN_H + 90) {
           levelEnemies.splice(i, 1);
           i--;
-          continue; 
+          continue;
       }
       let enemyX = e.t=="island" ? (levelIslands[e.island].x+e.pos)*GRID : e.x*GRID;
       let enemyY = e.absY;
@@ -726,11 +690,6 @@ var timerInterval;
 preloadImages(imageSources, function(){
   document.getElementById('loading').style.display='none';
   document.getElementById('info').style.display='';
-  // Ustawienie timera na ukrycie info po 10 sekundach
-  setTimeout(() => {
-    document.getElementById('info').style.display = 'none';
-  }, 10000); // 10000 milisekund = 10 sekund
-
   document.getElementById('gameCanvas').style.display = '';
   resetGame(); gameloop();
   positionGameCanvas();
