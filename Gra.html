@@ -246,7 +246,7 @@ const level = {
   {x:73,y:6,len:7},
 ],
   spikes: [
-    {x:7,y:0},{x:4,y:0},{x:5,y:0},{x:48,y:0},{x:49,y:0},{x:50,y:0},
+    {x:3,y:0},{x:4,y:0},{x:5,y:0},{x:48,y:0},{x:49,y:0},{x:50,y:0},
     {x:59,y:0},{x:60,y:0},{x:61,y:0},{x:82,y:0},{x:83,y:0},{x:84,y:0},
     {x:87,y:0},{x:99,y:0},{x:107,y:0},{x:108,y:0}
   ],
@@ -320,11 +320,11 @@ function spawnParallax(){
 let filterkid, camX, timer, filters_collected, lives, filterkid_solid, gameWon, gameOver, dying, dyingTy, dyingVy,
     levelEnemies, levelSpikes, levelTokens, levelBlocks, levelObstacles, levelHearts, levelClocks, levelIslands, levelSchool;
 let islandTiles = [];
-let keys = {}, startingX = 100, startingY = fromGround(0) - PLAYER_H;
+let keys = {}, startingX = 1000, startingY = fromGround(0) - PLAYER_H;
 let wantJump=false, jumpPressed=false, jumpTime=0, JUMP_MAX=12;
 function resetGame(){
   filterkid = { x:startingX, y:startingY, vx:0, vy:0, w:PLAYER_W, h:PLAYER_H, onGround:false, facing:1, dead:false};
-  camX = 0; timer = 120; filters_collected = 0; lives = 2;
+  camX = 0; timer = 90; filters_collected = 0; lives = 2;
   filterkid_solid = false; gameWon = false; gameOver = false; dying = false;
   
   levelBlocks = level.ground_blocks.map(o => Object.assign({},o));
@@ -336,11 +336,13 @@ function resetGame(){
   levelSchool = Object.assign({},level.school);
   parallaxObjects = [];
 
-  levelObstacles = JSON.parse(JSON.stringify(level.obstacle_blocks));
-  levelObstacles.forEach(function(o) {
-      o.hits = 1; 
-      o.toBreak = false;
-  });
+ levelObstacles = JSON.parse(JSON.stringify(level.obstacle_blocks));
+levelObstacles.forEach(function(o) {
+    o.hits = 3;        // potrzebne 3 uderzenia głową, żeby usunąć
+    o.cracked = false; // czy pęknięte
+    o.toBreak = false; // czy do usunięcia
+});
+
   islandTiles = [];
   levelIslands.forEach(function(isl, idx) {
     for (let k = 0; k < isl.len; k++) {
@@ -384,11 +386,20 @@ function drawOrRect(imgName, x, y, w, h, drawRect) {
   else drawRect();
 }
 function drawBlock(x,y){drawOrRect('ground_block', x, y, GRID*3, GRID, function(){ ctx.fillStyle="#915921";ctx.fillRect(x,y,GRID*3,GRID); ctx.strokeStyle="#37250d";ctx.strokeRect(x,y,GRID*3,GRID); });}
-function drawObstacle(type,x,y){
-  var name = 'obstacle_block_'+type;
+function drawObstacle(type,x,y,cracked){
+  var name = cracked ? 'island_block_crack' : ('obstacle_block_'+type);
   var color = ["#c33","#0c3","#39c","#993","#999","#666"][type-1];
-  drawOrRect(name, x, y, GRID, GRID, function(){ ctx.save();ctx.translate(x,y);ctx.fillStyle=color;ctx.fillRect(0,0,GRID,GRID);ctx.strokeStyle="#222";ctx.strokeRect(0,0,GRID,GRID);ctx.restore(); });
+  drawOrRect(name, x, y, GRID, GRID, function(){
+    ctx.save();
+    ctx.translate(x, y);
+    ctx.fillStyle = cracked ? '#cc5' : color;
+    ctx.fillRect(0, 0, GRID, GRID);
+    ctx.strokeStyle = "#222";
+    ctx.strokeRect(0, 0, GRID, GRID);
+    ctx.restore();
+  });
 }
+
 function drawIslandBlock(x,y, cracked){let name = cracked ? 'island_block_crack' : 'island_block'; drawOrRect(name, x, y, GRID, GRID, function(){ ctx.fillStyle = cracked ? '#cc5' : '#e7e763';ctx.strokeStyle = cracked ? '#996' : '#bdb948';ctx.fillRect(x,y,GRID,GRID);ctx.strokeRect(x,y,GRID,GRID); });}
 function drawSpike(x,y){drawOrRect('spike', x, y, GRID, GRID, function(){ctx.save();ctx.translate(x,y);ctx.fillStyle="#eee";ctx.beginPath();ctx.moveTo(0,GRID-3);ctx.lineTo(GRID/2,5);ctx.lineTo(GRID,GRID-3);ctx.closePath();ctx.fill();ctx.strokeStyle="#999";ctx.lineWidth=2;ctx.strokeRect(0,0,GRID,GRID);ctx.restore();});}
 function drawSchool(x,y,w,h){
@@ -513,17 +524,31 @@ function update(){
       filterkid.y = by + bh + 1; filterkid.vy = 1; wantJump = false; jumpTime = JUMP_MAX;
     }
   });
-  levelObstacles.forEach(b => {
+ levelObstacles.forEach(b => {
     let bx = b.x*GRID, by = fromGround(b.y)-GRID, bh = GRID;
-    if(filterkid.x + filterkid.w > bx && filterkid.x < bx + GRID &&
-       filterkid.y < by + bh && filterkid.y > by + bh - 18 && filterkid.vy < 0){
-      filterkid.y = by + bh + 1; filterkid.vy = 1; wantJump = false; jumpTime = JUMP_MAX;
-      if (b.hits > 0) {
-          b.hits--;
-          if (b.hits <= 0) b.toBreak = true;
-      }
+    if (
+      filterkid.x + filterkid.w > bx &&
+      filterkid.x < bx + GRID &&
+      filterkid.y < by + bh &&
+      filterkid.y > by + bh - 18 &&
+      filterkid.vy < 0
+    ) {
+        filterkid.y = by + bh + 1;
+        filterkid.vy = 1;
+        wantJump = false;
+        jumpTime = JUMP_MAX;
+
+        if (b.hits > 0) {
+            b.hits--;
+            if (b.hits === 2) b.cracked = true; // pierwszy „etap” — pęknięcie
+            if (b.hits <= 0) b.toBreak = true;  // trzeci cios — rozpad
+        }
     }
-  });
+});
+
+// usuń rozwalone przeszkody
+levelObstacles = levelObstacles.filter(o => !o.toBreak);
+
   islandTiles.forEach(island => {
     let bx = island.x * GRID, by = fromGround(island.y), bw = GRID, bh = GRID;
     if(filterkid.x + filterkid.w > bx && filterkid.x < bx + bw &&
@@ -567,12 +592,13 @@ function update(){
                   groundFound = false;
               }
           } else if (e.t === "obstacle") {
-              const tileX = Math.floor(e.x);
-              const tileY = e.y;
-              if (!levelObstacles.some(o => o.x === tileX && o.y === tileY)) {
-                  groundFound = false;
-              }
-          }
+    const tileX = Math.floor(e.x);
+    const tileY = e.y;
+    if (!levelObstacles.some(o => o.x === tileX && o.y === tileY && !o.toBreak)) {
+        groundFound = false;
+    }
+}
+
           if (groundFound) {
               if(e.t=="ground"||e.t=="obstacle"){
                   e.x += e.dir*0.04;
@@ -653,7 +679,7 @@ function draw(){
   ctx.clearRect(0,0,canvas.width,canvas.height);
   drawParallaxBg(camX);
   levelBlocks.forEach(b => drawBlock(b.x*GRID-camX,fromGround(b.y)));
-  levelObstacles.forEach(b => drawObstacle(b.type,b.x*GRID-camX,fromGround(b.y)-GRID));
+levelObstacles.forEach(b => drawObstacle(b.type, b.x*GRID-camX, fromGround(b.y)-GRID, b.cracked));
   islandTiles.forEach(tile => drawIslandBlock(tile.x*GRID-camX, fromGround(tile.y), tile.cracked));
   levelSpikes.forEach(b => drawSpike(b.x*GRID-camX,fromGround(b.y)));
   levelTokens.forEach(t => drawFilterToken(t.x*GRID-camX,fromGround(t.y)));
