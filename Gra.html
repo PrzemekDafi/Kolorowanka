@@ -671,8 +671,7 @@ function createBlockParticles(x, y, color) {
       vx: (Math.random() - 0.5) * 5,
       vy: Math.random() * -10,
       size: 5 + Math.random() * 5,
-      color: color
-    });
+ 		color: '#D2B48C' //     });
   }
 }
 
@@ -892,7 +891,7 @@ for (let i=0; i<levelEnemies.length; i++) {
       if(filterkid.vy > 0 && filterkid.y+filterkid.h < enemyY+PLAYER_H/2){
         filterkid.vy = -8;
         e.crushing = true;
-        e.crushTimer = 20;
+        e.crushTimer = 60;
         killedEnemies++;
         continue;
       } else {
