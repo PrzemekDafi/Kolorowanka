@@ -1068,6 +1068,21 @@ setTimeout(() => {
 showScoreWindow();
 }, 3000);
 }
+    // Obsługa kliknięcia "Zagraj ponownie"
+document.getElementById('restart').onclick = function () {
+  // Schowaj przycisk i okno wyniku
+  document.getElementById('restart').style.display = 'none';
+  document.getElementById('scoreWindow').style.display = 'none';
+
+  // Reset flag gry
+  gameOver = false;
+  gameWon = false;
+  dying = false;
+
+  // Uruchom ponowną grę
+  resetGame();
+};
+
 </script>
 </body>
 </html>
