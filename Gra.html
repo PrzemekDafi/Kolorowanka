@@ -131,27 +131,28 @@
     </div>
     <button onclick="document.getElementById('scoreWindow').style.display='none';" style="position:absolute;top:15px;right:30px;font-size:28px;">X</button>
   </div>
+<script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
 
 <script>
   // Automatyczne pozycjonowanie canvasa
  function positionGameCanvas() {
-  var arcade = document.getElementById('arcade-frame');
-  var gameContainer = document.getElementById('gameContainer');
-  var canvas = document.getElementById('gameCanvas');
-  var arcadeW = 1191, arcadeH = 1285;
-  var screenX = 190, screenY = 464, screenW = 800, screenH = 450;
-  var actualRect = arcade.getBoundingClientRect();
-  var scale = actualRect.width / arcadeW;
-  var gameLeft = actualRect.left + (screenX * scale);
-  var gameTop = actualRect.bottom - ((arcadeH - screenY) * scale);
-  var gameWidth = screenW * scale;
-  var gameHeight = screenH * scale;
-  gameContainer.style.left = gameLeft + "px";
-  gameContainer.style.top  = gameTop + "px";
-  gameContainer.style.width  = gameWidth + "px";
-  gameContainer.style.height = gameHeight + "px";
-  canvas.style.width  = "800px";
-  canvas.style.height = "450px";
+  var arcade = document.getElementById('arcade-frame');
+  var gameContainer = document.getElementById('gameContainer');
+  var canvas = document.getElementById('gameCanvas');
+  var arcadeW = 1191, arcadeH = 1285;
+  var screenX = 190, screenY = 464, screenW = 800, screenH = 450;
+  var actualRect = arcade.getBoundingClientRect();
+  var scale = actualRect.width / arcadeW;
+  var gameLeft = actualRect.left + (screenX * scale);
+  var gameTop = actualRect.bottom - ((arcadeH - screenY) * scale);
+  var gameWidth = screenW * scale;
+  var gameHeight = screenH * scale;
+  gameContainer.style.left = gameLeft + "px";
+  gameContainer.style.top  = gameTop + "px";
+  gameContainer.style.width  = gameWidth + "px";
+  gameContainer.style.height = gameHeight + "px";
+  canvas.style.width  = "800px";
+  canvas.style.height = "450px";
   }
   window.addEventListener('resize', positionGameCanvas);
   window.addEventListener('DOMContentLoaded', positionGameCanvas);
@@ -159,7 +160,7 @@
   let totalScore=0, collectedFilters=0, collectedHearts=0, collectedTimers=0, killedEnemies=0;
   let timerInterval;
 
-  
+  
   const imageSources = {
     filterkid_walk1: "img/filterkid_walk1.png",
   filterkid_walk2: "img/filterkid_walk2.png",
@@ -191,10 +192,10 @@
   par_cloud1: "img/par_cloud1.png",
   par_cloud2: "img/par_cloud2.png",
   par_cloud3: "img/par_cloud3.png",
-  par_car:     "img/par_car.png",
-  par_ship:    "img/par_ship.png",
-  par_bird:    "img/par_bird.png",
-  par_house:   "img/par_house.png"
+  par_car:     "img/par_car.png",
+  par_ship:    "img/par_ship.png",
+  par_bird:    "img/par_bird.png",
+  par_house:   "img/par_house.png"
 };
 const IMAGES = {};
 function preloadImages(sources, whenDone) {
@@ -266,7 +267,7 @@ const level = {
                                       {type:6,x:103,y:1},
     {type:1,x:124,y:4},{type:3,x:129,y:4},
     {type:4,x:124,y:3},{type:5,x:125,y:3},{type:5,x:126,y:3},{type:5,x:127,y:3},{type:6,x:128,y:3},
-    {type:1,x:133,y:2},  {type:4,x:133,y:0}, {type:4,x:133,y:1},
+    {type:1,x:133,y:2},  {type:4,x:133,y:0}, {type:4,x:133,y:1},
     {type:6,x:138,y:2}, {type:6,x:138,y:3}, {type:6,x:138,y:4}, {type:1,x:133,y:5},{type:3,x:138,y:5},
     {type:1,x:133,y:8}, {type:3,x:138,y:8},
     {type:3,x:139,y:4}, {type:6,x:139,y:3},{type:6,x:139,y:2},{type:6,x:140,y:2},{type:3,x:141,y:2},
@@ -279,13 +280,13 @@ const level = {
   {x:20,y:7,len:1}, {x:25,y:7,len:5}, {x:26,y:7,len:4},
   {x:42,y:7,len:4},
   {x:73,y:3,len:7}, {x:73,y:7,len:2}, {x:75,y:7,len:2},
-  {x:97,y:7,len:4},  {x:99,y:3,len:4},
+  {x:97,y:7,len:4},  {x:99,y:3,len:4},
   {x:113,y:3,len:4}, 
   {x:120,y:3,len:2}, 
-  {x:120,y:7,len:4},   {x:125,y:5,len:5},
-  {x:134,y:3,len:4},  {x:134,y:6,len:4}, {x:134,y:9,len:4},
+  {x:120,y:7,len:4},   {x:125,y:5,len:5},
+  {x:134,y:3,len:4},  {x:134,y:6,len:4}, {x:134,y:9,len:4},
   {x:141,y:7,len:1}, {x:146,y:7,len:2},
-  {x:150,y:3,len:4},  {x:155,y:5,len:2},
+  {x:150,y:3,len:4},  {x:155,y:5,len:2},
   {x:176,y:7,len:3},
  
 ],
@@ -305,14 +306,14 @@ filter_tokens: [{x:15,y:2},{x:27,y:3},{x:34,y:2},{x:52,y:2},{x:67,y:4},{x:120,y:
   clock_items: [{x:200,y:4},{x:135,y:4},],
   school: {x:170,y:2, w:8, h:6},
   plastic_enemies: [
-    {type:"ground",x:7,y:0,dir:1,min:7,max:19},   {type:"ground", x:14, y:0, dir:1, min:14, max:17},
+    {type:"ground",x:7,y:0,dir:1,min:7,max:19},   {type:"ground", x:14, y:0, dir:1, min:14, max:17},
 	{type:"ground", x:33, y:0, dir:1, min:33, max:36},	{type:"ground", x:36, y:0, dir:1, min:36, max:39},
-	{type:"ground", x:43, y:0, dir:1, min:43, max:46},    {type:"ground", x:51, y:0, dir:1, min:51, max:54},
-	{type:"ground", x:64, y:0, dir:1, min:64, max:67},    {type:"ground", x:76, y:0, dir:1, min:76, max:79},
-	{type:"ground", x:98, y:0, dir:1, min:98, max:101},    {type:"ground", x:105, y:0, dir:1, min:105, max:108},     
-	{type:"ground", x:122, y:0, dir:1, min:122, max:125},    {type:"ground", x:129, y:0, dir:1, min:129, max:132},     
+	{type:"ground", x:43, y:0, dir:1, min:43, max:46},    {type:"ground", x:51, y:0, dir:1, min:51, max:54},
+	{type:"ground", x:64, y:0, dir:1, min:64, max:67},    {type:"ground", x:76, y:0, dir:1, min:76, max:79},
+	{type:"ground", x:98, y:0, dir:1, min:98, max:101},    {type:"ground", x:105, y:0, dir:1, min:105, max:108},     
+	{type:"ground", x:122, y:0, dir:1, min:122, max:125},    {type:"ground", x:129, y:0, dir:1, min:129, max:132},     
 	{type:"ground", x:140, y:0, dir:1, min:140, max:143},
-    {type:"ground", x:144, y:0, dir:1, min:144, max:147},     {type:"ground", x:155, y:0, dir:1, min:155, max:158},
+    {type:"ground", x:144, y:0, dir:1, min:144, max:147},     {type:"ground", x:155, y:0, dir:1, min:155, max:158},
     {type:"ground",x:20,y:0,dir:1,min:20,max:22},
     {type:"island",island:0,pos:1,dir:1},
     {type:"island",island:1,pos:1,dir:1},{type:"island",island:2,pos:1,dir:1},{type:"island",island:3,pos:0,dir:-1},
@@ -713,17 +714,17 @@ function update(){
   // ruch gracza
   let speed = 3.2;
   filterkid.vx = 0;
-  if(keys['ArrowLeft'])  { filterkid.vx = -speed; filterkid.facing = -1; }
-  if(keys['ArrowRight']) { filterkid.vx =  speed; filterkid.facing =  1; }
+  if(keys['ArrowLeft'])  { filterkid.vx = -speed; filterkid.facing = -1; }
+  if(keys['ArrowRight']) { filterkid.vx =  speed; filterkid.facing =  1; }
   filterkid.x += filterkid.vx;
   if(keys['ArrowUp'] && filterkid.onGround && !jumpPressed){
     wantJump = true; jumpPressed = true; jumpTime=0;
   }
   if(!keys['ArrowUp']){ jumpPressed=false; wantJump=false; jumpTime=0; }
   if(wantJump){
-    if(jumpTime===0)       filterkid.vy = -18.5;
+    if(jumpTime===0)       filterkid.vy = -18.5;
     if(jumpTime < JUMP_MAX){ filterkid.vy -= 1.45; jumpTime++; }
-    else                   { wantJump = false; }
+    else                   { wantJump = false; }
   }
   filterkid.vy += 2.2;
   let dy = filterkid.vy, nextY = filterkid.y + dy;
@@ -912,6 +913,33 @@ function loseLifeToStart(){
     showScoreWindow();
   } else {
     timer = 120;
+    // Znajdź najbliższe bezpieczne miejsce do odrodzenia
+    let newX = filterkid.x;
+    let isSafe = false;
+    const checkSpikes = (x) => {
+      for (let s of levelSpikes) {
+        if (x + PLAYER_W > s.x * GRID && x < s.x * GRID + GRID) {
+          return false;
+        }
+      }
+      return true;
+    };
+
+    // Szukaj bezpiecznego miejsca w lewo lub prawo
+    let searchDist = 0;
+    while (!isSafe && searchDist < 500) {
+      if (checkSpikes(newX - searchDist)) {
+        newX -= searchDist;
+        isSafe = true;
+      } else if (checkSpikes(newX + searchDist)) {
+        newX += searchDist;
+        isSafe = true;
+      }
+      searchDist += 20;
+    }
+   
+    filterkid.x = newX;
+    filterkid.y = startingY;
     filterkid.vy = 0;
     filterkid.vx = 0;
     filterkid_solid = false;
@@ -942,13 +970,26 @@ function showScoreWindow(){
 }
 
 function shareScore(target){
-  const text = `Mój wynik w Power of Lovable: ${totalScore} pkt! Zebrałem filtry: ${collectedFilters}, serca: ${collectedHearts}, zegarki: ${collectedTimers}, pokonani wrogowie: ${killedEnemies}. Spróbuj pobić mój rekord!`;
-  if(target=='x'){ window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`,'_blank'); }
-  else if(target=='facebook'){ window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(location.href)}&quote=${encodeURIComponent(text)}`,'_blank'); }
-  else if(target=='tiktok'){ alert("TikTok nie umożliwia web-share, wynik skopiowany."); navigator.clipboard.writeText(text); }
-  else if(target=='instagram'){ navigator.clipboard.writeText(text).then(()=>{ alert("Wynik skopiowany. Otwórz Instagram i wklej go!"); window.open("https://www.instagram.com/","_blank"); }); }
+  const scoreWindow = document.getElementById('scoreWindow');
+  html2canvas(scoreWindow).then(canvas => {
+    const imgData = canvas.toDataURL('image/png');
+    const text = `Mój wynik w Power of Lovable: ${totalScore} pkt! Spróbuj pobić mój rekord!`;
+   
+    if (target === 'x') {
+      window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(imgData)}`, '_blank');
+    } else if (target === 'facebook') {
+      window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(imgData)}&quote=${encodeURIComponent(text)}`, '_blank');
+    } else if (target === 'tiktok') {
+      navigator.clipboard.writeText(text).then(() => {
+        alert("TikTok nie umożliwia web-share, wynik skopiowany. Spróbuj wkleić go w aplikacji!");
+      });
+    } else if (target === 'instagram') {
+      navigator.clipboard.writeText(text).then(() => {
+        alert("Wynik skopiowany. Otwórz Instagram i wklej go!");
+      });
+    }
+  });
 }
-
 
 preloadImages(imageSources, function(){
   document.getElementById('loading').style.display='none';
