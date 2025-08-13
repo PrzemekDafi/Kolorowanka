@@ -1370,19 +1370,19 @@ preloadImages(imageSources, function(){
 });
 
 function gameWinLogic() {
-  gameWon = true;
-  document.getElementById('restart').style.display = '';
-  totalScore = 3 * collectedFilters + 2 * collectedHearts + 2 * collectedTimers + killedEnemies;
-  
-  // Pokaż napis "GRATULACJE!" na 3 sekundy
-  ctx.font = "bold 50px 'Press Start 2P'";
-  ctx.fillStyle = "#fff";
-  ctx.textAlign = "center";
-  ctx.fillText("GRATULACJE!", SCREEN_W / 2, SCREEN_H / 2);
+  gameWon = true;
+  document.getElementById('restart').style.display = '';
+  totalScore = 3 * collectedFilters + 2 * collectedHearts + 2 * collectedTimers + killedEnemies;
 
-  setTimeout(() => {
-    showScoreWindow();
-  }, 3000);
+  // Pokaż napis "GRATULACJE!" na 3 sekundy
+  ctx.font = "bold 50px 'Press Start 2P'";
+  ctx.fillStyle = "#fff";
+  ctx.textAlign = "center";
+  ctx.fillText("GRATULACJE!", SCREEN_W / 2, SCREEN_H / 2);
+
+  setTimeout(() => {
+    showScoreWindow();
+  }, 3000);
 }
 </script>
 </body>
