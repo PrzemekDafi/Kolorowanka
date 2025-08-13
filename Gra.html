@@ -940,61 +940,52 @@ gameWinLogic();
 }
 
 function loseLifeToStart(){
-if(gameOver || gameWon) return;
-lives--;
-if(lives < 0){
-gameOver = true; gameWon = false;
-document.getElementById('restart').style.display='';
-totalScore = 3*collectedFilters + 2*collectedHearts + 2*collectedTimers + killedEnemies;
-showScoreWindow();
-} else {
-timer = 120;
-filterkid.vy = 0;
-filterkid.vx = 0;
-filterkid_solid = false;
-filterkid.dead = false;
+  if (gameOver || gameWon) return;
 
-const playerX = filterkid.x;
-const playerY = filterkid.y;
+  lives--;
 
-// Usuń wrogów w pobliżu gracza
-levelEnemies = levelEnemies.filter(e => {
-let enemyX = e.t === "island" ? (levelIslands[e.island].x + e.pos) * GRID : e.x * GRID;
-let enemyY = e.absY;
-let distance = Math.sqrt(Math.pow(playerX - enemyX, 2) + Math.pow(playerY - enemyY, 2));
-return distance > 200;
-});
+  if (lives < 0) {
+    gameOver = true;
+    gameWon = false;
+    document.getElementById('restart').style.display='';
+    totalScore = 3*collectedFilters + 2*collectedHearts + 2*collectedTimers + killedEnemies;
+    showScoreWindow();
+  } else {
+    timer = 120;
+    filterkid.vy = 0;
+    filterkid.vx = 0;
+    filterkid_solid = false;
+    filterkid.dead = false;
 
-// Sprawdź, czy miejsce odrodzenia jest bezpieczne (bez kolców)
-let safeX = playerX;
-let isSafe = false;
-let searchDistance = 0;
-while (!isSafe && searchDistance < 1000) {
-let foundSafe = false;
-let testX = playerX + searchDistance;
-let testX_neg = playerX - searchDistance;
+    // 🔹 WERSJA BEZPOSREDNIO NA STARTOWE KOORDYNATY:
+    filterkid.x = startingX;
+    filterkid.y = startingY;
 
-if (!levelSpikes.some(s => collideRect({x: testX, y: fromGround(0) - 10}, {x: s.x * GRID, y: fromGround(s.y)}, PLAYER_W, 10, GRID, GRID))) {
-safeX = testX;
-foundSafe = true;
-} else if (!levelSpikes.some(s => collideRect({x: testX_neg, y: fromGround(0) - 10}, {x: s.x * GRID, y: fromGround(s.y)}, PLAYER_W, 10, GRID, GRID))) {
-safeX = testX_neg;
-foundSafe = true;
+    /*
+    // 🔹 Jeśli chcesz wyszukać najbliższe bezpieczne miejsce od startingX:
+    let safeFound = false;
+    let searchDistance = 0;
+    while (!safeFound && searchDistance < LEVEL_WIDTH) {
+      let testX = startingX + searchDistance;
+      let testXneg = startingX - searchDistance;
+      if (!levelSpikes.some(s => collideRect({x: testX, y: fromGround(0) - 10}, {x: s.x * GRID, y: fromGround(s.y)}, PLAYER_W, 10, GRID, GRID))) {
+        filterkid.x = testX;
+        safeFound = true;
+      } else if (!levelSpikes.some(s => collideRect({x: testXneg, y: fromGround(0) - 10}, {x: s.x * GRID, y: fromGround(s.y)}, PLAYER_W, 10, GRID, GRID))) {
+        filterkid.x = testXneg;
+        safeFound = true;
+      }
+      searchDistance += GRID;
+    }
+    filterkid.y = startingY;
+    if (!safeFound) {
+      // awaryjnie wróć na punkt startowy
+      filterkid.x = startingX;
+    }
+    */
+  }
 }
 
-if (foundSafe) {
-isSafe = true;
-filterkid.x = safeX;
-}
-searchDistance += GRID;
-}
-
-if (!isSafe) { // Jeśli nie znaleziono bezpiecznego miejsca, odradzamy na początku planszy
-filterkid.x = startingX;
-filterkid.y = startingY;
-}
-}
-}
 
 function showScoreWindow(){
 let div = document.getElementById('scoreBoard');
