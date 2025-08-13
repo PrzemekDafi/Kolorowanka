@@ -154,6 +154,7 @@
   let totalScore=0, collectedFilters=0, collectedHearts=0, collectedTimers=0, killedEnemies=0;
   let timerInterval;
 
+  
   const imageSources = {
     filterkid_walk1: "img/filterkid_walk1.png",
   filterkid_walk2: "img/filterkid_walk2.png",
@@ -355,6 +356,7 @@ function spawnParallax(){
   }
 }
 
+
 let filterkid, camX, timer, filters_collected, lives, filterkid_solid, gameWon, gameOver, dying, dyingTy, dyingVy;
 let levelEnemies, levelSpikes, levelTokens, levelBlocks, levelObstacles, levelHearts, levelClocks, levelIslands, levelSchool;
 let islandTiles = [], parallaxObjects = [];
@@ -415,13 +417,35 @@ function resetGame(){
   });
   document.getElementById('restart').style.display='none';
   wantJump = false; jumpPressed = false; jumpTime = 0;
+
+  // Generowanie losowych zegarów
+  let clockPositions = [];
+  for (let i = 0; i < 5; i++) {
+    let x = Math.floor(Math.random() * (LEVEL_WIDTH / GRID - 20)) + 10;
+    let y = 2 + Math.floor(Math.random() * 5);
+    clockPositions.push({x: x, y: y});
+  }
+  levelClocks = clockPositions;
+ 
+  // Generowanie losowych filtrów
+  let filterPositions = [];
+  for (let i = 0; i < 10; i++) {
+    let x = Math.floor(Math.random() * (LEVEL_WIDTH / GRID - 20)) + 10;
+    let y = 2 + Math.floor(Math.random() * 5);
+    filterPositions.push({x: x, y: y});
+  }
+  levelTokens = filterPositions;
 }
 
 function triggerDeath(){
   filterkid.dead = true; dying = true; dyingTy = filterkid.y; dyingVy = -12;
 }
 
-document.getElementById('restart').onclick=resetGame;
+document.getElementById('restart').onclick = function() {
+  resetGame();
+  document.getElementById('scoreWindow').style.display = 'none';
+};
+
 document.addEventListener('keydown',function(e){ keys[e.key] = true; });
 document.addEventListener('keyup',function(e){ keys[e.key] = false; });
 const canvas = document.getElementById('gameCanvas');
