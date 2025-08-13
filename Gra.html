@@ -1271,11 +1271,12 @@ for (let i=0; i<levelEnemies.length; i++) {
       timer+=10; collectedTimers++; levelClocks.splice(i,1); i--;
     }
   }
-  var sx = levelSchool.x*GRID, sy = fromGround(levelSchool.y);
-  var sw = (levelSchool.w||1)*GRID*1.5, sh = (levelSchool.h||1)*GRID*1.1;
-  if(collideRect(filterkid,{x:sx,y:sy-sh},filterkid.w,filterkid.h,sw,sh)){
-    gameWinLogic();
-  }
+var sx = levelSchool.x*GRID, sy = fromGround(levelSchool.y);
+var sw = (levelSchool.w||1)*GRID*1.5, sh = (levelSchool.h||1)*GRID*1.1;
+if(collideRect(filterkid,{x:sx,y:sy-sh},filterkid.w,filterkid.h,sw,sh)){
+  if(!gameWon){
+    gameWinLogic();
+  }
 }
 
 function loseLifeToStart(){
