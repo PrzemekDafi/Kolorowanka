@@ -950,7 +950,7 @@ function loseLifeToStart(){
       let enemyX = e.t === "island" ? (levelIslands[e.island].x + e.pos) * GRID : e.x * GRID;
       let enemyY = e.absY;
       let distance = Math.sqrt(Math.pow(playerX - enemyX, 2) + Math.pow(playerY - enemyY, 2));
-      return distance > 300;
+      return distance > 200;
     });
 
     // Sprawdź, czy miejsce odrodzenia jest bezpieczne (bez kolców)
