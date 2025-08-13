@@ -913,33 +913,6 @@ function loseLifeToStart(){
     showScoreWindow();
   } else {
     timer = 120;
-    // Znajdź najbliższe bezpieczne miejsce do odrodzenia
-    let newX = filterkid.x;
-    let isSafe = false;
-    const checkSpikes = (x) => {
-      for (let s of levelSpikes) {
-        if (x + PLAYER_W > s.x * GRID && x < s.x * GRID + GRID) {
-          return false;
-        }
-      }
-      return true;
-    };
-
-    // Szukaj bezpiecznego miejsca w lewo lub prawo
-    let searchDist = 0;
-    while (!isSafe && searchDist < 500) {
-      if (checkSpikes(newX - searchDist)) {
-        newX -= searchDist;
-        isSafe = true;
-      } else if (checkSpikes(newX + searchDist)) {
-        newX += searchDist;
-        isSafe = true;
-      }
-      searchDist += 20;
-    }
-   
-    filterkid.x = newX;
-    filterkid.y = startingY;
     filterkid.vy = 0;
     filterkid.vx = 0;
     filterkid_solid = false;
@@ -947,12 +920,43 @@ function loseLifeToStart(){
 
     const playerX = filterkid.x;
     const playerY = filterkid.y;
+
+    // Usuń wrogów w pobliżu gracza
     levelEnemies = levelEnemies.filter(e => {
       let enemyX = e.t === "island" ? (levelIslands[e.island].x + e.pos) * GRID : e.x * GRID;
       let enemyY = e.absY;
       let distance = Math.sqrt(Math.pow(playerX - enemyX, 2) + Math.pow(playerY - enemyY, 2));
       return distance > 300;
     });
+
+    // Sprawdź, czy miejsce odrodzenia jest bezpieczne (bez kolców)
+    let safeX = playerX;
+    let isSafe = false;
+    let searchDistance = 0;
+    while (!isSafe && searchDistance < 1000) {
+      let foundSafe = false;
+      let testX = playerX + searchDistance;
+      let testX_neg = playerX - searchDistance;
+
+      if (!levelSpikes.some(s => collideRect({x: testX, y: fromGround(0) - 10}, {x: s.x * GRID, y: fromGround(s.y)}, PLAYER_W, 10, GRID, GRID))) {
+        safeX = testX;
+        foundSafe = true;
+      } else if (!levelSpikes.some(s => collideRect({x: testX_neg, y: fromGround(0) - 10}, {x: s.x * GRID, y: fromGround(s.y)}, PLAYER_W, 10, GRID, GRID))) {
+        safeX = testX_neg;
+        foundSafe = true;
+      }
+
+      if (foundSafe) {
+        isSafe = true;
+        filterkid.x = safeX;
+      }
+      searchDistance += GRID;
+    }
+
+    if (!isSafe) { // Jeśli nie znaleziono bezpiecznego miejsca, odradzamy na początku planszy
+      filterkid.x = startingX;
+      filterkid.y = startingY;
+    }
   }
 }
 
@@ -966,7 +970,10 @@ function showScoreWindow(){
     Wrogowie: <b>${killedEnemies}</b> × 1 = ${killedEnemies*1}<br>
     <hr style='border-color:#fff'>
     <b>Łącznie: ${totalScore} pkt</b>`;
-  document.getElementById('scoreWindow').style.display = '';
+   
+  setTimeout(() => {
+    document.getElementById('scoreWindow').style.display = '';
+  }, 3000);
 }
 
 function shareScore(target){
@@ -1009,6 +1016,22 @@ preloadImages(imageSources, function(){
     }
   },1000);
 });
+
+function gameWinLogic() {
+  gameWon = true;
+  document.getElementById('restart').style.display = '';
+  totalScore = 3 * collectedFilters + 2 * collectedHearts + 2 * collectedTimers + killedEnemies;
+ 
+  // Pokaż napis "GRATULACJE!" na 3 sekundy
+  ctx.font = "bold 50px 'Press Start 2P'";
+  ctx.fillStyle = "#fff";
+  ctx.textAlign = "center";
+  ctx.fillText("GRATULACJE!", SCREEN_W / 2, SCREEN_H / 2);
+
+  setTimeout(() => {
+    showScoreWindow();
+  }, 3000);
+}
 </script>
 </body>
 </html>
