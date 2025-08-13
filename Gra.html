@@ -1003,20 +1003,10 @@ function loseLifeToStart(){
       if(safeX !== null && safeY !== null){
         filterkid.x = safeX;
         filterkid.y = safeY;
-      } else {
-        // Awaryjnie start
-        filterkid.x = startingX;
-        filterkid.y = startingY;
-      }
-    } else {
-      // Inne sytuacje: odradzamy się w punkcie startowym
-      filterkid.x = startingX;
-      filterkid.y = startingY;
+      } 
     }
   }
 }
-
-
 
 function showScoreWindow(){
 let div = document.getElementById('scoreBoard');
