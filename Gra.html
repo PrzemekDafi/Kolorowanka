@@ -118,7 +118,7 @@
 </div>
 <img id="arcade-frame" src="img/arcade.png" alt="Arcade Frame">
 <div id="loading" style="display:block;">Ładowanie gry...</div>
-<div id="info" style="display:none;">Strzałki: ← / → ruch, ↑ skok</div>
+<div id="info" style="display:none;">Zbieraj filtry - zgniataj plastikowe butelki!<br>Strzałki: ← / → ruch, ↑ skok</div>
 <button id="restart" style="display:none;">Zagraj ponownie</button>
     <div id="scoreWindow" style="position: fixed;
     left: 50%;
@@ -133,11 +133,11 @@
     overflow: hidden;">
     <img id="scoreImage" src="img/score.png" alt="Score image" style="float:left; width:300px; height:900px; margin:50px 30px;" />
     <div style="margin-left:360px; margin-top:120px; color:#fff; font-size:28px;" id="scoreBoard"></div>
-    <div style="position:absolute; bottom:70px; left:360px;">Pochwal się swoim wynikiem!
-      <button class="shareBtn" onclick="shareScore('facebook')">Facebook</button>
+    <div style="position:absolute; bottom:70px; left:360px;">Game Over!
+<!--      <button class="shareBtn" onclick="shareScore('facebook')">Facebook</button>
       <button class="shareBtn" onclick="shareScore('x')">X</button>
       <button class="shareBtn" onclick="shareScore('tiktok')">TikTok</button>
-      <button class="shareBtn" onclick="shareScore('instagram')">Instagram</button>
+      <button class="shareBtn" onclick="shareScore('instagram')">Instagram</button>-->
     </div>
     <button onclick="document.getElementById('scoreWindow').style.display='none';" style="position:absolute;top:35px;right:30px;font-size:28px;">X</button>
   </div>
@@ -936,61 +936,37 @@ for (let i=0; i<levelEnemies.length; i++) {
   }
 }
 
-function loseLifeToStart(){
-  if(gameOver || gameWon) return;
-  lives--;
-  if(lives < 0){
-    gameOver = true; gameWon = false;
-    document.getElementById('restart').style.display='';
-    totalScore = 3*collectedFilters + 2*collectedHearts + 2*collectedTimers + killedEnemies;
-    showScoreWindow();
-  } else {
-    timer = 120;
-    filterkid.vy = 0;
-    filterkid.vx = 0;
-    filterkid_solid = false;
-    filterkid.dead = false;
+function loseLifeToStart() {
+    if (gameOver || gameWon) return;
+    lives--;
+    if (lives < 0) {
+        gameOver = true;
+        gameWon = false;
+        document.getElementById('restart').style.display = '';
+        totalScore = 3 * collectedFilters + 2 * collectedHearts + 2 * collectedTimers + killedEnemies;
+        showScoreWindow();
+    } else {
+        timer = 120;
+        filterkid.vy = 0;
+        filterkid.vx = 0;
+        filterkid_solid = false;
+        filterkid.dead = false;
 
-    const playerX = filterkid.x;
-    const playerY = filterkid.y;
+        // Resetowanie pozycji gracza do bezpiecznego punktu startowego
+        filterkid.x = startingX;
+        filterkid.y = startingY;
 
-    // Usuń wrogów w pobliżu gracza
-    levelEnemies = levelEnemies.filter(e => {
-      let enemyX = e.t === "island" ? (levelIslands[e.island].x + e.pos) * GRID : e.x * GRID;
-      let enemyY = e.absY;
-      let distance = Math.sqrt(Math.pow(playerX - enemyX, 2) + Math.pow(playerY - enemyY, 2));
-      return distance > 200;
-    });
+        const playerX = filterkid.x;
+        const playerY = filterkid.y;
 
-    // Sprawdź, czy miejsce odrodzenia jest bezpieczne (bez kolców)
-    let safeX = playerX;
-    let isSafe = false;
-    let searchDistance = 0;
-    while (!isSafe && searchDistance < 1000) {
-      let foundSafe = false;
-      let testX = playerX + searchDistance;
-      let testX_neg = playerX - searchDistance;
-
-      if (!levelSpikes.some(s => collideRect({x: testX, y: fromGround(0) - 10}, {x: s.x * GRID, y: fromGround(s.y)}, PLAYER_W, 10, GRID, GRID))) {
-        safeX = testX;
-        foundSafe = true;
-      } else if (!levelSpikes.some(s => collideRect({x: testX_neg, y: fromGround(0) - 10}, {x: s.x * GRID, y: fromGround(s.y)}, PLAYER_W, 10, GRID, GRID))) {
-        safeX = testX_neg;
-        foundSafe = true;
-      }
-
-      if (foundSafe) {
-        isSafe = true;
-        filterkid.x = safeX;
-      }
-      searchDistance += GRID;
+        // Usuń wrogów w pobliżu gracza
+        levelEnemies = levelEnemies.filter(e => {
+            let enemyX = e.t === "island" ? (levelIslands[e.island].x + e.pos) * GRID : e.x * GRID;
+            let enemyY = e.absY;
+            let distance = Math.sqrt(Math.pow(playerX - enemyX, 2) + Math.pow(playerY - enemyY, 2));
+            return distance > 200;
+        });
     }
-
-    if (!isSafe) { // Jeśli nie znaleziono bezpiecznego miejsca, odradzamy na początku planszy
-      filterkid.x = startingX;
-      filterkid.y = startingY;
-    }
-  }
 }
 
 function showScoreWindow(){
