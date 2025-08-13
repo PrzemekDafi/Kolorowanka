@@ -831,11 +831,11 @@ function drawOrRect(imgName, x, y, w, h, drawRect) {
 function drawBlock(x,y){drawOrRect('ground_block', x, y, GRID*3, GRID, function(){ ctx.fillStyle="#915921";ctx.fillRect(x,y,GRID*3,GRID); ctx.strokeStyle="#37250d";ctx.strokeRect(x,y,GRID*3,GRID); });}
 function drawObstacle(type,x,y,cracked){
   var name = cracked ? 'island_block_crack' : ('obstacle_block_'+type);
-  var color = ["#c33","#0c3","#39c","#993","#999","#666"][type-1];
+  var color = ["#c8f6c55"][type-1];
   drawOrRect(name, x, y, GRID, GRID, function(){
     ctx.save();
     ctx.translate(x, y);
-    ctx.fillStyle = cracked ? '#cc5' : color;
+    ctx.fillStyle = cracked ? '#8f6c55' : color;
     ctx.fillRect(0, 0, GRID, GRID);
     ctx.strokeStyle = "#222";
     ctx.strokeRect(0, 0, GRID, GRID);
