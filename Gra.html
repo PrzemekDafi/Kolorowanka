@@ -995,7 +995,7 @@ function loseLifeToStart(){
         // Sprawdź, czy tam nie ma kolców
         const spikeHere = levelSpikes.some(s => s.x * GRID === ox && fromGround(s.y) === oy + GRID);
         if(o.toBreak === false && !spikeHere){
-          safeX = ox;
+          safeX = ox - (GRID * 3); 
           safeY = oy - PLAYER_H;
           break;
         }
