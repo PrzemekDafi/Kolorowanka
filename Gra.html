@@ -625,19 +625,29 @@ ctx.fillStyle = p.color;
 ctx.fill();
 });
 }
-
 ctx.save();
-ctx.font="20px 'Press Start 2P'"; 
-ctx.fillStyle="#fff";
-ctx.shadowColor = "#333"; 
+ctx.font = "20px 'Press Start 2P'";
+
+// Miganie na czerwono, gdy timer ≤ 15 sekund
+let flashing = false;
+if (timer <= 15) {
+  // Miganie co 500 ms
+  flashing = Math.floor(Date.now() / 500) % 2 === 0;
+}
+
+ctx.fillStyle = flashing ? "red" : "#fff";
+ctx.shadowColor = "#333";
 ctx.shadowOffsetX = 2;
 ctx.shadowOffsetY = 2;
 ctx.shadowBlur = 0;
+ctx.fillText("Czas: " + timer, 10, 30);
 
-ctx.fillText("Czas: "+timer, 10, 30);
-ctx.fillText("Filtry: "+collectedFilters, 10, 60);
-ctx.fillText("Życia: "+lives, 10, 90);
+// Pozostałe teksty zawsze białe
+ctx.fillStyle = "#fff";
+ctx.fillText("Filtry: " + collectedFilters, 10, 60);
+ctx.fillText("Życia: " + lives, 10, 90);
 ctx.restore();
+
 
 if(gameOver){
 ctx.save();
