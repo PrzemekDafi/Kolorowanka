@@ -949,15 +949,15 @@ gameWinLogic();
 }
 
 function loseLifeToStart(){
-  if(gameOver || gameWon) return;
+  if (gameOver || gameWon) return;
 
   lives--;
 
-  if(lives < 0){
+  if (lives < 0) {
     gameOver = true;
     gameWon = false;
-    document.getElementById('restart').style.display = '';
-    totalScore = 3*collectedFilters + 2*collectedHearts + 2*collectedTimers + killedEnemies;
+    document.getElementById('restart').style.display='';
+    totalScore = 3 * collectedFilters + 2 * collectedHearts + 2 * collectedTimers + killedEnemies;
     showScoreWindow();
   } else {
     timer = 120;
@@ -966,47 +966,69 @@ function loseLifeToStart(){
     filterkid_solid = false;
     filterkid.dead = false;
 
-    // Usuń wrogów w promieniu 200px od obecnej pozycji gracza
-    let playerX = filterkid.x;
-    let playerY = filterkid.y;
+    // 🔹 usuń wrogów w promieniu 200px od miejsca śmierci
+    const playerX = filterkid.x;
+    const playerY = filterkid.y;
     levelEnemies = levelEnemies.filter(e => {
-      let enemyX = e.t === "island" ? (levelIslands[e.island].x + e.pos)*GRID : e.x*GRID;
+      let enemyX = e.t === "island"
+        ? (levelIslands[e.island].x + e.pos) * GRID
+        : e.x * GRID;
       let enemyY = e.absY;
-      let dist = Math.sqrt((playerX - enemyX)**2 + (playerY - enemyY)**2);
-      return dist > 200;
+      let distance = Math.sqrt(
+        Math.pow(playerX - enemyX, 2) +
+        Math.pow(playerY - enemyY, 2)
+      );
+      return distance > 200;
     });
 
-    // Sprawdź, czy śmierć była na kolcach (spikes)
-    const onSpikes = levelSpikes.some(s => collideRect(
-      filterkid,
-      {x: s.x * GRID, y: fromGround(s.y)},
-      filterkid.w, filterkid.h,
-      GRID, GRID
-    ));
+    // 🔹 sprawdź, czy śmierć była na kolcach
+    const onSpikes = levelSpikes.some(s =>
+      collideRect(
+        { x: playerX, y: playerY },
+        { x: s.x * GRID, y: fromGround(s.y) },
+        filterkid.w, filterkid.h,
+        GRID, GRID
+      )
+    );
 
-    if(onSpikes){
-      // Znajdź najbliższy wolny blok (obstacle), który nie jest zepsuty (toBreak=false), jest pod postacią i jest bezpieczny
+    if (onSpikes) {
+      // Szukamy najbliższej bezpiecznej przeszkody
       let safeX = null;
       let safeY = null;
-      for(let i=0; i<levelObstacles.length; i++){
+      for (let i = 0; i < levelObstacles.length; i++) {
         let o = levelObstacles[i];
         let ox = o.x * GRID;
-        let oy = fromGround(o.y) - GRID; // przeszkoda rysowana wyżej
-        // Sprawdź, czy tam nie ma kolców
-        const spikeHere = levelSpikes.some(s => s.x * GRID === ox && fromGround(s.y) === oy + GRID);
-        if(o.toBreak === false && !spikeHere){
-          safeX = ox - (GRID * 3); 
+        let oy = fromGround(o.y) - GRID; // pozycja kafla przeszkody
+
+        // Sprawdź, czy na tej samej pozycji nie ma kolców
+        const spikeHere = levelSpikes.some(s =>
+          s.x * GRID === ox &&
+          fromGround(s.y) === oy + GRID
+        );
+
+        if (o.toBreak === false && !spikeHere) {
+          // cofamy o 3 kratki w lewo, z zabezpieczeniem przed <0
+          safeX = Math.max(0, ox - (GRID * 3));
           safeY = oy - PLAYER_H;
           break;
         }
       }
-      if(safeX !== null && safeY !== null){
+      if (safeX !== null && safeY !== null) {
         filterkid.x = safeX;
         filterkid.y = safeY;
-      } 
+      } else {
+        // Awaryjny respawn na startowej pozycji
+        filterkid.x = startingX;
+        filterkid.y = startingY;
+      }
+    } else {
+      // W innych wypadkach respawn na punkcie startowym
+      filterkid.x = startingX;
+      filterkid.y = startingY;
     }
   }
 }
+
 
 function showScoreWindow(){
 let div = document.getElementById('scoreBoard');
