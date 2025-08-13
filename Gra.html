@@ -109,19 +109,20 @@
       margin:5px;
       font-family:'Press Start 2P', monospace;
     }
-	  #scoreWindow {
-    display: none;
-    position: fixed;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-    width: 900px;
-    height: 900px;
-    background: #222;
-    z-index: 101;
-    border-radius: 15px;
-    box-shadow: 0 0 40px #000;
-    overflow: hidden;
+	 #scoreWindow {
+  display: none;
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 900px;
+  height: 900px;
+  background: #222;
+  z-index: 101;
+  border-radius: 15px;
+  box-shadow: 0 0 40px #000;
+  overflow: hidden;
+}
   </style>
 </head>
 <body>
@@ -1373,6 +1374,7 @@ preloadImages(imageSources, function(){
 });
 
 function gameWinLogic() {
+  if (gameWon) return; // Dodano zabezpieczenie, aby funkcja nie była wywoływana wielokrotnie
   gameWon = true;
   document.getElementById('restart').style.display = '';
   totalScore = 3 * collectedFilters + 2 * collectedHearts + 2 * collectedTimers + killedEnemies;
