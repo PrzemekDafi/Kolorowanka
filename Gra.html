@@ -1012,8 +1012,23 @@ function loseLifeToStart(){
           safeY = oy - PLAYER_H;
           break;
         }
+      }
+      if (safeX !== null && safeY !== null) {
+        filterkid.x = safeX;
+        filterkid.y = safeY;
+      } else {
+        // Awaryjny respawn na startowej pozycji
+        filterkid.x = startingX;
+        filterkid.y = startingY;
+      }
+    } else {
+      // W innych wypadkach respawn na punkcie startowym
+      filterkid.x = startingX;
+      filterkid.y = startingY;
+    }
   }
-} 
+}
+
 function showScoreWindow(){
 let div = document.getElementById('scoreBoard');
 div.innerHTML =
