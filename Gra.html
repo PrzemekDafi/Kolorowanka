@@ -1,103 +1,103 @@
 <!DOCTYPE html>
 <html lang="pl">
 <head>
-  <meta charset="utf-8">
-  <title>Power of Lovable - Dafi</title>
-  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
-  <style>
-    html, body {
-      height: 100%;
-      margin: 0;
-      padding: 0;
-      overflow: hidden;
-    }
-    body {
-      width: 100vw;
-      height: 100vh;
-      position: relative;
-      font-family: 'Press Start 2P', monospace;
-      background: #222;
-    }
-    #background-img {
-      position: fixed;
-      left: 0; top: 0;
-      width: 100vw; height: 100vh;
-      object-fit: cover;
-      z-index: 0;
-      pointer-events: none;
-      user-select: none;
-    }
-    #arcade-frame {
-      position: fixed;
-      left: 50%;
-      bottom: 0;
-      transform: translateX(-50%);
-      width: 1100px;
-      height: auto;
-      z-index: 2;
-      pointer-events: none;
-      user-select: none;
-    }
-    #gameContainer {
-      position: fixed;
-      z-index: 1;
-      left: 50%;
-    }
-    #gameCanvas {
-      display: block;
-      width: 100%;
-      height: 100%;
-    }
-   #loading {
-      position: fixed;
-      left: 50%; top: 50%;
-      transform: translate(-50%, -50%);
-     width: auto;
-      padding: 25px 25px;
-      background-color: rgba(0, 136, 255, 0.8);
-      color: #fff;
-      font-size: 24px;
-      border-radius: 0px;
-      text-align: center;
-       display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 100;
-    }
+  <meta charset="utf-8">
+  <title>Power of Lovable - Dafi</title>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+  <style>
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+    }
+    body {
+      width: 100vw;
+      height: 100vh;
+      position: relative;
+      font-family: 'Press Start 2P', monospace;
+      background: #222;
+    }
+    #background-img {
+      position: fixed;
+      left: 0; top: 0;
+      width: 100vw; height: 100vh;
+      object-fit: cover;
+      z-index: 0;
+      pointer-events: none;
+      user-select: none;
+    }
+    #arcade-frame {
+      position: fixed;
+      left: 50%;
+      bottom: 0;
+      transform: translateX(-50%);
+      width: 1100px;
+      height: auto;
+      z-index: 2;
+      pointer-events: none;
+      user-select: none;
+    }
+    #gameContainer {
+      position: fixed;
+      z-index: 1;
+      left: 50%;
+    }
+    #gameCanvas {
+      display: block;
+      width: 100%;
+      height: 100%;
+    }
+   #loading {
+      position: fixed;
+      left: 50%; top: 50%;
+      transform: translate(-50%, -50%);
+     width: auto; /* Zmieniono na auto, aby dopasować do treści */
+      padding: 25px 25px; /* Dodano padding */
+      background-color: rgba(0, 136, 255, 0.8); /* Szare, półprzezroczyste tło */
+      color: #fff; /* Biały tekst dla lepszej czytelności */
+      font-size: 24px; /* Dopasuj rozmiar czcionki */
+      border-radius: 0px; /* Zaokrąglone rogi */
+      text-align: center;
+       display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 100;
+    }
 
-    #info {
-      position: fixed;
-      left: 50%; top: 30%;
-      transform: translate(-50%, -50%);
-      width: auto;
-      padding: 25px 25px;
-      background-color: rgba(0, 136, 255, 0.8);
-      color: #fff;
-      font-size: 24px;
-      border-radius: 0px;
-      text-align: center;
-      z-index: 20;
-      pointer-events: none;
-      white-space: wrap;
-    }
+    #info {
+      position: fixed;
+      left: 50%; top: 30%;
+      transform: translate(-50%, -50%);
+      width: auto; /* Zmieniono na auto, aby dopasować do treści */
+      padding: 25px 25px; /* Dodano padding */
+      background-color: rgba(0, 136, 255, 0.8); /* Szare, półprzezroczyste tło */
+      color: #fff; /* Biały tekst dla lepszej czytelności */
+      font-size: 24px; /* Dopasuj rozmiar czcionki */
+      border-radius: 0px; /* Zaokrąglone rogi */
+      text-align: center;
+      z-index: 20;
+      pointer-events: none; /* Niech nie blokuje interakcji z grą */
+      white-space: wrap; /* Zapobiega zawijaniu tekstu */
+    }
 
 
-   #restart {
-     position: fixed;
-      left: 50%; top: 50%;
+   #restart {
+     position: fixed;
+      left: 50%; top: 50%;
 		text-transform: uppercase;
-      transform: translate(-50%, -50%);
-      width: auto;
-      padding: 25px 25px;
-      background-color: rgba(0, 136, 255, 0.9);
-      color: #fff;
-      font-size: 24px;
-      border-radius: 0px;
-      text-align: center;
-      z-index: 20;
-      pointer-events: auto;
-    }
- #shareBtn {
+      transform: translate(-50%, -50%);
+      width: auto; /* Zmieniono na auto, aby dopasować do treści */
+      padding: 25px 25px; /* Dodano padding */
+      background-color: rgba(0, 136, 255, 0.9); /* Szare, półprzezroczyste tło */
+      color: #fff; /* Biały tekst dla lepszej czytelności */
+      font-size: 24px; /* Dopasuj rozmiar czcionki */
+      border-radius: 0px; /* Zaokrąglone rogi */
+      text-align: center;
+      z-index: 20;
+      pointer-events: auto;
+    }
+ #shareBtn {
       font-size:18px;
       padding:5px 15px;
       margin:5px;
@@ -265,7 +265,6 @@ const level = {
                                       {type:6,x:103,y:3},
                                       {type:6,x:103,y:2},
                                       {type:6,x:103,y:1},
-	  {type:5,x:116,y:3},{type:5,x:118,y:3},
     {type:1,x:124,y:4},{type:3,x:129,y:4},
     {type:4,x:124,y:3},{type:5,x:125,y:3},{type:5,x:126,y:3},{type:5,x:127,y:3},{type:6,x:128,y:3},
     {type:1,x:133,y:2},  {type:4,x:133,y:0}, {type:4,x:133,y:1},
@@ -914,6 +913,33 @@ function loseLifeToStart(){
     showScoreWindow();
   } else {
     timer = 120;
+    // Znajdź najbliższe bezpieczne miejsce do odrodzenia
+    let newX = filterkid.x;
+    let isSafe = false;
+    const checkSpikes = (x) => {
+      for (let s of levelSpikes) {
+        if (x + PLAYER_W > s.x * GRID && x < s.x * GRID + GRID) {
+          return false;
+        }
+      }
+      return true;
+    };
+
+    // Szukaj bezpiecznego miejsca w lewo lub prawo
+    let searchDist = 0;
+    while (!isSafe && searchDist < 500) {
+      if (checkSpikes(newX - searchDist)) {
+        newX -= searchDist;
+        isSafe = true;
+      } else if (checkSpikes(newX + searchDist)) {
+        newX += searchDist;
+        isSafe = true;
+      }
+      searchDist += 20;
+    }
+   
+    filterkid.x = newX;
+    filterkid.y = startingY;
     filterkid.vy = 0;
     filterkid.vx = 0;
     filterkid_solid = false;
@@ -921,43 +947,12 @@ function loseLifeToStart(){
 
     const playerX = filterkid.x;
     const playerY = filterkid.y;
-
-    // Usuń wrogów w pobliżu gracza
     levelEnemies = levelEnemies.filter(e => {
       let enemyX = e.t === "island" ? (levelIslands[e.island].x + e.pos) * GRID : e.x * GRID;
       let enemyY = e.absY;
       let distance = Math.sqrt(Math.pow(playerX - enemyX, 2) + Math.pow(playerY - enemyY, 2));
       return distance > 300;
     });
-
-    // Sprawdź, czy miejsce odrodzenia jest bezpieczne (bez kolców)
-    let safeX = playerX;
-    let isSafe = false;
-    let searchDistance = 0;
-    while (!isSafe && searchDistance < 1000) {
-      let foundSafe = false;
-      let testX = playerX + searchDistance;
-      let testX_neg = playerX - searchDistance;
-
-      if (!levelSpikes.some(s => collideRect({x: testX, y: fromGround(0) - 10}, {x: s.x * GRID, y: fromGround(s.y)}, PLAYER_W, 10, GRID, GRID))) {
-        safeX = testX;
-        foundSafe = true;
-      } else if (!levelSpikes.some(s => collideRect({x: testX_neg, y: fromGround(0) - 10}, {x: s.x * GRID, y: fromGround(s.y)}, PLAYER_W, 10, GRID, GRID))) {
-        safeX = testX_neg;
-        foundSafe = true;
-      }
-
-      if (foundSafe) {
-        isSafe = true;
-        filterkid.x = safeX;
-      }
-      searchDistance += GRID;
-    }
-
-    if (!isSafe) { // Jeśli nie znaleziono bezpiecznego miejsca, odradzamy na początku planszy
-      filterkid.x = startingX;
-      filterkid.y = startingY;
-    }
   }
 }
 
@@ -971,10 +966,7 @@ function showScoreWindow(){
     Wrogowie: <b>${killedEnemies}</b> × 1 = ${killedEnemies*1}<br>
     <hr style='border-color:#fff'>
     <b>Łącznie: ${totalScore} pkt</b>`;
-   
-  setTimeout(() => {
-    document.getElementById('scoreWindow').style.display = '';
-  }, 3000);
+  document.getElementById('scoreWindow').style.display = '';
 }
 
 function shareScore(target){
@@ -1017,22 +1009,6 @@ preloadImages(imageSources, function(){
     }
   },1000);
 });
-
-function gameWinLogic() {
-  gameWon = true;
-  document.getElementById('restart').style.display = '';
-  totalScore = 3 * collectedFilters + 2 * collectedHearts + 2 * collectedTimers + killedEnemies;
- 
-  // Pokaż napis "GRATULACJE!" na 3 sekundy
-  ctx.font = "bold 50px 'Press Start 2P'";
-  ctx.fillStyle = "#fff";
-  ctx.textAlign = "center";
-  ctx.fillText("GRATULACJE!", SCREEN_W / 2, SCREEN_H / 2);
-
-  setTimeout(() => {
-    showScoreWindow();
-  }, 3000);
-}
 </script>
 </body>
 </html>
