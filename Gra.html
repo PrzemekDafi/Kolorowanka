@@ -316,7 +316,7 @@ const level = {
 filter_tokens: [{x:15,y:2},{x:27,y:3},{x:34,y:2},{x:52,y:2},{x:67,y:4},{x:120,y:2},{x:175,y:3},{x:300,y:5},{x:400,y:2}],
   heart_items: [{x:0,y:10},{x:34,y:3},{x:65,y:3},{x:80,y:2},{x:120,y:3}],
   clock_items: [{x:200,y:4},{x:135,y:4},],
-  school: {x:170,y:0, w:8, h:6},
+  school: {x:150,y:-1, w:8, h:6},
   plastic_enemies: [
   {type:"ground",x:7,y:0,dir:1,min:7,max:19},   {type:"ground", x:14, y:0, dir:1, min:14, max:17},
 {type:"ground", x:33, y:0, dir:1, min:33, max:36},	{type:"ground", x:36, y:0, dir:1, min:36, max:39},
@@ -378,7 +378,7 @@ parallaxObjects.push({layer, x, y, img, speed});
 let filterkid, camX, timer, filters_collected, lives, filterkid_solid, gameWon, gameOver, dying, dyingTy, dyingVy;
 let levelEnemies, levelSpikes, levelTokens, levelBlocks, levelObstacles, levelHearts, levelClocks, levelIslands, levelSchool;
 let islandTiles = [], parallaxObjects = [];
-let keys = {}, startingX = 40, startingY = fromGround(0) - PLAYER_H;
+let keys = {}, startingX = 140, startingY = fromGround(0) - PLAYER_H;
 let wantJump=false, jumpPressed=false, jumpTime=0, JUMP_MAX=12;
 let itemAnimOffset = 0; // Dodane dla animacji przedmiotów
 let brokenParticles = []; // Dodane dla efektu rozpadu
