@@ -658,10 +658,10 @@ ctx.shadowColor = "#30a7e2";
 ctx.shadowOffsetX = 3;
 ctx.shadowOffsetY = 3;
 ctx.shadowBlur = 5;
-ctx.fillText("KONIEC GRY!", SCREEN_W/2, SCREEN_H/2-30);
+ctx.fillText("GAME OVER", SCREEN_W/2, SCREEN_H/2-30);
 ctx.font="24px 'Press Start 2P'";
 ctx.shadowBlur = 0;
-ctx.fillText("Zacznij od nowa", SCREEN_W/2, SCREEN_H/2);
+ctx.fillText("Spróbuj jeszcze raz!", SCREEN_W/2, SCREEN_H/2);
 ctx.restore();
 }
 if(gameWon){
@@ -678,7 +678,7 @@ ctx.shadowBlur = 5;
 ctx.fillText("GRATULACJE!", SCREEN_W/2, SCREEN_H/2-30);
 ctx.font="24px 'Press Start 2P'";
 ctx.shadowBlur = 0;
-ctx.fillText("Zacznij od nowa", SCREEN_W/2, SCREEN_H/2);
+ctx.fillText("Dotarłeś do szkoły!", SCREEN_W/2, SCREEN_H/2);
 ctx.restore();
 }
 }
@@ -1021,13 +1021,22 @@ function loseLifeToStart(){
 
 function showScoreWindow(){
 let div = document.getElementById('scoreBoard');
+    ctx.save();
+ctx.fillStyle = "rgba(0,0,0,0.5)"; 
+ctx.fillRect(0,0,SCREEN_W,SCREEN_H);
+ctx.fillStyle = "#fff"; 
+ctx.font="bold 40px 'Press Start 2P'";
+ctx.shadowColor = "#30a7e2";
+ctx.shadowOffsetX = 3;
+ctx.shadowOffsetY = 3;
+ctx.shadowBlur = 5;
 div.innerHTML =
-`<p style="box-shadow: rgb(255 255 255) 10px 10px 0px;">Twój wynik:<br><br>
+`  Twój wynik:<br><br>
    Filtry: <b>${collectedFilters}</b>=${collectedFilters*3}<br>
    Serca: <b>${collectedHearts}</b>=${collectedHearts*2}<br>
    Czas: <b>${collectedTimers}</b>=${collectedTimers*2}<br>
    Butelki: <b>${killedEnemies}</b>=${killedEnemies*1}<br>
-  <b>Punktacja: ${totalScore}pkt</b></p>`;
+  <b>Punktacja: ${totalScore}pkt</b>`;
 
 setTimeout(() => {
 document.getElementById('scoreWindow').style.display = '';
