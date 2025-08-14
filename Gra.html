@@ -1022,13 +1022,13 @@ function loseLifeToStart(){
 
 function showScoreWindow(){
 let div = document.getElementById('scoreBoard');
-div.innerHTML =<p style="box-shadow: rgb(255 255 255) 10px 10px 0px;">
-`Twój wynik:<br><br>
+div.innerHTML =
+`<p style="box-shadow: rgb(255 255 255) 10px 10px 0px;">Twój wynik:<br><br>
    Filtry: <b>${collectedFilters}</b>=${collectedFilters*3}<br>
    Serca: <b>${collectedHearts}</b>=${collectedHearts*2}<br>
    Czas: <b>${collectedTimers}</b>=${collectedTimers*2}<br>
    Butelki: <b>${killedEnemies}</b>=${killedEnemies*1}<br>
-  <b>Punktacja: ${totalScore}pkt</b>`;</p>
+  <b>Punktacja: ${totalScore}pkt</b></p>`;
 
 setTimeout(() => {
 document.getElementById('scoreWindow').style.display = '';
