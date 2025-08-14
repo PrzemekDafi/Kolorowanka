@@ -345,14 +345,14 @@ for(let i=0;i<LEVEL_WIDTH/(GRID*3);i++)
 
 // ---- RESZTA LOGIKI I KOD GRY (NIEZMIENIONY) ----
 function spawnParallax() {
-  if (Math.random() < 0.25) { // 25% szansy na całą sekwencję w jednej klatce!
+  if (Math.random() < 0.05) { // 25% szansy na całą sekwencję w jednej klatce!
 
 let farIds = ["par_cloud1","par_cloud2","par_cloud3","par_ship","par_bird"];
 let midIds = [
 "par_tree1","par_tree1","par_tree2","par_tree2","par_tree3","par_tree3",
 "par_car","par_house","par_house"
 ];
-let layer = Math.random() < 0.5 ? "far" : "mid";
+let layer = Math.random() < 0.55 ? "far" : "mid";
 let images = (layer=="far") ? farIds : midIds;
 let img = images[Math.floor(Math.random()*images.length)];
 let x = camX + SCREEN_W + 100 + Math.random()*500;
