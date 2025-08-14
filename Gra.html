@@ -128,9 +128,9 @@ pointer-events: auto;
     height: 900px;
     background-image: url('img/score-bg.jpg');
     z-index: 101;
-    text-shadow: 2px 2px white;
+    text-shadow: 2px 2px black;
     line-height: auto;
-    color: black;
+    color: #000;
     border-radius: 0;
     box-shadow: rgb(255 255 255) 10px 10px 0px;
     overflow: hidden;">
@@ -1014,7 +1014,10 @@ function loseLifeToStart(){
           break;
         }
       }
-     
+      if (safeX !== null && safeY !== null) {
+        filterkid.x = safeX;
+        filterkid.y = safeY;
+      } 
     } 
   }
 }
@@ -1033,7 +1036,7 @@ div.innerHTML =
 
 setTimeout(() => {
 document.getElementById('scoreWindow').style.display = '';
-}, 1500);
+}, 3000);
 }
 
 function shareScore(target){
@@ -1082,7 +1085,7 @@ gameWon = true;
 document.getElementById('restart').style.display = '';
 totalScore = 3 * collectedFilters + 2 * collectedHearts + 2 * collectedTimers + killedEnemies;
 
-// Pokaż napis "GRATULACJE!" na 1.5 sekundy
+// Pokaż napis "GRATULACJE!" na 3 sekundy
 ctx.font = "bold 50px 'Press Start 2P'";
 ctx.fillStyle = "#fff";
 ctx.textAlign = "center";
@@ -1090,7 +1093,7 @@ ctx.fillText("GRATULACJE!", SCREEN_W / 2, SCREEN_H / 2);
 
 setTimeout(() => {
 showScoreWindow();
-}, 1500);
+}, 3000);
 }
     // Obsługa kliknięcia "Zagraj ponownie"
 document.getElementById('restart').onclick = function () {
