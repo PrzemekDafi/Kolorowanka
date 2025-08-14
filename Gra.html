@@ -345,7 +345,12 @@ for(let i=0;i<LEVEL_WIDTH/(GRID*3);i++)
 
 // ---- RESZTA LOGIKI I KOD GRY (NIEZMIENIONY) ----
 function spawnParallax(){
-if(Math.random() < 0.01){ // większa szansa!
+if(Math.random() < 0.25){ // większa szansa!
+if(Math.random() < 0.3) spawnParallaxObject("par_cloud1");
+if(Math.random() < 0.2) spawnParallaxObject("par_ship");
+if(Math.random() < 0.2) spawnParallaxObject("par_bird");
+if(Math.random() < 0.1) spawnParallaxObject("par_house");
+
 let farIds = ["par_cloud1","par_cloud2","par_cloud3","par_ship","par_bird"];
 let midIds = [
 "par_tree1","par_tree1","par_tree2","par_tree2","par_tree3","par_tree3",
