@@ -1023,22 +1023,15 @@ function loseLifeToStart(){
 function showScoreWindow(){
 let div = document.getElementById('scoreBoard');
     ctx.save();
-ctx.fillStyle = "rgba(0,0,0,0.5)"; 
-ctx.fillRect(0,0,SCREEN_W,SCREEN_H);
-ctx.fillStyle = "#fff"; 
-ctx.font="bold 40px 'Press Start 2P'";
-ctx.shadowColor = "#30a7e2";
-ctx.shadowOffsetX = 3;
-ctx.shadowOffsetY = 3;
-ctx.shadowBlur = 5;
 div.innerHTML =
-`  Twój wynik:<br><br>
+`  <font style:"shadowColor = "#30a7e2";shadowOffsetX = 3;shadowOffsetY = 3;shadowBlur = 5;">
+   Twój wynik:<br><br>
    Filtry: <b>${collectedFilters}</b>=${collectedFilters*3}<br>
    Serca: <b>${collectedHearts}</b>=${collectedHearts*2}<br>
    Czas: <b>${collectedTimers}</b>=${collectedTimers*2}<br>
    Butelki: <b>${killedEnemies}</b>=${killedEnemies*1}<br>
   <b>Punktacja: ${totalScore}pkt</b>`;
-
+</font>
 setTimeout(() => {
 document.getElementById('scoreWindow').style.display = '';
 }, 3000);
