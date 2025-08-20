@@ -109,6 +109,42 @@ pointer-events: auto;
       margin:5px;
       font-family:'Press Start 2P', monospace;
     }
+  #mobile-controls {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100vw;
+  height: 110px;
+  display: flex;
+  z-index: 500;
+}
+
+.ctrlBtn {
+  width: 33.33vw;
+  height: 100vw;
+  max-height: 110px;
+  max-width: 110px;
+  flex: 1 1 0;
+  margin: 0;
+  background: linear-gradient(135deg, #088cff 60%, #222 100%);
+  color: #fff;
+  border: 2px solid #30a7e2;
+  font-size: 3rem;
+  border-radius: 18px;
+  box-shadow: 0 8px 20px rgba(0,32,64,0.2);
+  font-family: 'Press Start 2P', monospace;
+  outline: none;
+  transition: background .2s, box-shadow .2s;
+}
+
+.ctrlBtn:active {
+  background: linear-gradient(135deg, #26aad3 10%, #088cff 90%);
+  box-shadow: 0 2px 8px rgba(0,32,64,0.2);
+}
+@media (min-width: 900px) {
+  #mobile-controls { display: none !important; }
+}
+
   </style>
 </head>
 <body>
@@ -116,6 +152,12 @@ pointer-events: auto;
 <div id="gameContainer">
   <canvas id="gameCanvas" width="800" height="450" style="display:none;"></canvas>
 </div>
+<div id="mobile-controls" style="display:none;">
+  <button id="btnLeft" class="ctrlBtn">&#8592;</button>
+  <button id="btnUp" class="ctrlBtn">&#8593;</button>
+  <button id="btnRight" class="ctrlBtn">&#8594;</button>
+</div>
+
 <img id="arcade-frame" src="img/arcade.png" alt="Arcade Frame">
 <div id="loading" style="display:block;">Ładowanie gry...</div>
 <div id="info" style="display:none;">Zbieraj filtry, zgniataj plastik!<br>Jak grać? Strzałki: ← / → ruch, ↑ skok</div>
@@ -169,6 +211,24 @@ pointer-events: auto;
   }
   window.addEventListener('resize', positionGameCanvas);
   window.addEventListener('DOMContentLoaded', positionGameCanvas);
+function isMobile() {
+  return /Android|iPhone|iPad|iPod|Mobile|Windows Phone/i.test(navigator.userAgent)
+    || window.innerWidth < 900;
+}
+window.addEventListener('DOMContentLoaded', function() {
+  document.getElementById('mobile-controls').style.display = isMobile() ? 'flex' : 'none';
+});
+window.addEventListener('resize', function() {
+  document.getElementById('mobile-controls').style.display = isMobile() ? 'flex' : 'none';
+});
+  document.getElementById('btnLeft').addEventListener('touchstart', function(e){ e.preventDefault(); keys['ArrowLeft'] = true; });
+document.getElementById('btnLeft').addEventListener('touchend', function(e){ e.preventDefault(); keys['ArrowLeft'] = false; });
+
+document.getElementById('btnRight').addEventListener('touchstart', function(e){ e.preventDefault(); keys['ArrowRight'] = true; });
+document.getElementById('btnRight').addEventListener('touchend', function(e){ e.preventDefault(); keys['ArrowRight'] = false; });
+
+document.getElementById('btnUp').addEventListener('touchstart', function(e){ e.preventDefault(); keys['ArrowUp'] = true; });
+document.getElementById('btnUp').addEventListener('touchend', function(e){ e.preventDefault(); keys['ArrowUp'] = false; });
 
   let totalScore=0, collectedFilters=0, collectedHearts=0, collectedTimers=0, killedEnemies=0;
   let timerInterval;
@@ -229,7 +289,10 @@ const level = {
   filter_token: [ {x:25,y:5}, ],
   ground_blocks: [],
   obstacle_blocks: [
-  {type:1,x:0,y:6},{type:2,x:0,y:7},{type:3,x:1,y:7}, {type:5,x:15,y:4},{type:5,x:3,y:6},
+  {type:5,x:0,y:4},{type:5,x:0,y:3},{type:2,x:1,y:3},{type:3,x:1,y:4},{type:5,x:0,y:2},{type:5,x:0,y:1},{type:5,x:0,y:0},{type:1,x:0,y:6},{type:2,x:0,y:7},{type:5,x:0,y:5},{type:3,x:1,y:7}, {type:5,x:15,y:4},{type:5,x:3,y:6},{type:5,x:3,y:0},
+	  
+	  
+		  
   {type:1,x:21,y:7},{type:2,x:22,y:7},{type:3,x:23,y:7},
   {type:1,x:28,y:7},{type:2,x:29,y:7},{type:3,x:30,y:7},
   {type:1,x:150,y:7},{type:2,x:151,y:7},{type:3,x:152,y:7},
@@ -286,7 +349,7 @@ const level = {
     {type:3,x:139,y:4}, {type:6,x:139,y:3},{type:6,x:139,y:2},{type:6,x:140,y:2},{type:3,x:141,y:2},
     {type:6,x:142,y:6},
     {type:1,x:145,y:2}, {type:2,x:146,y:2}, {type:6,x:147,y:2},
-    {type:1,x:154,y:4}, {type:1,x:154,y:2}, {type:3,x:157,y:4},{type:3,x:158,y:1},{type:1,x:157,y:2},
+    {type:1,x:154,y:4}, {type:1,x:154,y:2}, {type:3,x:157,y:4},{type:3,x:158,y:0},{type:3,x:157,y:1},{type:1,x:157,y:2},
   ],
  islands: [
   {x:5,y:4,len:4}, {x:7,y:7,len:5},
@@ -439,7 +502,7 @@ wantJump = false; jumpPressed = false; jumpTime = 0;
 
 // Generowanie losowych zegarów
 let clockPositions = [];
-for (let i = 0; i < 10; i++) {
+for (let i = 0; i < 5; i++) {
 let x = Math.floor(Math.random() * (LEVEL_WIDTH / GRID - 20)) + 10;
 let y = 2 + Math.floor(Math.random() * 5);
 clockPositions.push({x: x, y: y});
@@ -448,7 +511,7 @@ levelClocks = clockPositions;
 
 // Generowanie losowych filtrów
 let filterPositions = [];
-for (let i = 0; i < 20; i++) {
+for (let i = 0; i < 10; i++) {
 let x = Math.floor(Math.random() * (LEVEL_WIDTH / GRID - 20)) + 10;
 let y = 2 + Math.floor(Math.random() * 5);
 filterPositions.push({x: x, y: y});
@@ -457,7 +520,7 @@ levelTokens = filterPositions;
 }
     // Generowanie losowych serc
 let heartPositions = [];
-for (let i = 0; i < 8; i++) {  // np. 8 serc na poziomie
+for (let i = 0; i < 3; i++) {  // np. 8 serc na poziomie
   let x = Math.floor(Math.random() * (LEVEL_WIDTH / GRID - 20)) + 10;
   let y = 2 + Math.floor(Math.random() * 5);
   heartPositions.push({x: x, y: y});
