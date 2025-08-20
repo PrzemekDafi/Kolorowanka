@@ -38,6 +38,14 @@ z-index: 2;
 pointer-events: none;
 user-select: none;
 }
+/* Zmiany tylko dla urządzeń mobilnych (lub wąskich ekranów) */
+@media (max-width: 899px) {
+  #arcade-frame {
+    bottom: auto;
+    top: 0; /* Zmieniono pozycję na górę */
+  }
+}
+	
 #gameContainer {
 position: fixed;
 z-index: 1;
@@ -188,25 +196,35 @@ pointer-events: auto;
 
 <script>
   // Automatyczne pozycjonowanie canvasa
- function positionGameCanvas() {
-  var arcade = document.getElementById('arcade-frame');
-  var gameContainer = document.getElementById('gameContainer');
-  var canvas = document.getElementById('gameCanvas');
-  var arcadeW = 1191, arcadeH = 1285;
-  var screenX = 190, screenY = 464, screenW = 800, screenH = 450;
-  var actualRect = arcade.getBoundingClientRect();
-  var scale = actualRect.width / arcadeW;
-  var gameLeft = actualRect.left + (screenX * scale);
-  var gameTop = actualRect.bottom - ((arcadeH - screenY) * scale);
-  var gameWidth = screenW * scale;
-  var gameHeight = screenH * scale;
-  gameContainer.style.left = gameLeft + "px";
-  gameContainer.style.top  = gameTop + "px";
-  gameContainer.style.width  = gameWidth + "px";
-  gameContainer.style.height = gameHeight + "px";
-  canvas.style.width  = "800px";
-  canvas.style.height = "450px";
-  }
+function positionGameCanvas() {
+  var arcade = document.getElementById('arcade-frame');
+  var gameContainer = document.getElementById('gameContainer');
+  var canvas = document.getElementById('gameCanvas');
+  var arcadeW = 1191, arcadeH = 1285;
+  var screenX = 190, screenY = 464, screenW = 800, screenH = 450;
+  var actualRect = arcade.getBoundingClientRect();
+  var scale = actualRect.width / arcadeW;
+  var gameLeft = actualRect.left + (screenX * scale);
+
+  var gameTop;
+  if (isMobile()) {
+    // Obliczenie dla urządzeń mobilnych (arcade-frame na górze)
+    gameTop = actualRect.top + (screenY * scale);
+  } else {
+    // Obliczenie dla desktopów (arcade-frame na dole)
+    gameTop = actualRect.bottom - ((arcadeH - screenY) * scale);
+  }
+
+  var gameWidth = screenW * scale;
+  var gameHeight = screenH * scale;
+
+  gameContainer.style.left = gameLeft + "px";
+  gameContainer.style.top  = gameTop + "px";
+  gameContainer.style.width  = gameWidth + "px";
+  gameContainer.style.height = gameHeight + "px";
+  canvas.style.width  = "800px";
+  canvas.style.height = "450px";
+}
   window.addEventListener('resize', positionGameCanvas);
   window.addEventListener('DOMContentLoaded', positionGameCanvas);
 // ... (logika pozycjonowania canvasa) ...
