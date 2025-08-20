@@ -41,7 +41,10 @@
     #gameContainer {
       position: fixed;
       z-index: 1;
-      left: 50%;
+      left: 115.983px; 
+      top: 1116.22px; 
+      width: 738.875px; 
+      height: 415.62px;
     }
     #gameCanvas {
       display: block;
@@ -137,16 +140,28 @@
       background: linear-gradient(135deg, #26aad3 10%, #088cff 90%);
       box-shadow: 0 2px 8px rgba(0,32,64,0.2);
     }
+
+  #gameContainer;
+    {
+     left: 115.983px; 
+      top: 1116.22px; 
+      width: 738.875px; 
+      height: 415.62px;
+    }
     @media (min-width: 900px) {
       #mobile-controls { display: none; }
     }
     @media (max-width: 899px) and (orientation: portrait) {
       #arcade-frame {
-        bottom: auto;
+        visibility: hidden;
         top: 0;
         width: 100%;
-        max-height: calc(100vh - 120px);
       }
+      #gameContainer
+      {
+      height: 50%;
+      }
+        
     }
     #scoreWindow {
       display: none;
