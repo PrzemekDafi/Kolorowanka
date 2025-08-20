@@ -38,14 +38,6 @@ z-index: 2;
 pointer-events: none;
 user-select: none;
 }
-/* Zmiany tylko dla urządzeń mobilnych (lub wąskich ekranów) */
-@media (max-width: 899px) {
-  #arcade-frame {
-    bottom: auto;
-    top: 0; /* Zmieniono pozycję na górę */
-  }
-}
-	
 #gameContainer {
 position: fixed;
 z-index: 1;
@@ -90,7 +82,7 @@ white-space: wrap; /* Zapobiega zawijaniu tekstu */
 }
 
 
-   #restart {
+   #restart {
 position: fixed;
 left: 50%; top: 50%;
 text-transform: uppercase;
@@ -117,126 +109,133 @@ pointer-events: auto;
       margin:5px;
       font-family:'Press Start 2P', monospace;
     }
-  #mobile-controls {
-  position: fixed;
-  left: 0;
-  bottom: 0;
-  width: 100vw;
-  height: 110px;
-  display: flex;
-  z-index: 500;
+#mobile-controls {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 110px;
+  display: flex;
+  z-index: 500;
 }
-
 .ctrlBtn {
-  width: 33.33vw;
-  height: 100vw;
-  flex: 1 1 0;
-  margin: 0;
-  background: linear-gradient(135deg, #088cff 60%, #222 100%);
-  color: #fff;
-  border: 2px solid #30a7e2;
-  font-size: 3rem;
-  border-radius: 18px;
-  box-shadow: 0 8px 20px rgba(0,32,64,0.2);
-  font-family: 'Press Start 2P', monospace;
-  outline: none;
-  transition: background .2s, box-shadow .2s;
+  width: 33.33%;
+  height: 110px;
+  flex: 1 1 0;
+  margin: 0;
+  background: linear-gradient(135deg, #088cff 60%, #222 100%);
+  color: #fff;
+  border: 2px solid #30a7e2;
+  font-size: 3rem;
+  border-radius: 18px;
+  box-shadow: 0 8px 20px rgba(0,32,64,0.2);
+  font-family: 'Press Start 2P', monospace;
+  outline: none;
+  transition: background .2s, box-shadow .2s;
 }
 
 .ctrlBtn:active {
-  background: linear-gradient(135deg, #26aad3 10%, #088cff 90%);
-  box-shadow: 0 2px 8px rgba(0,32,64,0.2);
+  background: linear-gradient(135deg, #26aad3 10%, #088cff 90%);
+  box-shadow: 0 2px 8px rgba(0,32,64,0.2);
 }
 @media (min-width: 900px) {
   #mobile-controls { display: none; }
 }
 
-  </style>
+@media (max-width: 899px) and (orientation: portrait) {
+    #arcade-frame {
+        bottom: auto;
+        top: 0;
+        width: 100%;
+        max-height: calc(100vh - 120px); /* Ogranicza wysokość, by zostawić miejsce na kontrolki */
+    }
+}
+#scoreWindow {
+  display: none;
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 900px;
+  height: 900px;
+  background: #222;
+  z-index: 101;
+  border-radius: 15px;
+  box-shadow: 0 0 40px #000;
+  overflow: hidden;
+}
+</style>
 </head>
 <body>
 <img id="background-img" src="img/bg-gra.jpg" alt="Tło arcade">
 <div id="gameContainer">
-  <canvas id="gameCanvas" width="800" height="450" style="display:none;"></canvas>
+  <canvas id="gameCanvas" width="800" height="450" style="display:none;"></canvas>
 </div>
-<div id="mobile-controls" style="display:none; text-align: center; justify-content: center; width: 100%;">
-  <button id="btnLeft" class="ctrlBtn" style="width: 33.33%;">&#8592;</button>
-  <button id="btnUp" class="ctrlBtn" style="width: 33.33%;">&#8593;</button>
-  <button id="btnRight" class="ctrlBtn" style="width: 33.33%;">&#8594;</button>
+<div id="mobile-controls">
+  <button id="btnLeft" class="ctrlBtn">&#8592;</button>
+  <button id="btnUp" class="ctrlBtn">&#8593;</button>
+  <button id="btnRight" class="ctrlBtn">&#8594;</button>
 </div>
 
 <img id="arcade-frame" src="img/arcade.png" alt="Arcade Frame">
 <div id="loading" style="display:block;">Ładowanie gry...</div>
 <div id="info" style="display:none;">Zbieraj filtry, zgniataj plastik!<br>Jak grać? Strzałki: ← / → ruch, ↑ skok</div>
 <button id="restart" style="display:none;">Zagraj ponownie</button>
-    <div id="scoreWindow" style="position: fixed; display:none;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-    width: 900px;
-    height: 900px;
-    background-image: url('img/score-bg.jpg');
-    z-index: 101;
-    text-shadow: 2px 2px black;
-    line-height: auto;
-    color: #000;
-    border-radius: 0;
-    box-shadow: rgb(255 255 255) 10px 10px 0px;
-    overflow: hidden;">
-    <img id="scoreImage" src="img/score.png" alt="Score image" style="float:left; width:300px; height:900px; margin:50px 30px;" />
-    <div style="margin-left:360px; margin-top:120px; color:#fff; font-size:28px;" id="scoreBoard"></div>
-    <!--<div style="position:absolute; bottom:70px; left:360px;">Pochwal się swoim wynikiem!
-      <button class="shareBtn" onclick="shareScore('facebook')">Facebook</button>
-      <button class="shareBtn" onclick="shareScore('x')">X</button>
-      <button class="shareBtn" onclick="shareScore('tiktok')">TikTok</button>
-      <button class="shareBtn" onclick="shareScore('instagram')">Instagram</button>
-    </div>-->
-    <button onclick="document.getElementById('scoreWindow').style.display='none';" style="font-family: 'Press Start 2P', monospace; position:absolute;top:35px;right:30px;font-size:28px;"> X </button>
-  </div>
+    <div id="scoreWindow">
+    <img id="scoreImage" src="img/score.png" alt="Score image" style="float:left; width:300px; height:900px; margin:50px 30px;" />
+    <div style="margin-left:360px; margin-top:120px; color:#fff; font-size:28px;" id="scoreBoard"></div>
+    <div style="position:absolute; bottom:70px; left:360px;">Pochwal się swoim wynikiem!
+      <button class="shareBtn" onclick="shareScore('facebook')">Facebook</button>
+      <button class="shareBtn" onclick="shareScore('x')">X</button>
+      <button class="shareBtn" onclick="shareScore('tiktok')">TikTok</button>
+      <button class="shareBtn" onclick="shareScore('instagram')">Instagram</button>
+    </div>
+    <button onclick="document.getElementById('scoreWindow').style.display='none';" style="font-family: 'Press Start 2P', monospace; position:absolute;top:35px;right:30px;font-size:28px;"> X </button>
+  </div>
 <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
 
 <script>
-  // Automatyczne pozycjonowanie canvasa
+// Automatyczne pozycjonowanie canvasa
 function positionGameCanvas() {
-  var arcade = document.getElementById('arcade-frame');
-  var gameContainer = document.getElementById('gameContainer');
-  var canvas = document.getElementById('gameCanvas');
-  var arcadeW = 1191, arcadeH = 1285;
-  var screenX = 190, screenY = 464, screenW = 800, screenH = 450;
-  var actualRect = arcade.getBoundingClientRect();
-  var scale = actualRect.width / arcadeW;
-  var gameLeft = actualRect.left + (screenX * scale);
+var arcade = document.getElementById('arcade-frame');
+var gameContainer = document.getElementById('gameContainer');
+var canvas = document.getElementById('gameCanvas');
+var arcadeW = 1191, arcadeH = 1285;
+var screenX = 190, screenY = 464, screenW = 800, screenH = 450;
+var actualRect = arcade.getBoundingClientRect();
+var scale = actualRect.width / arcadeW;
+var gameLeft = actualRect.left + (screenX * scale);
 
-  var gameTop;
-  if (isMobile()) {
-    // Obliczenie dla urządzeń mobilnych (arcade-frame na górze)
-    gameTop = actualRect.top + (screenY * scale);
-  } else {
-    // Obliczenie dla desktopów (arcade-frame na dole)
-    gameTop = actualRect.bottom - ((arcadeH - screenY) * scale);
-  }
-
-  var gameWidth = screenW * scale;
-  var gameHeight = screenH * scale;
-
-  gameContainer.style.left = gameLeft + "px";
-  gameContainer.style.top  = gameTop + "px";
-  gameContainer.style.width  = gameWidth + "px";
-  gameContainer.style.height = gameHeight + "px";
-  canvas.style.width  = "800px";
-  canvas.style.height = "450px";
+var gameTop;
+if (isMobile()) {
+  gameTop = actualRect.top + (screenY * scale);
+} else {
+  gameTop = actualRect.bottom - ((arcadeH - screenY) * scale);
 }
-  window.addEventListener('resize', positionGameCanvas);
-  window.addEventListener('DOMContentLoaded', positionGameCanvas);
-// ... (logika pozycjonowania canvasa) ...
+
+var gameWidth = screenW * scale;
+var gameHeight = screenH * scale;
+
+gameContainer.style.left = gameLeft + "px";
+gameContainer.style.top  = gameTop + "px";
+gameContainer.style.width  = gameWidth + "px";
+gameContainer.style.height = gameHeight + "px";
+canvas.style.width  = "800px";
+canvas.style.height = "450px";
+}
+window.addEventListener('resize', positionGameCanvas);
+window.addEventListener('DOMContentLoaded', positionGameCanvas);
+
 function isMobile() {
-  return /Android|iPhone|iPad|iPod|Mobile|Windows Phone/i.test(navigator.userAgent)
-    || window.innerWidth < 900;
+return /Android|iPhone|iPad|iPod|Mobile|Windows Phone/i.test(navigator.userAgent)
+  || window.innerWidth < 900;
 }
+
 window.addEventListener('DOMContentLoaded', function() {
-  document.getElementById('mobile-controls').style.display = isMobile() ? 'flex' : 'none';
+document.getElementById('mobile-controls').style.display = isMobile() ? 'flex' : 'none';
 });
 window.addEventListener('resize', function() {
-  document.getElementById('mobile-controls').style.display = isMobile() ? 'flex' : 'none';
+document.getElementById('mobile-controls').style.display = isMobile() ? 'flex' : 'none';
 });
 document.getElementById('btnLeft').addEventListener('touchstart', function(e){ e.preventDefault(); keys['ArrowLeft'] = true; });
 document.getElementById('btnLeft').addEventListener('touchend', function(e){ e.preventDefault(); keys['ArrowLeft'] = false; });
@@ -247,55 +246,55 @@ document.getElementById('btnRight').addEventListener('touchend', function(e){ e.
 document.getElementById('btnUp').addEventListener('touchstart', function(e){ e.preventDefault(); keys['ArrowUp'] = true; });
 document.getElementById('btnUp').addEventListener('touchend', function(e){ e.preventDefault(); keys['ArrowUp'] = false; });
 
-  let totalScore=0, collectedFilters=0, collectedHearts=0, collectedTimers=0, killedEnemies=0;
-  let timerInterval;
+let totalScore=0, collectedFilters=0, collectedHearts=0, collectedTimers=0, killedEnemies=0;
+let timerInterval;
 
 
-  const imageSources = {
-  filterkid_walk1: "img/filterkid_walk1.png",
-  filterkid_walk2: "img/filterkid_walk2.png",
-  filterkid_rest: "img/filterkid_rest.png",
-  filterkid_soft_jump: "img/filterkid_soft_jump.png",
-  filterkid_dead: "img/filterkid_dead.png",
-  ground_block: "img/ground_block.png",
-  obstacle_block_1: "img/obstacle_block_1.png",
-  obstacle_block_2: "img/obstacle_block_2.png",
-  obstacle_block_3: "img/obstacle_block_3.png",
-  obstacle_block_4: "img/obstacle_block_4.png",
-  obstacle_block_5: "img/obstacle_block_5.png",
-  obstacle_block_6: "img/obstacle_block_6.png",
-  island_block: "img/island_block.png",
-  island_block_crack: "img/island_block_crack.png",
-  spike: "img/spike.png",
-  school: "img/school.png",
-  filter_token: "img/filter_token.png",
-  heart_item: "img/heart_item.png",
-  clock_item: "img/clock_item.png",
-  plastic_enemy: "img/plastic_enemy.png",
-  plastic_enemy_crush: "img/plastic_enemy_crush.png",
-  sky_bg: "img/sky_bg.png",
-  far_bg: "img/far_bg.png",
-  mid_bg: "img/mid_bg.png",
-  par_tree1: "img/par_tree1.png",
-  par_tree2: "img/par_tree2.png",
-  par_tree3: "img/par_tree3.png",
-  par_cloud1: "img/par_cloud1.png",
-  par_cloud2: "img/par_cloud2.png",
-  par_cloud3: "img/par_cloud3.png",
-  par_car:     "img/par_car.png",
-  par_ship:    "img/par_ship.png",
-  par_bird:    "img/par_bird.png",
-  par_house:   "img/par_house.png"
+const imageSources = {
+filterkid_walk1: "img/filterkid_walk1.png",
+filterkid_walk2: "img/filterkid_walk2.png",
+filterkid_rest: "img/filterkid_rest.png",
+filterkid_soft_jump: "img/filterkid_soft_jump.png",
+filterkid_dead: "img/filterkid_dead.png",
+ground_block: "img/ground_block.png",
+obstacle_block_1: "img/obstacle_block_1.png",
+obstacle_block_2: "img/obstacle_block_2.png",
+obstacle_block_3: "img/obstacle_block_3.png",
+obstacle_block_4: "img/obstacle_block_4.png",
+obstacle_block_5: "img/obstacle_block_5.png",
+obstacle_block_6: "img/obstacle_block_6.png",
+island_block: "img/island_block.png",
+island_block_crack: "img/island_block_crack.png",
+spike: "img/spike.png",
+school: "img/school.png",
+filter_token: "img/filter_token.png",
+heart_item: "img/heart_item.png",
+clock_item: "img/clock_item.png",
+plastic_enemy: "img/plastic_enemy.png",
+plastic_enemy_crush: "img/plastic_enemy_crush.png",
+sky_bg: "img/sky_bg.png",
+far_bg: "img/far_bg.png",
+mid_bg: "img/mid_bg.png",
+par_tree1: "img/par_tree1.png",
+par_tree2: "img/par_tree2.png",
+par_tree3: "img/par_tree3.png",
+par_cloud1: "img/par_cloud1.png",
+par_cloud2: "img/par_cloud2.png",
+par_cloud3: "img/par_cloud3.png",
+par_car:      "img/par_car.png",
+par_ship:     "img/par_ship.png",
+par_bird:     "img/par_bird.png",
+par_house:    "img/par_house.png"
 };
 const IMAGES = {};
 function preloadImages(sources, whenDone) {
-  let loaded = 0, total = Object.keys(sources).length;
-  for (let name in sources) {
-    IMAGES[name] = new Image();
-    IMAGES[name].onload = () => { if (++loaded === total) whenDone(); };
-    IMAGES[name].onerror = () => { if (++loaded === total) whenDone(); };
-    IMAGES[name].src = sources[name];
-  }
+let loaded = 0, total = Object.keys(sources).length;
+for (let name in sources) {
+IMAGES[name] = new Image();
+IMAGES[name].onload = () => { if (++loaded === total) whenDone(); };
+IMAGES[name].onerror = () => { if (++loaded === total) whenDone(); };
+IMAGES[name].src = sources[name];
+}
 }
 
 const SCREEN_W = 800, SCREEN_H = 450, GRID = 40;
@@ -303,109 +302,109 @@ const PLAYER_W = 28, PLAYER_H = 68, GROUND_Y = SCREEN_H - GRID;
 const LEVEL_WIDTH = 7100;
 function fromGround(yTiles) { return GROUND_Y - GRID * yTiles; }
 const level = {
-  filter_token: [ {x:25,y:5}, ],
-  ground_blocks: [],
-  obstacle_blocks: [
-  {type:5,x:0,y:4},{type:5,x:0,y:3},{type:2,x:1,y:3},{type:3,x:1,y:4},{type:5,x:0,y:2},{type:5,x:0,y:1},{type:5,x:0,y:0},{type:1,x:0,y:6},{type:2,x:0,y:7},{type:5,x:0,y:5},{type:3,x:1,y:7}, {type:5,x:15,y:4},{type:5,x:3,y:6},{type:5,x:3,y:0},
-	  
-	  
-		  
-  {type:1,x:21,y:7},{type:2,x:22,y:7},{type:3,x:23,y:7},
-  {type:1,x:28,y:7},{type:2,x:29,y:7},{type:3,x:30,y:7},
-  {type:1,x:150,y:7},{type:2,x:151,y:7},{type:3,x:152,y:7},
-  {type:1,x:154,y:7},{type:2,x:155,y:7},{type:3,x:156,y:7},
-  {type:1,x:181,y:7},
-  {type:1,x:10,y:6},{type:2,x:11,y:6},{type:3,x:12,y:6},
-  {type:1,x:36,y:6},{type:2,x:37,y:6},{type:3,x:38,y:6},
-  {type:1,x:56,y:6},{type:2,x:57,y:6},{type:3,x:58,y:6},
-  {type:1,x:87,y:6},{type:2,x:88,y:6},{type:3,x:89,y:6},
-  {type:1,x:118,y:6},{type:2,x:119,y:6},{type:3,x:120,y:6},
+filter_token: [ {x:25,y:5}, ],
+ground_blocks: [],
+obstacle_blocks: [
+{type:5,x:0,y:4},{type:5,x:0,y:3},{type:2,x:1,y:3},{type:3,x:1,y:4},{type:5,x:0,y:2},{type:5,x:0,y:1},{type:5,x:0,y:0},{type:1,x:0,y:6},{type:2,x:0,y:7},{type:5,x:0,y:5},{type:3,x:1,y:7}, {type:5,x:15,y:4},{type:5,x:3,y:6},{type:5,x:3,y:0},
+   
+   
+   
+{type:1,x:21,y:7},{type:2,x:22,y:7},{type:3,x:23,y:7},
+{type:1,x:28,y:7},{type:2,x:29,y:7},{type:3,x:30,y:7},
+{type:1,x:150,y:7},{type:2,x:151,y:7},{type:3,x:152,y:7},
+{type:1,x:154,y:7},{type:2,x:155,y:7},{type:3,x:156,y:7},
+{type:1,x:181,y:7},
+{type:1,x:10,y:6},{type:2,x:11,y:6},{type:3,x:12,y:6},
+{type:1,x:36,y:6},{type:2,x:37,y:6},{type:3,x:38,y:6},
+{type:1,x:56,y:6},{type:2,x:57,y:6},{type:3,x:58,y:6},
+{type:1,x:87,y:6},{type:2,x:88,y:6},{type:3,x:89,y:6},
+{type:1,x:118,y:6},{type:2,x:119,y:6},{type:3,x:120,y:6},
 
-  {type:5,x:145,y:5},{type:6,x:146,y:5},
-  {type:1,x:20,y:4},
-  {type:1,x:25,y:4},{type:5,x:26,y:4},{type:5,x:27,y:4},{type:5,x:28,y:4},{type:5,x:29,y:4},{type:5,x:30,y:4},{type:3,x:31,y:4},
-  {type:2,x:40,y:4},{type:6,x:45,y:4},
-  {type:4,x:53,y:4},{type:5,x:54,y:4},{type:5,x:55,y:4},{type:6,x:56,y:4},
-  {type:5,x:61,y:4},{type:5,x:69,y:4},{type:5,x:70,y:4},
-  {type:1,x:4,y:3},{type:3,x:9,y:3},
-  {type:1,x:18,y:3},{type:5,x:19,y:3},{type:5,x:20,y:3},{type:5,x:21,y:3},{type:3,x:22,y:3},
-  {type:5,x:26,y:3},{type:5,x:27,y:3},
-  {type:4,x:37,y:3},{type:5,x:46,y:3},{type:5,x:47,y:3},{type:5,x:48,y:3},{type:5,x:49,y:3},{type:5,x:50,y:3},{type:5,x:51,y:3},
-  {type:1,x:54,y:3},{type:2,x:55,y:3},{type:3,x:56,y:3},
-  {type:1,x:62,y:3},{type:5,x:63,y:3},{type:5,x:64,y:3},{type:5,x:65,y:3},{type:5,x:66,y:3},
-  {type:5,x:68,y:3},{type:5,x:69,y:3},{type:5,x:70,y:3},
-  {type:2,x:84,y:3},{type:3,x:85,y:3},
+{type:5,x:145,y:5},{type:6,x:146,y:5},
+{type:1,x:20,y:4},
+{type:1,x:25,y:4},{type:5,x:26,y:4},{type:5,x:27,y:4},{type:5,x:28,y:4},{type:5,x:29,y:4},{type:5,x:30,y:4},{type:3,x:31,y:4},
+{type:2,x:40,y:4},{type:6,x:45,y:4},
+{type:4,x:53,y:4},{type:5,x:54,y:4},{type:5,x:55,y:4},{type:6,x:56,y:4},
+{type:5,x:61,y:4},{type:5,x:69,y:4},{type:5,x:70,y:4},
+{type:1,x:4,y:3},{type:3,x:9,y:3},
+{type:1,x:18,y:3},{type:5,x:19,y:3},{type:5,x:20,y:3},{type:5,x:21,y:3},{type:3,x:22,y:3},
+{type:5,x:26,y:3},{type:5,x:27,y:3},
+{type:4,x:37,y:3},{type:5,x:46,y:3},{type:5,x:47,y:3},{type:5,x:48,y:3},{type:5,x:49,y:3},{type:5,x:50,y:3},{type:5,x:51,y:3},
+{type:1,x:54,y:3},{type:2,x:55,y:3},{type:3,x:56,y:3},
+{type:1,x:62,y:3},{type:5,x:63,y:3},{type:5,x:64,y:3},{type:5,x:65,y:3},{type:5,x:66,y:3},
+{type:5,x:68,y:3},{type:5,x:69,y:3},{type:5,x:70,y:3},
+{type:2,x:84,y:3},{type:3,x:85,y:3},
 
-  {type:1,x:92,y:3},{type:2,x:93,y:3},
+{type:1,x:92,y:3},{type:2,x:93,y:3},
 
-  {type:1,x:17,y:2},{type:2,x:18,y:2},{type:5,x:19,y:2},{type:5,x:20,y:2},{type:5,x:21,y:2},{type:5,x:22,y:2},{type:5,x:23,y:2},{type:3,x:24,y:2},
-  {type:5,x:27,y:2},{type:5,x:28,y:2},{type:5,x:29,y:2},
+{type:1,x:17,y:2},{type:2,x:18,y:2},{type:5,x:19,y:2},{type:5,x:20,y:2},{type:5,x:21,y:2},{type:5,x:22,y:2},{type:5,x:23,y:2},{type:3,x:24,y:2},
+{type:5,x:27,y:2},{type:5,x:28,y:2},{type:5,x:29,y:2},
 
-  {type:2,x:38,y:2},
-  {type:4,x:53,y:2},
+{type:2,x:38,y:2},
+{type:4,x:53,y:2},
 
-  {type:1,x:61,y:2},{type:2,x:62,y:2},{type:2,x:63,y:2},{type:2,x:64,y:2},{type:3,x:65,y:2},
+{type:1,x:61,y:2},{type:2,x:62,y:2},{type:2,x:63,y:2},{type:2,x:64,y:2},{type:3,x:65,y:2},
 
-  {type:5,x:77,y:2},
-  {type:1,x:91,y:2},{type:2,x:92,y:2},{type:3,x:93,y:2},
+{type:5,x:77,y:2},
+{type:1,x:91,y:2},{type:2,x:92,y:2},{type:3,x:93,y:2},
 
-    //uporządkowane
-    {type:1,x:72,y:2},{type:3,x:80,y:2},
-    {type:1,x:83,y:3},{type:3,x:80,y:2},
-    {type:1,x:93,y:2},{type:5,x:97,y:2},{type:1,x:96,y:6},{type:4,x:99,y:5},{type:4,x:100,y:5},{type:6,x:101,y:5},
-    {type:1,x:101,y:3},{type:2,x:102,y:4},{type:2,x:103,y:5},
-                     {type:5,x:102,y:3},{type:6,x:103,y:4},
-                                      {type:6,x:103,y:3},
-                                      {type:6,x:103,y:2},
-                                      {type:6,x:103,y:1},
-    {type:1,x:124,y:4},{type:3,x:129,y:4},
-    {type:4,x:124,y:3},{type:5,x:125,y:3},{type:5,x:126,y:3},{type:5,x:127,y:3},{type:6,x:128,y:3},
-    {type:1,x:133,y:2},  {type:4,x:133,y:0}, {type:4,x:133,y:1},
-    {type:6,x:138,y:2}, {type:6,x:138,y:3}, {type:6,x:138,y:4}, {type:1,x:133,y:5},{type:3,x:138,y:5},
-    {type:1,x:133,y:8}, {type:3,x:138,y:8},
-    {type:3,x:139,y:4}, {type:6,x:139,y:3},{type:6,x:139,y:2},{type:6,x:140,y:2},{type:3,x:141,y:2},
-    {type:6,x:142,y:6},
-    {type:1,x:145,y:2}, {type:2,x:146,y:2}, {type:6,x:147,y:2},
-    {type:1,x:154,y:4}, {type:1,x:154,y:2}, {type:3,x:157,y:4},{type:3,x:158,y:0},{type:3,x:157,y:1},{type:1,x:157,y:2},
-  ],
- islands: [
-  {x:5,y:4,len:4}, {x:7,y:7,len:5},
-  {x:20,y:7,len:1}, {x:25,y:7,len:5}, {x:26,y:7,len:4},
-  {x:42,y:7,len:4},
-  {x:73,y:3,len:7}, {x:73,y:7,len:2}, {x:75,y:7,len:2},
-  {x:97,y:7,len:4},  {x:99,y:3,len:4},
-  {x:113,y:3,len:4}, 
-  {x:120,y:3,len:2}, 
-  {x:120,y:7,len:4}, {x:125,y:5,len:5},
-  {x:134,y:3,len:4}, {x:134,y:6,len:4}, {x:134,y:9,len:4},
-  {x:141,y:7,len:1}, {x:146,y:7,len:2},
-  {x:150,y:3,len:4}, {x:155,y:5,len:2},
+//uporządkowane
+{type:1,x:72,y:2},{type:3,x:80,y:2},
+{type:1,x:83,y:3},{type:3,x:80,y:2},
+{type:1,x:93,y:2},{type:5,x:97,y:2},{type:1,x:96,y:6},{type:4,x:99,y:5},{type:4,x:100,y:5},{type:6,x:101,y:5},
+{type:1,x:101,y:3},{type:2,x:102,y:4},{type:2,x:103,y:5},
+                     {type:5,x:102,y:3},{type:6,x:103,y:4},
+                                        {type:6,x:103,y:3},
+                                        {type:6,x:103,y:2},
+                                        {type:6,x:103,y:1},
+{type:1,x:124,y:4},{type:3,x:129,y:4},
+{type:4,x:124,y:3},{type:5,x:125,y:3},{type:5,x:126,y:3},{type:5,x:127,y:3},{type:6,x:128,y:3},
+{type:1,x:133,y:2},  {type:4,x:133,y:0}, {type:4,x:133,y:1},
+{type:6,x:138,y:2}, {type:6,x:138,y:3}, {type:6,x:138,y:4}, {type:1,x:133,y:5},{type:3,x:138,y:5},
+{type:1,x:133,y:8}, {type:3,x:138,y:8},
+{type:3,x:139,y:4}, {type:6,x:139,y:3},{type:6,x:139,y:2},{type:6,x:140,y:2},{type:3,x:141,y:2},
+{type:6,x:142,y:6},
+{type:1,x:145,y:2}, {type:2,x:146,y:2}, {type:6,x:147,y:2},
+{type:1,x:154,y:4}, {type:1,x:154,y:2}, {type:3,x:157,y:4},{type:3,x:158,y:0},{type:3,x:157,y:1},{type:1,x:157,y:2},
+],
+islands: [
+{x:5,y:4,len:4}, {x:7,y:7,len:5},
+{x:20,y:7,len:1}, {x:25,y:7,len:5}, {x:26,y:7,len:4},
+{x:42,y:7,len:4},
+{x:73,y:3,len:7}, {x:73,y:7,len:2}, {x:75,y:7,len:2},
+{x:97,y:7,len:4},  {x:99,y:3,len:4},
+{x:113,y:3,len:4},
+{x:120,y:3,len:2},
+{x:120,y:7,len:4}, {x:125,y:5,len:5},
+{x:134,y:3,len:4}, {x:134,y:6,len:4}, {x:134,y:9,len:4},
+{x:141,y:7,len:1}, {x:146,y:7,len:2},
+{x:150,y:3,len:4}, {x:155,y:5,len:2},
 
 ],
-  spikes: [
-    {x:6,y:0},{x:7,y:0},{x:8,y:0},
-    {x:48,y:0},{x:49,y:0},{x:50,y:0},
-    {x:60,y:0},{x:61,y:0},{x:62,y:0},
-    {x:87,y:0},{x:88,y:0},{x:89,y:0},
+spikes: [
+{x:6,y:0},{x:7,y:0},{x:8,y:0},
+{x:48,y:0},{x:49,y:0},{x:50,y:0},
+{x:60,y:0},{x:61,y:0},{x:62,y:0},
+{x:87,y:0},{x:88,y:0},{x:89,y:0},
 
-    {x:94,y:4},
-    {x:111,y:0},{x:112,y:0},{x:113,y:0},
-    {x:112,y:3},{x:117,y:3},{x:118,y:3},{x:119,y:3}
-  ],
+{x:94,y:4},
+{x:111,y:0},{x:112,y:0},{x:113,y:0},
+{x:112,y:3},{x:117,y:3},{x:118,y:3},{x:119,y:3}
+],
 
 filter_tokens: [{x:15,y:2},{x:27,y:3},{x:34,y:2},{x:52,y:2},{x:67,y:4},{x:120,y:2},{x:175,y:3},{x:300,y:5},{x:400,y:2}],
-  heart_items: [{x:0,y:10},{x:34,y:3},{x:65,y:3},{x:80,y:2},{x:120,y:3},{x:150,y:5}],
-  clock_items: [{x:200,y:4},{x:135,y:4},{x:125,y:1},],
-  school: {x:159,y:-0.45, w:9, h:7},
-  plastic_enemies: [
-  {type:"ground",x:9,y:0,dir:1,min:9,max:19},   {type:"ground", x:14, y:0, dir:1, min:14, max:17},
+heart_items: [{x:0,y:10},{x:34,y:3},{x:65,y:3},{x:80,y:2},{x:120,y:3},{x:150,y:5}],
+clock_items: [{x:200,y:4},{x:135,y:4},{x:125,y:1},],
+school: {x:159,y:-0.45, w:9, h:7},
+plastic_enemies: [
+{type:"ground",x:9,y:0,dir:1,min:9,max:19},  {type:"ground", x:14, y:0, dir:1, min:14, max:17},
 {type:"ground", x:33, y:0, dir:1, min:33, max:36},	{type:"ground", x:36, y:0, dir:1, min:36, max:39},
-{type:"ground", x:43, y:0, dir:1, min:43, max:46},    {type:"ground", x:51, y:0, dir:1, min:51, max:54},
-{type:"ground", x:64, y:0, dir:1, min:64, max:67},    {type:"ground", x:76, y:0, dir:1, min:76, max:79},
-{type:"ground", x:98, y:0, dir:1, min:98, max:101},    {type:"ground", x:105, y:0, dir:1, min:105, max:108},     
-{type:"ground", x:122, y:0, dir:1, min:122, max:125},    {type:"ground", x:129, y:0, dir:1, min:129, max:132},     
+{type:"ground", x:43, y:0, dir:1, min:43, max:46},   {type:"ground", x:51, y:0, dir:1, min:51, max:54},
+{type:"ground", x:64, y:0, dir:1, min:64, max:67},   {type:"ground", x:76, y:0, dir:1, min:76, max:79},
+{type:"ground", x:98, y:0, dir:1, min:98, max:101},    {type:"ground", x:105, y:0, dir:1, min:105, max:108},      
+{type:"ground", x:122, y:0, dir:1, min:122, max:125},    {type:"ground", x:129, y:0, dir:1, min:129, max:132},      
 {type:"ground", x:140, y:0, dir:1, min:140, max:143},
-{type:"ground", x:144, y:0, dir:1, min:144, max:147},     {type:"ground", x:155, y:0, dir:1, min:153, max:158},
+{type:"ground", x:144, y:0, dir:1, min:144, max:147},    {type:"ground", x:155, y:0, dir:1, min:153, max:158},
 {type:"ground",x:20,y:0,dir:1,min:20,max:22},
 {type:"island",island:0,pos:1,dir:1},
 {type:"island",island:1,pos:1,dir:1},{type:"island",island:2,pos:1,dir:1},{type:"island",island:3,pos:0,dir:-1},
@@ -416,15 +415,15 @@ filter_tokens: [{x:15,y:2},{x:27,y:3},{x:34,y:2},{x:52,y:2},{x:67,y:4},{x:120,y:
 {type:"island",island:17,pos:1,dir:1},
 
 
-  ]
+]
 };
 for(let i=0;i<LEVEL_WIDTH/(GRID*3);i++)
-  if (!level.spikes.some(function(s){ return i*3===s.x && s.y===0; }))
-    level.ground_blocks.push({x:i*3, y:0});
+if (!level.spikes.some(function(s){ return i*3===s.x && s.y===0; }))
+level.ground_blocks.push({x:i*3, y:0});
 
 // ---- RESZTA LOGIKI I KOD GRY (NIEZMIENIONY) ----
 function spawnParallax() {
-  if (Math.random() < 0.0) { // 25% szansy na całą sekwencję w jednej klatce!
+if (Math.random() < 0.0) { // 25% szansy na całą sekwencję w jednej klatce!
 
 let farIds = ["par_cloud1","par_cloud2","par_cloud3","par_ship","par_bird"];
 let midIds = [
@@ -516,37 +515,6 @@ levelEnemies.push(e);
 });
 document.getElementById('restart').style.display='';
 wantJump = false; jumpPressed = false; jumpTime = 0;
-
-// Generowanie losowych zegarów
-let clockPositions = [];
-for (let i = 0; i < 5; i++) {
-let x = Math.floor(Math.random() * (LEVEL_WIDTH / GRID - 20)) + 10;
-let y = 2 + Math.floor(Math.random() * 5);
-clockPositions.push({x: x, y: y});
-}
-levelClocks = clockPositions;
-
-// Generowanie losowych filtrów
-let filterPositions = [];
-for (let i = 0; i < 10; i++) {
-let x = Math.floor(Math.random() * (LEVEL_WIDTH / GRID - 20)) + 10;
-let y = 2 + Math.floor(Math.random() * 5);
-filterPositions.push({x: x, y: y});
-}
-levelTokens = filterPositions;
-}
-    // Generowanie losowych serc
-let heartPositions = [];
-for (let i = 0; i < 3; i++) {  // np. 8 serc na poziomie
-  let x = Math.floor(Math.random() * (LEVEL_WIDTH / GRID - 20)) + 10;
-  let y = 2 + Math.floor(Math.random() * 5);
-  heartPositions.push({x: x, y: y});
-}
-levelHearts = heartPositions;
-if (Math.random() < 0.002) { // prawdopodobieństwo na klatkę (~0.2%)
-  let x = Math.floor((camX + SCREEN_W) / GRID) + Math.floor(Math.random() * 20);
-  let y = 2 + Math.floor(Math.random() * 5);
-  levelTokens.push({x: x, y: y});
 }
 
 
@@ -720,14 +688,15 @@ ctx.fillStyle = p.color;
 ctx.fill();
 });
 }
+
 ctx.save();
 ctx.font = "20px 'Press Start 2P'";
 
 // Miganie na czerwono, gdy timer ≤ 15 sekund
 let flashing = false;
 if (timer <= 15) {
-  // Miganie co 500 ms
-  flashing = Math.floor(Date.now() / 500) % 2 === 0;
+  // Miganie co 500 ms
+  flashing = Math.floor(Date.now() / 500) % 2 === 0;
 }
 
 ctx.fillStyle = flashing ? "red" : "#fff";
@@ -746,9 +715,9 @@ ctx.restore();
 
 if(gameOver){
 ctx.save();
-ctx.fillStyle = "rgba(0,0,0,0.5)"; 
+ctx.fillStyle = "rgba(0,0,0,0.5)";
 ctx.fillRect(0,0,SCREEN_W,SCREEN_H);
-ctx.fillStyle = "#fff"; 
+ctx.fillStyle = "#fff";
 ctx.textAlign="center";
 ctx.font="bold 40px 'Press Start 2P'";
 ctx.shadowColor = "#30a7e2";
@@ -763,9 +732,9 @@ ctx.restore();
 }
 if(gameWon){
 ctx.save();
-ctx.fillStyle = "rgba(0,0,0,0.5)"; 
+ctx.fillStyle = "rgba(0,0,0,0.5)";
 ctx.fillRect(0,0,SCREEN_W,SCREEN_H);
-ctx.fillStyle = "#fff"; 
+ctx.fillStyle = "#fff";
 ctx.textAlign="center";
 ctx.font="bold 40px 'Press Start 2P'";
 ctx.shadowColor = "#30a7e2";
@@ -789,7 +758,7 @@ y: y + Math.random() * GRID,
 vx: (Math.random() - 0.5) * 5,
 vy: Math.random() * -10,
 size: 5 + Math.random() * 5,
-color: ['#7c5e4e', '#5d463b', '#4c3932',]    });
+color: colors[Math.floor(Math.random() * colors.length)]    });
 }
 }
 
@@ -866,9 +835,9 @@ wantJump = true; jumpPressed = true; jumpTime=0;
 }
 if(!keys['ArrowUp']){ jumpPressed=false; wantJump=false; jumpTime=0; }
 if(wantJump){
-if(jumpTime===0)      filterkid.vy = -18.5;
+if(jumpTime===0)      filterkid.vy = -18.5;
 if(jumpTime < JUMP_MAX){ filterkid.vy -= 1.45; jumpTime++; }
-else                  { wantJump = false; }
+else                  { wantJump = false; }
 }
 filterkid.vy += 2.2;
 let dy = filterkid.vy, nextY = filterkid.y + dy;
@@ -1040,95 +1009,55 @@ timer+=10; collectedTimers++; levelClocks.splice(i,1); i--;
 var sx = levelSchool.x*GRID, sy = fromGround(levelSchool.y);
 var sw = (levelSchool.w||1)*GRID*1.5, sh = (levelSchool.h||1)*GRID*1.1;
 if(collideRect(filterkid,{x:sx,y:sy-sh},filterkid.w,filterkid.h,sw,sh)){
+if(!gameWon){
 gameWinLogic();
+}
 }
 }
 
 function loseLifeToStart(){
-  if (gameOver || gameWon) return;
+if(gameOver || gameWon) return;
+lives--;
+if(lives < 0){
+gameOver = true;
+gameWon = false;
+document.getElementById('restart').style.display='';
+totalScore = 3*collectedFilters + 2*collectedHearts + 2*collectedTimers + killedEnemies;
+showScoreWindow();
+} else {
+timer = 120;
+filterkid.vy = 0;
+filterkid.vx = 0;
+filterkid_solid = false;
+filterkid.dead = false;
 
-  lives--;
+// Zawsze resetuj do bezpiecznego punktu startowego
+filterkid.x = startingX;
+filterkid.y = startingY;
 
-  if (lives < 0) {
-    gameOver = true;
-    gameWon = false;
-    document.getElementById('restart').style.display='';
-    totalScore = 3 * collectedFilters + 2 * collectedHearts + 2 * collectedTimers + killedEnemies;
-    showScoreWindow();
-  } else {
-    timer = 120;
-    filterkid.vy = 0;
-    filterkid.vx = 0;
-    filterkid_solid = false;
-    filterkid.dead = false;
+const playerX = filterkid.x;
+const playerY = filterkid.y;
 
-    // 🔹 usuń wrogów w promieniu 200px od miejsca śmierci
-    const playerX = filterkid.x;
-    const playerY = filterkid.y;
-    levelEnemies = levelEnemies.filter(e => {
-      let enemyX = e.t === "island"
-        ? (levelIslands[e.island].x + e.pos) * GRID
-        : e.x * GRID;
-      let enemyY = e.absY;
-      let distance = Math.sqrt(
-        Math.pow(playerX - enemyX, 2) +
-        Math.pow(playerY - enemyY, 2)
-      );
-      return distance > 200;
-    });
-
-    // 🔹 sprawdź, czy śmierć była na kolcach
-    const onSpikes = levelSpikes.some(s =>
-      collideRect(
-        { x: playerX, y: playerY },
-        { x: s.x * GRID, y: fromGround(s.y) },
-        filterkid.w, filterkid.h,
-        GRID, GRID
-      )
-    );
-
-    if (onSpikes) {
-      // Szukamy najbliższej bezpiecznej przeszkody
-      let safeX = null;
-      let safeY = null;
-      for (let i = 0; i < levelObstacles.length; i++) {
-        let o = levelObstacles[i];
-        let ox = o.x * GRID;
-        let oy = fromGround(o.y) - GRID; // pozycja kafla przeszkody
-
-        // Sprawdź, czy na tej samej pozycji nie ma kolców
-        const spikeHere = levelSpikes.some(s =>
-          s.x * GRID === ox &&
-          fromGround(s.y) === oy + GRID
-        );
-
-        if (o.toBreak === false && !spikeHere) {
-          // cofamy o 3 kratki w lewo, z zabezpieczeniem przed <0
-          safeX = Math.max(0, ox - (GRID * 3));
-          safeY = oy - PLAYER_H;
-          break;
-        }
-      }
-      if (safeX !== null && safeY !== null) {
-        filterkid.x = safeX;
-        filterkid.y = safeY;
-      } 
-    } 
-  }
+// Usuń wrogów w pobliżu gracza
+levelEnemies = levelEnemies.filter(e => {
+let enemyX = e.t === "island" ? (levelIslands[e.island].x + e.pos) * GRID : e.x * GRID;
+let enemyY = e.absY;
+let distance = Math.sqrt(Math.pow(playerX - enemyX, 2) + Math.pow(playerY - enemyY, 2));
+return distance > 200;
+});
+}
 }
 
 function showScoreWindow(){
 let div = document.getElementById('scoreBoard');
-    ctx.save();
 div.innerHTML =
-`  <font style:"color: #000;">
-   Twój wynik:<br><br>
-   Filtry: <b>${collectedFilters}</b>=${collectedFilters*3}<br>
-   Serca: <b>${collectedHearts}</b>=${collectedHearts*2}<br>
-   Czas: <b>${collectedTimers}</b>=${collectedTimers*2}<br>
-   Butelki: <b>${killedEnemies}</b>=${killedEnemies*1}<br>
-  <b>Punktacja: ${totalScore}pkt</b></font>`;
-
+`Twój wynik:<br><br>
+Filtry: <b>${collectedFilters}</b> × 3 = ${collectedFilters*3}<br>
+Serca: <b>${collectedHearts}</b> × 2 = ${collectedHearts*2}<br>
+Zegarki: <b>${collectedTimers}</b> × 2 = ${collectedTimers*2}<br>
+Wrogowie: <b>${killedEnemies}</b> × 1 = ${killedEnemies*1}<br>
+<hr style='border-color:#fff'>
+<b>Łącznie: ${totalScore} pkt</b>`;
 setTimeout(() => {
 document.getElementById('scoreWindow').style.display = '';
 }, 3000);
@@ -1190,21 +1119,6 @@ setTimeout(() => {
 showScoreWindow();
 }, 3000);
 }
-    // Obsługa kliknięcia "Zagraj ponownie"
-document.getElementById('restart').onclick = function () {
-  // Schowaj przycisk i okno wyniku
-  document.getElementById('restart').style.display = '';
-  document.getElementById('scoreWindow').style.display = 'none';
-
-  // Reset flag gry
-  gameOver = false;
-  gameWon = false;
-  dying = false;
-
-  // Uruchom ponowną grę
-  resetGame();
-};
-
 </script>
 </body>
 </html>
