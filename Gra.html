@@ -142,7 +142,7 @@ pointer-events: auto;
   box-shadow: 0 2px 8px rgba(0,32,64,0.2);
 }
 @media (min-width: 900px) {
-  #mobile-controls { display: none !important; }
+  #mobile-controls { display: none; }
 }
 
   </style>
@@ -211,17 +211,18 @@ pointer-events: auto;
   }
   window.addEventListener('resize', positionGameCanvas);
   window.addEventListener('DOMContentLoaded', positionGameCanvas);
+// ... (logika pozycjonowania canvasa) ...
 function isMobile() {
-  return /Android|iPhone|iPad|iPod|Mobile|Windows Phone/i.test(navigator.userAgent)
-    || window.innerWidth < 900;
+  return /Android|iPhone|iPad|iPod|Mobile|Windows Phone/i.test(navigator.userAgent)
+    || window.innerWidth < 900;
 }
 window.addEventListener('DOMContentLoaded', function() {
-  document.getElementById('mobile-controls').style.display = isMobile() ? 'flex' : 'none';
+  document.getElementById('mobile-controls').style.display = isMobile() ? 'flex' : 'none';
 });
 window.addEventListener('resize', function() {
-  document.getElementById('mobile-controls').style.display = isMobile() ? 'flex' : 'none';
+  document.getElementById('mobile-controls').style.display = isMobile() ? 'flex' : 'none';
 });
-  document.getElementById('btnLeft').addEventListener('touchstart', function(e){ e.preventDefault(); keys['ArrowLeft'] = true; });
+document.getElementById('btnLeft').addEventListener('touchstart', function(e){ e.preventDefault(); keys['ArrowLeft'] = true; });
 document.getElementById('btnLeft').addEventListener('touchend', function(e){ e.preventDefault(); keys['ArrowLeft'] = false; });
 
 document.getElementById('btnRight').addEventListener('touchstart', function(e){ e.preventDefault(); keys['ArrowRight'] = true; });
