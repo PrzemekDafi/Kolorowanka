@@ -122,8 +122,6 @@ pointer-events: auto;
 .ctrlBtn {
   width: 33.33vw;
   height: 100vw;
-  max-height: 110px;
-  max-width: 110px;
   flex: 1 1 0;
   margin: 0;
   background: linear-gradient(135deg, #088cff 60%, #222 100%);
@@ -152,10 +150,10 @@ pointer-events: auto;
 <div id="gameContainer">
   <canvas id="gameCanvas" width="800" height="450" style="display:none;"></canvas>
 </div>
-<div id="mobile-controls" style="display:none;">
-  <button id="btnLeft" class="ctrlBtn">&#8592;</button>
-  <button id="btnUp" class="ctrlBtn">&#8593;</button>
-  <button id="btnRight" class="ctrlBtn">&#8594;</button>
+<div id="mobile-controls" style="display:none; text-align: center; justify-content: center; width: 100%;">
+  <button id="btnLeft" class="ctrlBtn" style="width: 33.33%;">&#8592;</button>
+  <button id="btnUp" class="ctrlBtn" style="width: 33.33%;">&#8593;</button>
+  <button id="btnRight" class="ctrlBtn" style="width: 33.33%;">&#8594;</button>
 </div>
 
 <img id="arcade-frame" src="img/arcade.png" alt="Arcade Frame">
