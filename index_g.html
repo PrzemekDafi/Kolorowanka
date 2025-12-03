@@ -657,7 +657,7 @@ let image = new Image();
 let rotation = 0;
 let verticalOffset = 0;
 let horizontalOffset = 0;
-let scale = 0.5;
+let scale = 1.0;
 
 function drawOverlayImage() {
     if (!image.src) return;
@@ -673,7 +673,7 @@ function drawOverlayImage() {
     grawerCtx.translate(-centerX, -centerY);
 
     // Poprawione skalowanie (0.5-2.0)
-    const scaleValue = 0.5 + (parseInt(sizeSlider.value, 10) / 100) * 1.5;
+    const scaleValue = 0.1 + (parseInt(sizeSlider.value, 10) / 100) * 1.5;
     
     const maxWidth = 800 * scaleValue;
     const maxHeight = 800 * scaleValue;
