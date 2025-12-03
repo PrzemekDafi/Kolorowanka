@@ -674,8 +674,8 @@ function drawOverlayImage() {
     grawerCtx.translate(-centerX, -centerY);
 
     // Poprawione skalowanie (0.5-2.0)
-    const scaleValue = 0.1 + (parseInt(sizeSlider.value, 2) / 100) * 1.5;
-    
+	const scaleValue = 0.1 + (parseInt(sizeSlider.value, 10) / 100) * 1.5;
+	
     const maxWidth = 800 * scaleValue;
     const maxHeight = 800 * scaleValue;
     const aspectRatio = image.width / image.height;
