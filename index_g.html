@@ -324,25 +324,35 @@ select#zadruk-color {
     </div>
 
     <div class="options-column">
-        <h1>Nowości: GRAWER! + Dzbanki + Saturator butelka</h1>
-        <label for="product-select">Wybierz produkt:</label>
-        <select id="product-select" class="select-colors">
-            <option value="">Wybierz produkt</option>
-            <option value="crystal">Dzbanek Crystal Classic</option>
-            <option value="crystal_unimax">Dzbanek Crystal Unimax</option>
-            <option value="astra_classic">Dzbanek Astra Classic</option>
-            <option value="butelka_soft_05l">Butelka Soft 0,5 l</option>
-            <option value="butelka_solid_05l">Butelka Solid 0,5 l</option>
-            <option value="butelka_solid_07l">Butelka Solid 0,7 l</option>
-            <option value="butelka_solid_steel_07l">Butelka Solid Steel 0,7 l</option>
-            <option value="bidon_twist">Bidon Twist</option>
-            <option value="bidon_klasyczny">Bidon Dafi</option>
-            <option value="shape_t">Shape T</option>
-            <option value="shape">Shape</option>
-            <option value="self">Self</option>
-            <option value="easy">Easy</option>
-            <option value="saturator">PushAir</option>
-            <option value="saturator_butelka">PushAir Butelka 0,7</option>
+        	<h1>Nowości: Bidon Sportowy, butelka "Refeel"</h1>
+            <label for="product-select">Wybierz produkt:</label>
+            <select id="product-select" class="select-colors">
+                <option value="">Wybierz produkt</option>
+			<option value="bidon_sportowy">Bidon Sportowy [NOWOŚĆ]</option>
+			<option value="refeel2">Refeel 2 [NOWOŚĆ]</option>
+
+          <!--  <option value="butelka_soft_03l">Butelka Soft 0,3 l</option> -->
+		  <option value="crystal">Dzbanek Crystal Classic</option>
+	         <option value="crystal_unimax">Dzbanek Crystal Unimax</option>
+		  <option value="astra_classic">Dzbanek Astra Classic</option>
+                <option value="butelka_soft_05l">Butelka Soft 0,5 l</option>
+          <!--  <option value="butelka_soft_07l">Butelka Soft 0,7 l</option>-->
+                <option value="butelka_solid_05l">Butelka Solid 0,5 l</option>
+                <option value="butelka_solid_07l">Butelka Solid 0,7 l</option>
+                <option value="butelka_solid_steel_07l">Butelka Solid Steel 0,7 l</option>
+		  <option value="elastometr">Elastometr butelek Solid</option>
+                <option value="bidon_twist">Bidon Twist</option>
+		<option value="bidon_klasyczny">Bidon Dafi</option>
+                <option value="shape_t">Shape T</option>
+                <option value="shape">Shape</option>
+		<option value="self">Self</option>
+                <option value="easy">Easy</option>
+
+                <option value="saturator">PushAir</option>
+		  <option value="saturator_butelka">PushAir Butelka 0,7</option>
+		  <option value="saturator_butelka_05">PushAir Butelka 0,5</option>
+		  <option value="filtr_butelkowy">Filtr butelkowy</option>
+
         </select>
         <div id="color-options"></div>
         
@@ -385,13 +395,18 @@ select#zadruk-color {
 
 <script>
 const products = {
+    bidon_sportowy: ['zbiornik','ustnik', 'zakretka'],
+	refeel2: ['zadruk', 'zbiornik'],
     astra_classic: ['pokrywka','raczka', 'zbiornik'],
     crystal: ['pokrywka', 'obudowa', 'raczka', 'zbiornik'],
     crystal_unimax: ['pokrywka', 'obudowa', 'raczka', 'zbiornik'],
+    butelka_soft_03l: ['ustnik', 'zakretka_z_gumka', 'filtr'],
     butelka_soft_05l: ['ustnik', 'zakretka_z_gumka', 'filtr'],
+    butelka_soft_07l: ['ustnik', 'zakretka_z_gumka', 'filtr'],
     butelka_solid_05l: ['zadruk', 'elastometr', 'elastometr_uchwyty', 'przycisk', 'zakretka_dol', 'zakretka_gora', 'filtr', 'zbiornik'],
     butelka_solid_07l: ['zadruk', 'elastometr', 'elastometr_uchwyty', 'przycisk', 'zakretka_dol', 'zakretka_gora', 'zbiornik_solid', 'rurka'],
     butelka_solid_steel_07l: ['zadruk', 'elastometr', 'elastometr_uchwyty', 'przycisk', 'zakretka_dol', 'zakretka_gora','zbiornik_solid_steel'],
+    elastometr: ['elastometr'],
     shape_t: ['zadruk', 'zakretka_shape', 'uszczelka_shape', 'wewnetrzna_gumka'],
     shape: ['zadruk', 'shape_zbiornik', 'zakretka_shape', 'uszczelka_shape', 'wewnetrzna_gumka'],
     bidon_twist: ['twist-ustnik', 'twist_zakretka', 'twist_zakretka-dol', 'twist_zbiornik'],
@@ -400,47 +415,58 @@ const products = {
     easy: ['elastometr', 'sama_gora_zakretki', 'zbiornik', 'gora_zakretki', 'guma_zakretki'],
     saturator: ['saturator_gora_korpus', 'saturator_butelka', 'satuator_korpus', 'przycisk_saturatora', 'saturator_gora_klapka', 'pushair_logo'],
     saturator_butelka: ['zakretka', 'dol'],
+    saturator_butelka_05: ['zakretka', 'dol'],
+	filtr_butelkowy: ['filtr'],
 };
 
 const colors = {
-    Mocha_Mousse_Pantone_kolor_2025roku_NOWOŚĆ: '#a47764',
-    Tendril_NOWOŚĆ: '#899f6a',
-    Cornflower_Blue_NOWOŚĆ: '#7391c9',
-    Viola_NOWOŚĆ: '#a793b8',
-    Rose_Tan_NOWOŚĆ: '#d29d98',
-    Cobblestone_NOWOŚĆ: '#a99b8f',
-    Willow_NOWOŚĆ: '#9a8b4f',
-    Gardenia_NOWOŚĆ: '#f0e9e0',
-    Peach: '#f5c09e',
+    Antracytowy_Czarny: '#161616',
+	Arctic_Blue: '#95d6dc',
+	Baby_Pink: '#F4C2C2',
+	Barbie: '#e0218a', 
     Biały: '#ffffff',
-    Antracytowy: '#161616',
-    Żółty_FCB: '#ffc836',
-    Bordowy_FCB: '#a31d45',
-    Granatowy_FCB: '#1d3874',
-    Barbie: '#e0218a', 
-    Flamingowy: '#f04e98',
-    Różany: '#ffc0cb',
-    Stalowy: '#768692',
-    Wrzosowy: '#A7A4E0',
-    Lavender: '#afa4ce',
-    Niebiański: '#6CACE4',
-    Szafirowy: '#355ca8',
-    Miętowy: '#88DBDF',
-    Turkusowy: '#58c4c5',
-    Jeansowy: '#7b879e',
-    Mandarynkowy: '#FF8200',
-    Bursztynowy: '#ed7e2a',
-    Makowy: '#E4002B',
+	Bursztynowy: '#ed7e2a',
+	Butter_Yellow: '#FFECB5',
+	Cappuccino_Pantone_4775C: '#D7C4B7',
+	Clicks: '#C4D600',
+	Cobblestone: '#a99b8f',
+	Cornflower_Blue: '#7391c9',
     Cytrynowy: '#F3E500',
-    Clicks: '#C4D600',
-    Szałwiowy_Pantone_5615C: '#5e7461',
-    Miętowy_Pantone_5507C: '#9db0ac',
+	Dove_Blue: '#A4BCC2',
+    Flamingowy: '#f04e98',
+	FCB_Bordowy: '#a31d45',
+    FCB_Granatowy: '#1d3874',
+    FCB_Żółty: '#ffc836',
+	Forest_Shade_PANTONE_NOWOŚĆ: '#93ae82',
+	Gardenia: '#f0e9e0',
+	Jeansowy: '#7b879e',
+	Lavender: '#afa4ce',
+	Lazurowy_Pantone_7542C: '#A4BCC2',
+	Lilas_Pantone_NOWOŚĆ: '#b98996',
+    Makowy: '#E4002B',
+    Mandarynkowy: '#FF8200',
+    Miętowy_Dafi: '#88DBDF',
+	Miętowy_Pantone_5507C: '#9db0ac',
+	Mocha_Mousse_Pantone: '#a47764',
+    Niebiański: '#6CACE4',
+	Peach: '#f5c09e',
     Piaskowy_Pantone_Warm_Gray: '#CBC4BC',
-    Cappuccino_Pantone_4775C: '#D7C4B7',
-    Stalowy_Pantone_430C: '#7C878E',
-    Lazurowy_Pantone_7542C: '#A4BCC2',
-    Złoty: '#D1B464',
+	Pistachio: '#d4eb8e',
+	Rose_Tan: '#d29d98',
+	Rose_Gold_PANTONE_NOWOŚĆ: '#b76e79',
+	Różany: '#ffc0cb',
     Srebrny: '#d4d4d4',
+    Stalowy_Dafi: '#768692',
+    Stalowy_Pantone_430C: '#7C878E',
+	Szafirowy: '#355ca8',
+    Szałwiowy_Pantone_5615C: '#5e7461',
+	Tendril: '#899f6a',
+	Turkusowy: '#58c4c5',
+	Waniliowy: '#fdd26e',
+	Willow: '#9a8b4f',
+    Wrzosowy: '#A7A4E0',
+	Viola: '#a793b8',
+    Złoty: '#D1B464',	
 };
 
 let originalImages = {};
