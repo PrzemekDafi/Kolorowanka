@@ -37,7 +37,7 @@ body {
     max-width: 900px;
     min-width: auto;
 }
-.image-column, {
+.image-column {
     display: flex;
     position: relative;
     justify-content: center;
@@ -114,7 +114,7 @@ body {
     margin-bottom: 3px;
 }
 
-.product-select, {
+.product-select {
     margin-bottom: 20px;
     display: flex;
     flex-direction: column;
@@ -157,7 +157,7 @@ h1 {
 }
 
 .product-select,
-.product-select, input {
+.product-select input {
     padding: 10px;
     font-size: 16px;
     border-radius: 50px;
@@ -275,6 +275,7 @@ h1 {
     top: 0;
     left: 0;
     z-index: 9999;
+    pointer-events: none;
 }
 
 #overlay-canvas {
@@ -324,34 +325,34 @@ select#zadruk-color {
     </div>
 
     <div class="options-column">
-        	<h1>Nowości: Dzbanek Prisma, Bidon Sportowy, butelka WoDafi</h1>
+            <h1>Nowości: Dzbanek Prisma, Bidon Sportowy, butelka WoDafi</h1>
             <label for="product-select">Wybierz produkt:</label>
             <select id="product-select" class="select-colors">
                 <option value="">Wybierz produkt</option>
-			<option value="prisma">Dzbanek Prisma Unimax [NOWOŚĆ]</option>
-			<option value="bidon_sportowy">Bidon Sportowy [NOWOŚĆ]</option>
-			<option value="refeel2">WoDafi [NOWOŚĆ]</option>
+            <option value="prisma">Dzbanek Prisma Unimax [NOWOŚĆ]</option>
+            <option value="bidon_sportowy">Bidon Sportowy [NOWOŚĆ]</option>
+            <option value="refeel2">WoDafi [NOWOŚĆ]</option>
           <!--  <option value="butelka_soft_03l">Butelka Soft 0,3 l</option> -->
-		  <option value="crystal">Dzbanek Crystal Classic</option>
-	         <option value="crystal_unimax">Dzbanek Crystal Unimax</option>
-		  <option value="astra_classic">Dzbanek Astra Classic</option>
+          <option value="crystal">Dzbanek Crystal Classic</option>
+             <option value="crystal_unimax">Dzbanek Crystal Unimax</option>
+          <option value="astra_classic">Dzbanek Astra Classic</option>
                 <option value="butelka_soft_05l">Butelka Soft 0,5 l</option>
           <!--  <option value="butelka_soft_07l">Butelka Soft 0,7 l</option>-->
                 <option value="butelka_solid_05l">Butelka Solid 0,5 l</option>
                 <option value="butelka_solid_07l">Butelka Solid 0,7 l</option>
                 <option value="butelka_solid_steel_07l">Butelka Solid Steel 0,7 l</option>
-		  <option value="elastometr">Elastometr butelek Solid</option>
+          <option value="elastometr">Elastometr butelek Solid</option>
                 <option value="bidon_twist">Bidon Twist</option>
-		<option value="bidon_klasyczny">Bidon Dafi</option>
+        <option value="bidon_klasyczny">Bidon Dafi</option>
                 <option value="shape_t">Shape T</option>
                 <option value="shape">Shape</option>
-		<option value="self">Self</option>
+        <option value="self">Self</option>
                 <option value="easy">Easy</option>
 
                 <option value="saturator">PushAir</option>
-		  <option value="saturator_butelka">PushAir Butelka 0,7</option>
-		  <option value="saturator_butelka_05">PushAir Butelka 0,5</option>
-		  <option value="filtr_butelkowy">Filtr butelkowy</option>
+          <option value="saturator_butelka">PushAir Butelka 0,7</option>
+          <option value="saturator_butelka_05">PushAir Butelka 0,5</option>
+          <option value="filtr_butelkowy">Filtr butelkowy</option>
 
         </select>
         <div id="color-options"></div>
@@ -363,9 +364,9 @@ select#zadruk-color {
             <label for="horizontal-slider-zadruk">Przesunięcie w poziomie:</label><br>
             <input type="range" id="horizontal-slider-zadruk" min="-500" max="500" value="0"><br>
             <label for="vertical-slider-zadruk">Przesunięcie w pionie:</label><br>
-            <input type="range" id="vertical-slider-zadruk" min="-500" max="500" value="0"> 
+            <input type="range" id="vertical-slider-zadruk" min="-500" max="500" value="0"> <br>
             <label for="scale-slider-zadruk">Skalowanie:</label><br>
-            <input type="range" id="scale-slider-zadruk" min="10" max="100" value="80">
+            <input type="range" id="scale-slider-zadruk" min="10" max="100" value="80"><br>
             <label for="rotate-slider-zadruk">Obrót:</label><br>
             <input type="range" id="rotate-slider-zadruk" min="0" max="360" value="0">
         </div>
@@ -395,82 +396,87 @@ select#zadruk-color {
 
 <script>
 const products = {
-	prisma: ['pokrywka', 'raczka', 'zbiornik'],
+    prisma: ['pokrywka', 'raczka', 'zbiornik'],
     bidon_sportowy: ['zbiornik','ustnik', 'zakretka'],
-	refeel2: ['zadruk', 'zbiornik'],
+    // Produkty z zadrukiem mają teraz 'cien' w konfiguracji
+    refeel2: ['zadruk', 'cien', 'zbiornik'],
     astra_classic: ['pokrywka','raczka', 'zbiornik'],
     crystal: ['pokrywka', 'obudowa', 'raczka', 'zbiornik'],
     crystal_unimax: ['pokrywka', 'obudowa', 'raczka', 'zbiornik'],
     butelka_soft_03l: ['ustnik', 'zakretka_z_gumka', 'filtr'],
     butelka_soft_05l: ['ustnik', 'zakretka_z_gumka', 'filtr'],
     butelka_soft_07l: ['ustnik', 'zakretka_z_gumka', 'filtr'],
-    butelka_solid_05l: ['zadruk', 'elastometr', 'elastometr_uchwyty', 'przycisk', 'zakretka_dol', 'zakretka_gora', 'filtr', 'zbiornik'],
-    butelka_solid_07l: ['zadruk', 'elastometr', 'elastometr_uchwyty', 'przycisk', 'zakretka_dol', 'zakretka_gora', 'zbiornik_solid', 'rurka'],
-    butelka_solid_steel_07l: ['zadruk', 'elastometr', 'elastometr_uchwyty', 'przycisk', 'zakretka_dol', 'zakretka_gora','zbiornik_solid_steel'],
+    butelka_solid_05l: ['zadruk', 'cien', 'elastometr', 'elastometr_uchwyty', 'przycisk', 'zakretka_dol', 'zakretka_gora', 'filtr', 'zbiornik'],
+    butelka_solid_07l: ['zadruk', 'cien', 'elastometr', 'elastometr_uchwyty', 'przycisk', 'zakretka_dol', 'zakretka_gora', 'zbiornik_solid', 'rurka'],
+    butelka_solid_steel_07l: ['zadruk', 'cien', 'elastometr', 'elastometr_uchwyty', 'przycisk', 'zakretka_dol', 'zakretka_gora','zbiornik_solid_steel'],
     elastometr: ['elastometr'],
-    shape_t: ['zadruk', 'zakretka_shape', 'uszczelka_shape', 'wewnetrzna_gumka'],
-    shape: ['zadruk', 'shape_zbiornik', 'zakretka_shape', 'uszczelka_shape', 'wewnetrzna_gumka'],
+    shape_t: ['zadruk', 'cien', 'zakretka_shape', 'uszczelka_shape', 'wewnetrzna_gumka'],
+    shape: ['zadruk', 'cien', 'shape_zbiornik', 'zakretka_shape', 'uszczelka_shape', 'wewnetrzna_gumka'],
     bidon_twist: ['twist-ustnik', 'twist_zakretka', 'twist_zakretka-dol', 'twist_zbiornik'],
     bidon_klasyczny: ['bidon_zatyczka', 'bidon_zakretka', 'bidon_zbiornik'],
-    self: ['zadruk', 'self_zakretka', 'self_zatyczka', 'self-zbiornik-wewnetrzny', 'self-zbiornik-zewnetrzny'],
+    self: ['zadruk', 'cien', 'self_zakretka', 'self_zatyczka', 'self-zbiornik-wewnetrzny', 'self-zbiornik-zewnetrzny'],
     easy: ['elastometr', 'sama_gora_zakretki', 'zbiornik', 'gora_zakretki', 'guma_zakretki'],
     saturator: ['saturator_gora_korpus', 'saturator_butelka', 'satuator_korpus', 'przycisk_saturatora', 'saturator_gora_klapka', 'pushair_logo'],
     saturator_butelka: ['zakretka', 'dol'],
     saturator_butelka_05: ['zakretka', 'dol'],
-	filtr_butelkowy: ['filtr'],
+    filtr_butelkowy: ['filtr'],
 };
 
 const colors = {
     Antracytowy_Czarny: '#161616',
-	Arctic_Blue: '#95d6dc',
-	Baby_Pink: '#F4C2C2',
-	Barbie: '#e0218a', 
+    Arctic_Blue: '#95d6dc',
+    Baby_Pink: '#F4C2C2',
+    Barbie: '#e0218a', 
     Biały: '#ffffff',
-	Bursztynowy: '#ed7e2a',
-	Butter_Yellow: '#FFECB5',
-	Cappuccino_Pantone_4775C: '#D7C4B7',
-	Clicks: '#C4D600',
-	Cobblestone: '#a99b8f',
-	Cornflower_Blue: '#7391c9',
+    Bursztynowy: '#ed7e2a',
+    Butter_Yellow: '#FFECB5',
+    Cappuccino_Pantone_4775C: '#D7C4B7',
+    Clicks: '#C4D600',
+    Cobblestone: '#a99b8f',
+    Cornflower_Blue: '#7391c9',
     Cytrynowy: '#F3E500',
-	Dove_Blue: '#A4BCC2',
+    Dove_Blue: '#A4BCC2',
     Flamingowy: '#f04e98',
-	FCB_Bordowy: '#a31d45',
+    FCB_Bordowy: '#a31d45',
     FCB_Granatowy: '#1d3874',
     FCB_Żółty: '#ffc836',
-	Forest_Shade_PANTONE_NOWOŚĆ: '#93ae82',
-	Gardenia: '#f0e9e0',
-	Jeansowy: '#7b879e',
-	Lavender: '#afa4ce',
-	Lazurowy_Pantone_7542C: '#A4BCC2',
-	Lilas_Pantone_NOWOŚĆ: '#b98996',
+    Forest_Shade_PANTONE_NOWOŚĆ: '#93ae82',
+    Gardenia: '#f0e9e0',
+    Jeansowy: '#7b879e',
+    Lavender: '#afa4ce',
+    Lazurowy_Pantone_7542C: '#A4BCC2',
+    Lilas_Pantone_NOWOŚĆ: '#b98996',
     Makowy: '#E4002B',
     Mandarynkowy: '#FF8200',
     Miętowy_Dafi: '#88DBDF',
-	Miętowy_Pantone_5507C: '#9db0ac',
-	Mocha_Mousse_Pantone: '#a47764',
+    Miętowy_Pantone_5507C: '#9db0ac',
+    Mocha_Mousse_Pantone: '#a47764',
     Niebiański: '#6CACE4',
-	Peach: '#f5c09e',
+    Peach: '#f5c09e',
     Piaskowy_Pantone_Warm_Gray: '#CBC4BC',
-	Pistachio: '#d4eb8e',
-	Rose_Tan: '#d29d98',
-	Rose_Gold_PANTONE_NOWOŚĆ: '#b76e79',
-	Różany: '#ffc0cb',
+    Pistachio: '#d4eb8e',
+    Rose_Tan: '#d29d98',
+    Rose_Gold_PANTONE_NOWOŚĆ: '#b76e79',
+    Różany: '#ffc0cb',
     Srebrny: '#d4d4d4',
     Stalowy_Dafi: '#768692',
     Stalowy_Pantone_430C: '#7C878E',
-	Szafirowy: '#355ca8',
+    Szafirowy: '#355ca8',
     Szałwiowy_Pantone_5615C: '#5e7461',
-	Tendril: '#899f6a',
-	Turkusowy: '#58c4c5',
-	Waniliowy: '#fdd26e',
-	Willow: '#9a8b4f',
+    Tendril: '#899f6a',
+    Turkusowy: '#58c4c5',
+    Waniliowy: '#fdd26e',
+    Willow: '#9a8b4f',
     Wrzosowy: '#A7A4E0',
-	Viola: '#a793b8',
-    Złoty: '#D1B464',	
+    Viola: '#a793b8',
+    Złoty: '#D1B464',    
 };
 
 let originalImages = {};
+
+// Globalne obiekty dla maski i cienia
+let globalMaskImg = new Image();
+let globalShadowImg = new Image();
 
 document.getElementById('product-select').addEventListener('change', function () {
     const product = this.value;
@@ -480,14 +486,26 @@ document.getElementById('product-select').addEventListener('change', function ()
     imageColumn.innerHTML = '';
     originalImages = {};
 
+    // Resetowanie zadruku
+    zadrukImage = null;
+
     // Pokazuj/ukryj sekcję zadruku w zależności od produktu
     const zadrukContainer = document.getElementById('zadruk-container');
     if (product && products[product] && products[product].includes('zadruk')) {
         zadrukContainer.classList.remove('hidden');
+        
+        // Ładowanie maski i cienia dla wybranego produktu
+        globalMaskImg.src = `images/${product}/zadruk.png`;
+        globalShadowImg.src = `images/${product}/cien.png`;
+        
+        // Opcjonalne: wymuś przerysowanie po załadowaniu cienia (jeśli zadruk już jest wybrany)
+        globalShadowImg.onload = () => {
+            if (zadrukImage) drawZadrukImage();
+        };
+
     } else {
         zadrukContainer.classList.add('hidden');
-        // Resetuj zadruk jeśli produkt nie obsługuje
-        zadrukImage = null;
+        // Czyszczenie overlay jeśli brak zadruku
         drawZadrukImage();
     }
 
@@ -498,6 +516,9 @@ document.getElementById('product-select').addEventListener('change', function ()
         imageColumn.appendChild(productFrame);
 
         products[product].forEach((element, index) => {
+            // Pomiń tworzenie obrazka dla 'cien' w DOM - obsługujemy go w Canvasie
+            if (element === 'cien') return;
+
             const wrapper = document.createElement('div');
             wrapper.className = 'image-wrapper';
             wrapper.style.zIndex = index + 1;
@@ -505,10 +526,14 @@ document.getElementById('product-select').addEventListener('change', function ()
             img.src = `images/${product}/${element}.png`;
             img.alt = element;
             img.id = `${element}-img`;
+            
             wrapper.appendChild(img);
             productFrame.appendChild(wrapper);
 
             originalImages[element] = img.src;
+
+            // Pomiń inputy dla zadruku i cienia
+            if (element === 'zadruk') return;
 
             const colorInput = document.createElement('div');
             colorInput.className = 'color-input';
@@ -537,15 +562,13 @@ document.getElementById('product-select').addEventListener('change', function ()
             });
         });
         
-        // Ponowne narysuj zadruk jeśli istnieje
-        if (zadrukImage) {
-            drawZadrukImage();
-        }
+        // Rysuj (czyść) Canvas zadruku
+        drawZadrukImage();
     }
 });
 
 function handleColorChange(element, selectedColor, hexValue) {
-    if (element === 'zadruk') {
+    if (element === 'zadruk' || element === 'cien') {
         return;
     }
 
@@ -566,6 +589,8 @@ function isValidHex(hex) {
 
 function colorizeImage(element, color) {
     const img = document.getElementById(`${element}-img`);
+    if (!img) return; // Zabezpieczenie
+
     const canvas = document.createElement('canvas');
     const ctx = canvas.getContext('2d');
     const newImg = new Image();
@@ -674,8 +699,8 @@ function drawOverlayImage() {
     grawerCtx.translate(-centerX, -centerY);
 
     // Poprawione skalowanie (0.5-2.0)
-	const scaleValue = 0.1 + (parseInt(sizeSlider.value, 10) / 100) * 1.5;
-	
+    const scaleValue = 0.1 + (parseInt(sizeSlider.value, 10) / 100) * 1.5;
+    
     const maxWidth = 800 * scaleValue;
     const maxHeight = 800 * scaleValue;
     const aspectRatio = image.width / image.height;
@@ -703,9 +728,13 @@ function drawOverlayImage() {
     grawerCtx.drawImage(image, centerX - width / 2, centerY - height / 2, width, height);
     grawerCtx.restore();
     
-    // Przenieś na główny canvas
-    overlayCtx.clearRect(0, 0, overlayCanvas.width, overlayCanvas.height);
-    overlayCtx.drawImage(grawerCanvas, 0, 0);
+    // Rysuj Grawer (jako ostatni na overlayCanvas)
+    // Ale uwaga: overlayCanvas jest czyszczony w drawZadrukImage, więc tutaj musimy uważać
+    // Najlepiej wywołać rysowanie zadruku, które na końcu dorysuje grawer, lub na odwrót.
+    // W tej wersji zróbmy prosto: Overlay ma Zadruk (z Cieniem) + Grawer.
+    
+    // Wywołajmy pełne odświeżenie canvasu
+    drawZadrukImage(); 
 }
 
 fileUpload.addEventListener('change', (event) => {
@@ -790,61 +819,66 @@ rotateSliderZadruk.addEventListener('input', (event) => {
 });
 
 function drawZadrukImage() {
-    // Użyj osobnego canvasu dla zadruku
-    const zadrukCanvas = document.createElement('canvas');
-    zadrukCanvas.width = overlayCanvas.width;
-    zadrukCanvas.height = overlayCanvas.height;
-    const zadrukCtx = zadrukCanvas.getContext('2d');
+    // 1. Wyczyść główny overlay
+    overlayCtx.clearRect(0, 0, overlayCanvas.width, overlayCanvas.height);
 
+    // 2. Jeśli jest wgrany zadruk, narysuj go
     if (zadrukImage) {
-        const selectedProduct = document.getElementById('product-select').value;
-        const maskImg = new Image();
-        maskImg.src = `images/${selectedProduct}/zadruk.png`;
+        const zadrukCanvas = document.createElement('canvas');
+        zadrukCanvas.width = overlayCanvas.width;
+        zadrukCanvas.height = overlayCanvas.height;
+        const zadrukCtx = zadrukCanvas.getContext('2d');
 
-        maskImg.onload = () => {
-            zadrukCtx.clearRect(0, 0, zadrukCanvas.width, zadrukCanvas.height);
-            
-            const centerX = zadrukCanvas.width / 2 + horizontalOffsetZadruk;
-            const centerY = zadrukCanvas.height / 2 + verticalOffsetZadruk;
-            
-            const scaledWidth = zadrukImage.width * scaleZadruk;
-            const scaledHeight = zadrukImage.height * scaleZadruk;
-            
-            // Zapisz stan kontekstu
-            zadrukCtx.save();
-            
-            // Przesuń do środka i obróć
-            zadrukCtx.translate(centerX, centerY);
-            zadrukCtx.rotate(rotationZadruk * Math.PI / 180);
-            zadrukCtx.translate(-centerX, -centerY);
-            
-            // Narysuj obrazek
-            zadrukCtx.drawImage(
-                zadrukImage,
-                centerX - scaledWidth / 2,
-                centerY - scaledHeight / 2,
-                scaledWidth,
-                scaledHeight
-            );
-            
-            // Przywróć stan kontekstu
-            zadrukCtx.restore();
-            
-            // Nałóż maskę
+        const centerX = zadrukCanvas.width / 2 + horizontalOffsetZadruk;
+        const centerY = zadrukCanvas.height / 2 + verticalOffsetZadruk;
+        
+        const scaledWidth = zadrukImage.width * scaleZadruk;
+        const scaledHeight = zadrukImage.height * scaleZadruk;
+        
+        // A. Rysuj zdjęcie użytkownika
+        zadrukCtx.save();
+        zadrukCtx.translate(centerX, centerY);
+        zadrukCtx.rotate(rotationZadruk * Math.PI / 180);
+        zadrukCtx.translate(-centerX, -centerY);
+        
+        zadrukCtx.drawImage(
+            zadrukImage,
+            centerX - scaledWidth / 2,
+            centerY - scaledHeight / 2,
+            scaledWidth,
+            scaledHeight
+        );
+        zadrukCtx.restore();
+        
+        // B. Nałóż maskę (jeśli załadowana)
+        if (globalMaskImg.src && globalMaskImg.complete) {
             zadrukCtx.globalCompositeOperation = 'destination-in';
             zadrukCtx.drawImage(
-                maskImg,
-                (zadrukCanvas.width - maskImg.width) / 2,
-                (zadrukCanvas.height - maskImg.height) / 2
+                globalMaskImg,
+                (zadrukCanvas.width - globalMaskImg.width) / 2,
+                (zadrukCanvas.height - globalMaskImg.height) / 2
             );
-            
-            // Wyczyść overlay i narysuj wynikowy zadruk
-            overlayCtx.clearRect(0, 0, overlayCanvas.width, overlayCanvas.height);
-            overlayCtx.drawImage(zadrukCanvas, 0, 0);
-        };
-    } else {
-        // Jeśli nie ma zadruku, wyczyść overlay
-        overlayCtx.clearRect(0, 0, overlayCanvas.width, overlayCanvas.height);
+        }
+
+        // C. Rysuj cień NA WIERZCHU (jeśli załadowany)
+        if (globalShadowImg.src && globalShadowImg.complete && globalShadowImg.naturalWidth > 0) {
+            zadrukCtx.globalCompositeOperation = 'source-over';
+            zadrukCtx.drawImage(
+                globalShadowImg,
+                0, 0,
+                zadrukCanvas.width,
+                zadrukCanvas.height
+            );
+        }
+        
+        // D. Przenieś gotowy zadruk (zdjęcie+maska+cień) na główny canvas
+        overlayCtx.drawImage(zadrukCanvas, 0, 0);
+    }
+
+    // 3. Na samym końcu dorysuj grawer (jeśli istnieje)
+    // Dzięki temu grawer będzie ZAWSZE na wierzchu wszystkiego (zadruku i cienia)
+    if (image.src) { // zmienna 'image' przechowuje grawer
+         overlayCtx.drawImage(grawerCanvas, 0, 0);
     }
 }
 </script>
